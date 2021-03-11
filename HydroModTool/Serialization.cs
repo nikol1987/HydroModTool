@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
-using System.Windows.Controls;
 
 namespace HydroModTool
 {
@@ -64,8 +59,10 @@ namespace HydroModTool
         public List<ProjectListing> Projects { get; set; }
         public List<GuidEntry> Guids { get; set; }
         public bool AutoPackage { get; set; } = false;
-    }
 
+        public bool ShowConsole { get; set; } = false;
+    }
+    
     [Serializable]
     public class GuidEntry
     {
@@ -78,7 +75,7 @@ namespace HydroModTool
             set
             {
                 _modified = value;
-                ModifiedBytes = Utilities.StringToByteArray(value);
+                ModifiedBytes = Utilities.HexToByteArray(value);
             }
         }
 
@@ -88,7 +85,7 @@ namespace HydroModTool
             set
             {
                 _retail = value;
-                RetailBytes = Utilities.StringToByteArray(value);
+                RetailBytes = Utilities.HexToByteArray(value);
             }
         }
 

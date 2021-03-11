@@ -1,22 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.IO;
 using System.Windows.Controls;
 using HydroModTool.Views;
-using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace HydroModTool
@@ -26,14 +14,14 @@ namespace HydroModTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        //never do this, unless you're really, REALLY lazy
         public static ConfigViewModel Config { get; private set; }
+
         private ProjectViewModel _current;
-        private static readonly string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "hydro.cfg");
+        public static readonly string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "hydro.cfg");
         public MainWindow()
         {
-            InitializeComponent();
-            
-           var config = Serialization.LoadMain(ConfigPath);
+            var config = Serialization.LoadMain(ConfigPath);
             if (config == null)
             {
                 config = new MainConfig();
@@ -53,6 +41,9 @@ namespace HydroModTool
             //GuidGrid.DataContext = Config.Guids;
             
             this.DataContext = Config;
+
+
+            InitializeComponent();
 
             ProjectList.ItemsSource = Config.Projects;
             ProjectList.SelectionChanged += ProjectList_SelectionChanged;
@@ -128,7 +119,7 @@ namespace HydroModTool
             for (var i = 0; i < parts.Length; i++)
             {
                 string part = parts[i];
-                string rootPath = Utilities.GetPathAt(i, path);
+                string rootPath = Utilities.TrimPath(i, path);
                 //if(part == "StoreItems")
                 //    Debugger.Break();
                 
@@ -192,6 +183,13 @@ namespace HydroModTool
 
         private void Bt_ProjectPackage_OnClick(object sender, RoutedEventArgs e)
         {
+            if (!Config.ShowConsole)
+            {
+                Packaging.PackageProject(_current.Project, Config);
+                MessageBox.Show("Packaging finished");
+                return;
+            }
+
             ConsoleAllocator.ShowConsoleWindow();
             Packaging.PackageProject(_current.Project, Config);
             Console.WriteLine("Patching is done, but compiling to a PAK file isn't supported yet. Please continue to use the asset editor.");
@@ -250,6 +248,17 @@ namespace HydroModTool
             }
 
             ToggleButtons(true);
+        }
+
+        private void PL_ContextEdit(object sender, RoutedEventArgs e)
+        {
+            if (_current == null)
+                return;
+
+            var diag = new ProjectEditor();
+            diag.Open(_current.Project);
+            _current.RefreshModel();
+            SaveConfig();
         }
     }
 }

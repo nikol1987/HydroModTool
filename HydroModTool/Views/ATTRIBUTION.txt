@@ -1,3 +1,0 @@
-﻿Classes in the Views namespace are borrowed from Torch: https://github.com/TorchAPI/Torch
-I wrote a lot of the code involved, and it's currently under Apache 2.0 license, so fair use.
-I really, really hate WPF.

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HydroModTool.Views;
 
 namespace HydroModTool
@@ -65,6 +61,9 @@ namespace HydroModTool
                     ms.Read(buf, 1, 15);
                     foreach (var entry in config.Guids)
                     {
+                        if (entry.ModifiedBytes == null || entry.RetailBytes == null)
+                            continue;
+
                         //we found the guid, now replace the value in the stream
                         if (Utilities.CompareBytes(buf, entry.ModifiedBytes))
                         {

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace HydroModTool
 {
@@ -15,28 +12,45 @@ namespace HydroModTool
             return text.IndexOf(testSequence, comparison) != -1;
         }
 
-        private static Dictionary<char, Dictionary<char, byte>> _byteTable = null;
-        public static byte[] StringToByteArray(string hex)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static char ToUpper(this char c)
+        {
+            if (c < 97 || c > 122)
+                return c;
+
+            return (char)(c - 32);
+        }
+
+
+        private static Dictionary<char, Dictionary<char, byte>> _byteTable;
+        private static Regex _hexMatch = new Regex(@"^[A-Fa-f0-9]*$");
+        public static byte[] HexToByteArray(string hex)
         {
             if (_byteTable == null)
-                CalculateHex();
+                _byteTable = CalculateHex();
+
+            if (string.IsNullOrEmpty(hex))
+                return null;
+
+            if (!_hexMatch.IsMatch(hex))
+                return null;
 
             var chars = hex.Length;
             var bytes = new byte[chars / 2];
             for (var i = 0; i < chars; i += 2)
-                bytes[i / 2] = _byteTable[hex[i]][hex[i + 1]];
+                bytes[i / 2] = _byteTable[hex[i].ToUpper()][hex[i + 1].ToUpper()];
             return bytes;
         }
 
-        private static void CalculateHex()
+        private static Dictionary<char, Dictionary<char, byte>> CalculateHex()
         {
-            _byteTable = new Dictionary<char, Dictionary<char, byte>>(16);
+            var table = new Dictionary<char, Dictionary<char, byte>>(16);
             var chars = new[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
             byte b = 0;
             for (int i = 0; i < 16; i++)
             {
                 var d = new Dictionary<char, byte>(16);
-                _byteTable[chars[i]] = d;
+                table[chars[i]] = d;
 
                 for (int j = 0; j < 16; j++)
                 {
@@ -44,6 +58,8 @@ namespace HydroModTool
                     b++;
                 }
             }
+
+            return table;
         }
 
         public static bool CompareBytes(byte[] a, byte[] b)
@@ -60,7 +76,13 @@ namespace HydroModTool
             return true;
         }
 
-        public static string GetPathAt(int depth, string path)
+        /// <summary>
+        /// Trim n levels from the right, preserving the root
+        /// </summary>
+        /// <param name="depth"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string TrimPath(int depth, string path)
         {
             int d = 0;
 
@@ -70,8 +92,9 @@ namespace HydroModTool
                     return path.Substring(0, i);
             }
 
-            if(d == depth)
-            return path;
+            if (d == depth)
+                return path;
+
             return null;
         }
     }
