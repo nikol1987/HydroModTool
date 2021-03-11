@@ -69,13 +69,12 @@ namespace HydroModTool.Views
         }
         public ConfigViewModel(MainConfig config)
         {
+            _config = config;
             Projects = new ObservableCollection<ProjectViewModel>(config.Projects.Select(p => new ProjectViewModel(p)));
             Projects.CollectionChanged += (sender, args) => OnCollectionChanged(args);
             Guids = new ObservableCollection<GuidEntry>(config.Guids);
             Guids.CollectionChanged += (sender, args) => OnCollectionChanged(args);
             Guids.CollectionChanged += (sender, args) => UpdateBytes();
-            AutoPackage = config.AutoPackage;
-            _config = config;
         }
 
         public void Save(string path)

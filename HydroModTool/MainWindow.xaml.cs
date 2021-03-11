@@ -37,11 +37,10 @@ namespace HydroModTool
                 Serialization.SaveMain(ConfigPath, config);
             }
 
-            Config = new ConfigViewModel(config);
             //GuidGrid.DataContext = Config.Guids;
             
+            Config = new ConfigViewModel(config);
             this.DataContext = Config;
-
 
             InitializeComponent();
 

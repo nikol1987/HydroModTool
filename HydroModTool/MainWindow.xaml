@@ -79,19 +79,19 @@
             <TabItem Header="GUIDs">
                 <views:GuidEditor />
             </TabItem>
-            <TabItem Header="Settings">
+            <!--<TabItem Header="Settings">
                 <StackPanel>
                     <StackPanel.DataContext>
                         <views:ConfigViewModel />
                     </StackPanel.DataContext>
                     <CheckBox Content="Show console when packaging" IsChecked="{Binding Path=ShowConsole}" />
-                    <!--<CheckBox Content="Auto-package projects when files change" IsChecked="{Binding Path=AutoPackage}"/>
+                    --><!--<CheckBox Content="Auto-package projects when files change" IsChecked="{Binding Path=AutoPackage}"/>
                     <StackPanel Orientation="Horizontal">
         <TextBox Width="30"/> 
         <Label Content="Number of backups to keep"/>
-    </StackPanel>-->
+    </StackPanel>--><!--
                 </StackPanel>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
     </Grid>
 </Window>
