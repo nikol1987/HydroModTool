@@ -27,7 +27,7 @@ namespace HydroneerStager
                     var patched = PatchFile(basePathSrc + projectItem.Path, Store.Instance.Guids);
                     Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath));
 
-                    using (var file = File.Create(basePathSrc + projectItem.Path, (int)patched.Length, FileOptions.Asynchronous | FileOptions.SequentialScan))
+                    using (var file = File.Create(basePathOut + newPath, (int)patched.Length, FileOptions.Asynchronous | FileOptions.SequentialScan))
                     {
                         patched.Position = 0;
                         patched.CopyTo(file);
