@@ -48,13 +48,14 @@ namespace HydroneerStager
             this.projectSettings = new System.Windows.Forms.MenuStrip();
             this.addProject = new System.Windows.Forms.ToolStripMenuItem();
             this.stageProject = new System.Windows.Forms.ToolStripMenuItem();
+            this.pakageProject = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshPage = new System.Windows.Forms.ToolStripMenuItem();
             this.projectItemsView = new System.Windows.Forms.TreeView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.progressLabel = new System.Windows.Forms.Label();
             this.stageProgressbar = new System.Windows.Forms.ProgressBar();
             this.stagerWorker = new System.ComponentModel.BackgroundWorker();
-            this.pakageProject = new System.Windows.Forms.ToolStripMenuItem();
+            this.packagerWorker = new System.ComponentModel.BackgroundWorker();
             this.projectSettings.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -108,6 +109,13 @@ namespace HydroneerStager
             this.stageProject.Text = "Stage";
             this.stageProject.ToolTipText = "Stages selected Project";
             // 
+            // pakageProject
+            // 
+            this.pakageProject.Name = "pakageProject";
+            this.pakageProject.Size = new System.Drawing.Size(63, 20);
+            this.pakageProject.Text = "Package";
+            this.pakageProject.ToolTipText = "Creates a .pak";
+            // 
             // refreshPage
             // 
             this.refreshPage.Name = "refreshPage";
@@ -123,6 +131,7 @@ namespace HydroneerStager
             this.projectItemsView.ContextMenuStrip = this.contextMenuStrip1;
             this.projectItemsView.Location = new System.Drawing.Point(190, 27);
             this.projectItemsView.Name = "projectItemsView";
+            this.projectItemsView.ShowPlusMinus = false;
             this.projectItemsView.Size = new System.Drawing.Size(400, 477);
             this.projectItemsView.TabIndex = 3;
             this.projectItemsView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.projectItemsView_MouseUp);
@@ -154,13 +163,6 @@ namespace HydroneerStager
             this.stageProgressbar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.stageProgressbar.TabIndex = 0;
             // 
-            // pakageProject
-            // 
-            this.pakageProject.Name = "pakageProject";
-            this.pakageProject.Size = new System.Drawing.Size(63, 20);
-            this.pakageProject.Text = "Package";
-            this.pakageProject.ToolTipText = "Creates a .pak";
-            // 
             // ProjectsPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -183,5 +185,6 @@ namespace HydroneerStager
         #endregion
 
         private System.Windows.Forms.ToolStripMenuItem pakageProject;
+        private System.ComponentModel.BackgroundWorker packagerWorker;
     }
 }

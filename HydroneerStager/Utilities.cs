@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace HydroneerStager
@@ -78,5 +79,26 @@ namespace HydroneerStager
 
             return true;
         }
+    
+        public static uint Adler32Checksum(byte[] blockData)
+        {
+            uint num = 1U;
+            uint num2 = 0U;
+            foreach (byte b in blockData)
+            {
+                num = (num + (uint)b) % 65521U;
+                num2 = (num2 + num) % 65521U;
+            }
+            return num2 << 16 | num;
+        }
+    
+        public static byte[] FileNameToHeaderBytes(string fileName)
+        {
+            var bytes = new byte[fileName.Length + 5];
+            Buffer.BlockCopy(BitConverter.GetBytes(fileName.Length + 1), 0, bytes, 0, 4);
+            Buffer.BlockCopy(Encoding.ASCII.GetBytes(fileName), 0, bytes, 0, fileName.Length);
+
+            return bytes;
+        } 
     }
 }

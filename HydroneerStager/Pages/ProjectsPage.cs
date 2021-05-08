@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using static HydroneerStager.Packager;
 
 namespace HydroneerStager
 {
@@ -35,7 +36,6 @@ namespace HydroneerStager
 
                 Stager.Stage(stagerWorker, project);
             };
-
             stagerWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) => {
                 stageProgressbar.Value = e.ProgressPercentage;
                 progressLabel.Text = $"Copying {((ProjectItem)e.UserState).Name}";
@@ -49,6 +49,30 @@ namespace HydroneerStager
             };
             stagerWorker.WorkerReportsProgress = true;
 
+            packagerWorker.DoWork += (object sender, DoWorkEventArgs e) => {
+                var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
+
+                if (project == null)
+                {
+                    MessageBox.Show("No Project selected");
+                    return;
+                }
+
+                Packager.Package(packagerWorker, project);
+            };
+            packagerWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) => {
+                stageProgressbar.Value = e.ProgressPercentage;
+                progressLabel.Text = ((PackageProgressReport)e.UserState).Stage;
+            };
+            packagerWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
+                var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
+
+                stageProgressbar.Value = 100;
+                progressLabel.Text = "Completed";
+                MessageBox.Show($"Project {project.Name} Packaged");
+            };
+            packagerWorker.WorkerReportsProgress = true;
+
             loadProjects();
             loadProjectItems();
         }
@@ -56,6 +80,7 @@ namespace HydroneerStager
         private void PackageProject_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Soon™");
+            //packagerWorker.RunWorkerAsync();
         }
 
         private async void RefreshPage_Click(object sender, EventArgs e)
@@ -152,6 +177,7 @@ namespace HydroneerStager
 
             var assetTree = Utilities.BuildFileStruture(contextMenuStrip1, sortedItems);
             projectItemsView.Nodes.Add(assetTree.FirstNode);
+            projectItemsView.ExpandAll();
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
