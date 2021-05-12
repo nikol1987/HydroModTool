@@ -15,8 +15,6 @@ namespace HydroneerStager
 
         public ProjectsPage()
         {
-            Store.PropertyChanged += Store_PropertyChanged;
-
             InitializeComponent();
 
             projectSettings.Items["addProject"].Click += AddProject_Click;
@@ -31,6 +29,7 @@ namespace HydroneerStager
                 if (project == null)
                 {
                     MessageBox.Show("No Project selected");
+                    stagerWorker.CancelAsync();
                     return;
                 }
 
@@ -43,11 +42,17 @@ namespace HydroneerStager
             stagerWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
                 var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
 
+                if (project == null)
+                {
+                    return;
+                }
+
                 stageProgressbar.Value = 100;
                 progressLabel.Text = "Completed";
                 MessageBox.Show($"Project {project.Name} staged");
             };
             stagerWorker.WorkerReportsProgress = true;
+            stagerWorker.WorkerSupportsCancellation = true;
 
             packagerWorker.DoWork += (object sender, DoWorkEventArgs e) => {
                 var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
@@ -67,20 +72,31 @@ namespace HydroneerStager
             packagerWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
                 var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
 
+                if (project == null)
+                {
+                    return;
+                }
+
                 stageProgressbar.Value = 100;
                 progressLabel.Text = "Completed";
                 MessageBox.Show($"Project {project.Name} Packaged");
             };
             packagerWorker.WorkerReportsProgress = true;
+            packagerWorker.WorkerSupportsCancellation = true;
 
+            loadStoreEvents();
             loadProjects();
             loadProjectItems();
+        }
+
+        private void loadStoreEvents()
+        {
+            Store.PropertyChanged += Store_PropertyChanged;
         }
 
         private void PackageProject_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Soon™");
-            //packagerWorker.RunWorkerAsync();
         }
 
         private async void RefreshPage_Click(object sender, EventArgs e)
@@ -91,6 +107,7 @@ namespace HydroneerStager
 
             loadProjects();
             loadProjectItems();
+            loadStoreEvents();
         }
 
         private void StageProject_Click(object sender, EventArgs e)
@@ -120,11 +137,11 @@ namespace HydroneerStager
 
             var selectFolderPage = new AddProjectPage((project) =>
             {
-                Store.Instance.AddProject(project);
+                Store.AddProject(project);
                 selectFolderForm.Close();
 
                 projectListBox.SelectedItem = project.Name;
-                Store.Instance.SelectedProject = project.Id;
+                Store.SelectedProject = project.Id;
             })
             {
                 Dock = DockStyle.Fill
@@ -144,7 +161,7 @@ namespace HydroneerStager
                 return;
             }
 
-            Store.Instance.SelectedProject = Store.Instance.Projects.FirstOrDefault(e => e.Name == ((KeyValuePair<string, Project>)newSelectedItem).Key).Id;
+            Store.SelectedProject = Store.Projects.FirstOrDefault(e => e.Name == ((KeyValuePair<string, Project>)newSelectedItem).Key).Id;
         }
 
         private void loadProjects()

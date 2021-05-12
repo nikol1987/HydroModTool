@@ -12,6 +12,11 @@ namespace HydroneerStager
             var basePathSrc = project.Path;
             var basePathOut = Path.Combine(project.OutputPath, "Staging", "Mining");
 
+            if (Directory.Exists(basePathOut))
+            {
+                Directory.Delete(basePathOut, true);
+            }
+
             var count = 0;
             foreach (var projectItem in project.Items)
             {
