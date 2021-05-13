@@ -9,6 +9,8 @@ namespace HydroneerStager
     {
         public static void Stage(BackgroundWorker thisWorker, Project project)
         {
+            var store = Store.GetInstance();
+
             var basePathSrc = project.Path;
             var basePathOut = Path.Combine(project.OutputPath, "Staging", "Mining");
 
@@ -29,7 +31,7 @@ namespace HydroneerStager
 
                 if (projectItem.Name.EndsWith(".uexp"))
                 {
-                    var patched = PatchFile(basePathSrc + projectItem.Path, Store.Instance.Guids);
+                    var patched = PatchFile(basePathSrc + projectItem.Path, store.Guids);
                     Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath));
 
                     using (var file = File.Create(basePathOut + newPath, (int)patched.Length, FileOptions.Asynchronous | FileOptions.SequentialScan))

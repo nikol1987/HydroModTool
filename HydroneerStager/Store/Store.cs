@@ -9,7 +9,7 @@ namespace HydroneerStager
 {
     internal sealed class Store : AppStoreBase
     {
-        public static Store Instance;
+        private Store() { }
 
         private Guid? _selectedProject;
 
@@ -96,17 +96,27 @@ namespace HydroneerStager
             SetValue(ref _guids, guids.ToList(), "Guids");
         }
 
-        internal static async Task InitAsync()
+        internal override async Task InitAsync()
         {
-            AppConfiguration = await Configuration.GetConfigurationAsync();
+            var AppConfiguration = await Configuration.GetConfigurationAsync();
 
-            Instance = new Store() {
+            _instance = new Store()
+            {
+                AppConfiguration = AppConfiguration,
                 _selectedProject = AppConfiguration.DefaultProject,
                 _projects = AppConfiguration.Projects,
                 _guids = AppConfiguration.Guids
             };
         }
     
-        
+        public static Store GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new Store();
+            }
+
+            return (Store)_instance;
+        }
     }
 }

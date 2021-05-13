@@ -1,12 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace HydroneerStager
 {
     internal abstract class AppStoreBase : INotifyPropertyChanged
     {
-        protected static AppConfiguration AppConfiguration;
+        protected AppStoreBase() { }
+
+        protected static AppStoreBase _instance;
+
+        protected AppConfiguration AppConfiguration;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -25,9 +30,11 @@ namespace HydroneerStager
             OnChange(propName);
         }
 
-        internal static void Save()
+        public void Save()
         {
             Configuration.Save(AppConfiguration);
         }
+
+        internal abstract Task InitAsync();
     }
 }

@@ -2,14 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace HydroneerStager.Pages
 {
     public partial class GuidsPage : UserControl
     {
-        private DataTable DataSource;   
+        private DataTable DataSource;
+
+        private readonly Store Store = Store.GetInstance();
 
         public GuidsPage()
         {
@@ -58,10 +59,10 @@ namespace HydroneerStager.Pages
 
             menuStrip1.Items["saveGuids"].Click += (object sender, System.EventArgs e) => {
                 var guids = DataSourceToGuidItems(DataSource);
-                Store.Instance.SaveGuids(guids);
+                Store.SaveGuids(guids);
             };
 
-            var items = GuidItemsDataRows(Store.Instance.Guids);
+            var items = GuidItemsDataRows(Store.Guids);
 
             foreach (var item in items)
             {

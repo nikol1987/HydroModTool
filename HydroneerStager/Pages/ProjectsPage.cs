@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -11,16 +12,17 @@ namespace HydroneerStager
 {
     public partial class ProjectsPage : UserControl
     {
-        private Store Store = Store.Instance;
+        private Store Store = Store.GetInstance();
 
         public ProjectsPage()
         {
             InitializeComponent();
 
             projectSettings.Items["addProject"].Click += AddProject_Click;
-            projectSettings.Items["stageProject"].Click += StageProject_Click; ;
+            projectSettings.Items["stageProject"].Click += StageProject_Click;
             projectSettings.Items["pakageProject"].Click += PackageProject_Click;
-            projectSettings.Items["refreshPage"].Click += RefreshPage_Click; ;
+            projectSettings.Items["refreshPage"].Click += RefreshPage_Click;
+            projectSettings.Items["copyMod"].Click += CopyMod_Click;
 
 
             stagerWorker.DoWork += (object sender, DoWorkEventArgs e) => {
@@ -96,14 +98,14 @@ namespace HydroneerStager
 
         private void PackageProject_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Soon™");
+            //MessageBox.Show("Soon™");
+
+            packagerWorker.RunWorkerAsync();
         }
 
         private async void RefreshPage_Click(object sender, EventArgs e)
         {
             await Store.InitAsync();
-
-            Store = Store.Instance;
 
             loadProjects();
             loadProjectItems();
@@ -322,6 +324,28 @@ namespace HydroneerStager
             {
                 contextMenuStrip1.Show(projectItemsView, e.Location);
             }
+        }
+
+        private void CopyMod_Click(object sender, EventArgs e)
+        {
+            var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject); ;
+
+            if (project == null || project.Items == null || project.Items.Count == 0)
+            {
+                return;
+            }
+
+            var gameFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Mining", "Saved", "Paks");
+            Directory.CreateDirectory(gameFolder);
+
+            var outFile = Utilities.GetOutFile(project);
+
+            if (!File.Exists(outFile))
+            {
+                return;
+            }
+
+            File.Copy(outFile, Path.Combine(gameFolder, Path.GetFileName(outFile)));
         }
     }
 }

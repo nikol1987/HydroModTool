@@ -1,6 +1,7 @@
 ﻿using HydroneerStager.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -96,9 +97,18 @@ namespace HydroneerStager
         {
             var bytes = new byte[fileName.Length + 5];
             Buffer.BlockCopy(BitConverter.GetBytes(fileName.Length + 1), 0, bytes, 0, 4);
-            Buffer.BlockCopy(Encoding.ASCII.GetBytes(fileName), 0, bytes, 0, fileName.Length);
+            Buffer.BlockCopy(Encoding.ASCII.GetBytes(fileName), 0, bytes, 4, fileName.Length);
 
             return bytes;
-        } 
+        }
+
+        public static string GetOutFile(Project project)
+        {
+            var fileName = $"500-{project.Name}_P.pak";
+            var outPath = Path.Combine(project.OutputPath, "dist");
+            var outputFile = Path.Combine(outPath, fileName);
+
+            return outputFile;
+        }
     }
 }

@@ -49,6 +49,7 @@ namespace HydroneerStager
             this.addProject = new System.Windows.Forms.ToolStripMenuItem();
             this.stageProject = new System.Windows.Forms.ToolStripMenuItem();
             this.pakageProject = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyMod = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshPage = new System.Windows.Forms.ToolStripMenuItem();
             this.projectItemsView = new System.Windows.Forms.TreeView();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -88,6 +89,7 @@ namespace HydroneerStager
             this.addProject,
             this.stageProject,
             this.pakageProject,
+            this.copyMod,
             this.refreshPage});
             this.projectSettings.Location = new System.Drawing.Point(0, 0);
             this.projectSettings.Name = "projectSettings";
@@ -115,6 +117,13 @@ namespace HydroneerStager
             this.pakageProject.Size = new System.Drawing.Size(63, 20);
             this.pakageProject.Text = "Package";
             this.pakageProject.ToolTipText = "Creates a .pak";
+            // 
+            // copyMod
+            // 
+            this.copyMod.Name = "copyMod";
+            this.copyMod.Size = new System.Drawing.Size(75, 20);
+            this.copyMod.Text = "Copy mod";
+            this.copyMod.ToolTipText = "Copy mod pak to game folder";
             // 
             // refreshPage
             // 
@@ -186,5 +195,6 @@ namespace HydroneerStager
 
         private System.Windows.Forms.ToolStripMenuItem pakageProject;
         private System.ComponentModel.BackgroundWorker packagerWorker;
+        private System.Windows.Forms.ToolStripMenuItem copyMod;
     }
 }

@@ -28,7 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.loadingWorker = new System.ComponentModel.BackgroundWorker();
+            this.loadingPhaseLabel = new System.Windows.Forms.Label();
+            this.splashTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
+            // 
+            // loadingPhaseLabel
+            // 
+            this.loadingPhaseLabel.AutoSize = true;
+            this.loadingPhaseLabel.Font = new System.Drawing.Font("Roboto", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.loadingPhaseLabel.Location = new System.Drawing.Point(12, 330);
+            this.loadingPhaseLabel.Name = "loadingPhaseLabel";
+            this.loadingPhaseLabel.Size = new System.Drawing.Size(142, 24);
+            this.loadingPhaseLabel.TabIndex = 0;
+            this.loadingPhaseLabel.Text = "Initializing App";
+            // 
+            // splashTimer
+            // 
+            this.splashTimer.Interval = 1500;
             // 
             // SplashScreen
             // 
@@ -36,6 +54,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(760, 363);
             this.ControlBox = false;
+            this.Controls.Add(this.loadingPhaseLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -44,10 +63,15 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private System.ComponentModel.BackgroundWorker loadingWorker;
+        private System.Windows.Forms.Label loadingPhaseLabel;
+        private System.Windows.Forms.Timer splashTimer;
     }
 }
 
