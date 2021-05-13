@@ -98,8 +98,6 @@ namespace HydroneerStager
 
         private void PackageProject_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("Soon™");
-
             packagerWorker.RunWorkerAsync();
         }
 
@@ -345,7 +343,14 @@ namespace HydroneerStager
                 return;
             }
 
-            File.Copy(outFile, Path.Combine(gameFolder, Path.GetFileName(outFile)));
+            var gamePak = Path.Combine(gameFolder, Path.GetFileName(outFile));
+
+            if (File.Exists(gamePak))
+            {
+                File.Delete(gamePak);
+            }
+
+            File.Copy(outFile, gamePak);
         }
     }
 }

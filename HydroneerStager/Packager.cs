@@ -26,6 +26,13 @@ namespace HydroneerStager
                 Stage = "Preparing to Package"
             });
 
+            Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
+
+            if (File.Exists(outputFile))
+            {
+                File.Delete(outputFile);
+            }
+
             var bytes = stuff.GetBytes(stagedFilesDir);
 
             thisWorker.ReportProgress(90, new PackageProgressReport()
@@ -33,7 +40,6 @@ namespace HydroneerStager
                 Stage = "Creating pak"
             });
 
-            Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
             File.WriteAllBytes(outputFile, bytes);
 
             thisWorker.ReportProgress(100, new PackageProgressReport()
