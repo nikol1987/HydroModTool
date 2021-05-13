@@ -1,22 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.2.0" />
-    <PackageReference Include="DotNetZip" Version="1.15.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Krypton.Components.Suite" Version="4.5.9" />
     <PackageReference Include="ReactiveUI" Version="13.3.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\HydroneerStager.DataAccess\HydroneerStager.DataAccess.csproj" />
-    <ProjectReference Include="..\HydroneerStager.WinForms\HydroneerStager.WinForms.csproj" />
+    <PackageReference Include="ReactiveUI.Events.Winforms" Version="13.3.2" />
+    <PackageReference Include="ReactiveUI.WinForms" Version="13.3.2" />
   </ItemGroup>
 
   <ItemGroup>
