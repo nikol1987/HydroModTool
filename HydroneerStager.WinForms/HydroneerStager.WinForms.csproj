@@ -6,10 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.2.0" />
     <PackageReference Include="Krypton.Components.Suite" Version="4.5.9" />
+    <PackageReference Include="MultiSelectTreeView" Version="1.0.9" />
     <PackageReference Include="ReactiveUI" Version="13.3.2" />
     <PackageReference Include="ReactiveUI.Events.Winforms" Version="13.3.2" />
     <PackageReference Include="ReactiveUI.WinForms" Version="13.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hydroneer.Contracts\Hydroneer.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +23,9 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ApplicationTabs\ProjectTabs\AddProjectView.cs">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
 

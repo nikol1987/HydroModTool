@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Hydroneer.Contracts\Hydroneer.Contracts.csproj" />
     <ProjectReference Include="..\HydroneerStager.DataAccess\HydroneerStager.DataAccess.csproj" />
     <ProjectReference Include="..\HydroneerStager.WinForms\HydroneerStager.WinForms.csproj" />
   </ItemGroup>

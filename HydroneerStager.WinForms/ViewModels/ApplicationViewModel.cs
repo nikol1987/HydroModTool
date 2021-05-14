@@ -1,11 +1,14 @@
-﻿using ReactiveUI;
+﻿using HydroneerStager.WinForms.Data;
+using ReactiveUI;
 
 namespace HydroneerStager.WinForms.ViewModels
 {
     public sealed class ApplicationViewModel : ReactiveObject
     {
-        public ApplicationViewModel()
+        public ApplicationViewModel(ApplicationStore applicationStore)
         {
+            applicationStore.ReloadState();
+
             ApplicationTitle = "Hydroneer Modding Toolchain";
             Tab1Title = "Install Mods";
             Tab2Title = "Create Mods";

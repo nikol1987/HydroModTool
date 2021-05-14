@@ -1,25 +1,33 @@
-﻿using HydroneerStager.Models;
+﻿using HydroneerStager.WinForms.ViewModels;
+using ReactiveUI;
 using System;
-using System.Collections.Generic;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace HydroneerStager
 {
-    public partial class AddProjectPage : UserControl
+    public partial class AddProjectView : UserControl, IViewFor<AddProjectViewModel>
     {
-        private Project _project = new Project(Guid.NewGuid(), "", "", "", new List<ProjectItem>());
-        private readonly Action<Project> action;
-
-        public AddProjectPage(Action<Project> action)
+        public AddProjectView(AddProjectViewModel addProjectViewModel)
         {
             InitializeComponent();
 
-            projectNameTextBox.DataBindings.Add("Text", _project, "Name", false, DataSourceUpdateMode.OnPropertyChanged);
-            cookedAssetsDirTextBox.DataBindings.Add("Text", _project, "Path", false, DataSourceUpdateMode.OnPropertyChanged);
-            outputPathDirTextBox.DataBindings.Add("Text", _project, "OutputPath", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.action = action;
+            this.WhenActivated(d =>
+            {
+                d(this.Bind(ViewModel, vm => vm.Name, v => v.projectNameTextBox.Text));
+                d(this.Bind(ViewModel, vm => vm.Path, v => v.cookedAssetsDirTextBox.Text));
+                d(this.Bind(ViewModel, vm => vm.OutputPath, v => v.outputPathDirTextBox.Text));
+
+                submit.Events()
+                    .Click
+                    .Select(ea => this.ParentForm)
+                    .InvokeCommand(ViewModel, vm => vm.AddProjectCommand);
+            });
+
+            ViewModel = addProjectViewModel;
         }
 
         private void selectCookedDirBtn_Click(object sender, System.EventArgs e)
@@ -64,9 +72,13 @@ namespace HydroneerStager
             action.Invoke(result.ToString()); ;
         }
 
-        private void submit_Click(object sender, EventArgs e)
+        public AddProjectViewModel ViewModel { get; set; }
+
+        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (AddProjectViewModel)value; }
+         
+        private void cancel_Click(object sender, EventArgs e)
         {
-            action.Invoke(_project);
-        }
+            this.ParentForm.Close();
+        } 
     }
 }

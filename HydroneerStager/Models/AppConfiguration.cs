@@ -6,10 +6,10 @@ namespace HydroneerStager
 {
     public class AppConfiguration
     {
-        public IList<Project> Projects { get; set; } = new List<Project>();
+        public List<Project> Projects { get; set; } = new List<Project>();
 
         public Guid? DefaultProject { get; set; } = null;
 
-        public IList<GuidItem> Guids { get; set; } = new List<GuidItem>();
+        public List<GuidItem> Guids { get; set; } = new List<GuidItem>();
     }
 }

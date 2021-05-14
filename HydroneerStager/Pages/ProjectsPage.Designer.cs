@@ -27,7 +27,7 @@ namespace HydroneerStager
         private System.Windows.Forms.ToolStripMenuItem addProject;
         private System.Windows.Forms.ToolStripMenuItem stageProject;
         private System.Windows.Forms.TreeView projectItemsView;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label progressLabel;
         private System.Windows.Forms.ProgressBar stageProgressbar;
@@ -44,7 +44,7 @@ namespace HydroneerStager
         {
             this.components = new System.ComponentModel.Container();
             this.projectListBox = new System.Windows.Forms.ListBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.projectSettings = new System.Windows.Forms.MenuStrip();
             this.addProject = new System.Windows.Forms.ToolStripMenuItem();
             this.stageProject = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,11 +77,11 @@ namespace HydroneerStager
             // 
             // contextMenuStrip1
             // 
-            this.contextMenuStrip1.MinimumSize = new System.Drawing.Size(100, 0);
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.ShowImageMargin = false;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(100, 4);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            this.contextMenuStrip.MinimumSize = new System.Drawing.Size(100, 0);
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.ShowImageMargin = false;
+            this.contextMenuStrip.Size = new System.Drawing.Size(100, 4);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // projectSettings
             // 
@@ -137,7 +137,7 @@ namespace HydroneerStager
             this.projectItemsView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.projectItemsView.ContextMenuStrip = this.contextMenuStrip1;
+            this.projectItemsView.ContextMenuStrip = this.contextMenuStrip;
             this.projectItemsView.Location = new System.Drawing.Point(190, 27);
             this.projectItemsView.Name = "projectItemsView";
             this.projectItemsView.ShowPlusMinus = false;

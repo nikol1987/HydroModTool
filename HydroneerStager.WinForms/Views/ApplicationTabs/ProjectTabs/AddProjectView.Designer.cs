@@ -1,7 +1,7 @@
 ﻿
 namespace HydroneerStager
 {
-    partial class AddProjectPage
+    partial class AddProjectView
     {
         /// <summary> 
         /// Required designer variable.
@@ -38,6 +38,7 @@ namespace HydroneerStager
             this.outputPathDirTextBox = new System.Windows.Forms.TextBox();
             this.outputPathDirBtn = new System.Windows.Forms.Button();
             this.submit = new System.Windows.Forms.Button();
+            this.cancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -120,12 +121,23 @@ namespace HydroneerStager
             this.submit.TabIndex = 3;
             this.submit.Text = "Done";
             this.submit.UseVisualStyleBackColor = true;
-            this.submit.Click += new System.EventHandler(this.submit_Click);
             // 
-            // AddProjectPage
+            // cancel
+            // 
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Location = new System.Drawing.Point(394, 204);
+            this.cancel.Name = "cancel";
+            this.cancel.Size = new System.Drawing.Size(75, 23);
+            this.cancel.TabIndex = 3;
+            this.cancel.Text = "Cancel";
+            this.cancel.UseVisualStyleBackColor = true;
+            this.cancel.Click += new System.EventHandler(this.cancel_Click);
+            // 
+            // AddProjectView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cancel);
             this.Controls.Add(this.submit);
             this.Controls.Add(this.outputPathDirBtn);
             this.Controls.Add(this.selectCookedDirBtn);
@@ -137,7 +149,7 @@ namespace HydroneerStager
             this.Controls.Add(this.label1);
             this.MaximumSize = new System.Drawing.Size(510, 250);
             this.MinimumSize = new System.Drawing.Size(510, 250);
-            this.Name = "AddProjectPage";
+            this.Name = "AddProjectView";
             this.Size = new System.Drawing.Size(510, 250);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -155,5 +167,6 @@ namespace HydroneerStager
         private System.Windows.Forms.TextBox outputPathDirTextBox;
         private System.Windows.Forms.Button outputPathDirBtn;
         private System.Windows.Forms.Button submit;
+        private System.Windows.Forms.Button cancel;
     }
 }

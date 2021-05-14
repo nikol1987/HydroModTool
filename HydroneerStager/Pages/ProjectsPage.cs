@@ -194,15 +194,15 @@ namespace HydroneerStager
 
             var sortedItems = project.Items.OrderBy(e => e.Path).ToList();
 
-            var assetTree = Utilities.BuildFileStruture(contextMenuStrip1, sortedItems);
+            var assetTree = Utilities.BuildFileStruture(contextMenuStrip, sortedItems);
             projectItemsView.Nodes.Add(assetTree.FirstNode);
             projectItemsView.ExpandAll();
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            var sourceControl = contextMenuStrip1.SourceControl;
-            contextMenuStrip1.Items.Clear();
+            var sourceControl = contextMenuStrip.SourceControl;
+            contextMenuStrip.Items.Clear();
 
             if (sourceControl == null)
             {
@@ -212,7 +212,8 @@ namespace HydroneerStager
 
             if (sourceControl.Name == projectListBox.Name)
             {
-                var deleteProjectStripItem = new ToolStripButton() {
+                var deleteProjectStripItem = new ToolStripButton()
+                {
                     Name = "deleteProjectStripItem",
                     Text = "Delete Project",
                 };
@@ -223,7 +224,7 @@ namespace HydroneerStager
                     Store.DeleteProject(project.Id);
                 };
 
-                contextMenuStrip1.Items.Add(deleteProjectStripItem);
+                contextMenuStrip.Items.Add(deleteProjectStripItem);
             }
             else if (sourceControl.Name == projectItemsView.Name)
             {
@@ -242,7 +243,7 @@ namespace HydroneerStager
                         Store.RemoveItems(project.Id, new[] { new Guid(selectedNode.Name) });
                     };
 
-                    contextMenuStrip1.Items.Add(deleteItemStripItem);
+                    contextMenuStrip.Items.Add(deleteItemStripItem);
                 }
                 else
                 {
@@ -262,12 +263,12 @@ namespace HydroneerStager
                         });
                     };
 
-                    contextMenuStrip1.Items.Add(addProjectItemStripItem);
+                    contextMenuStrip.Items.Add(addProjectItemStripItem);
                 }
             }
             else
             {
-                contextMenuStrip1.Items.Add("Source: " + sourceControl.Name);
+                contextMenuStrip.Items.Add("Source: " + sourceControl.Name);
             }
 
 
@@ -283,7 +284,7 @@ namespace HydroneerStager
                 if (selectedIndex != -1)
                 {
                     projectListBox.SelectedIndex = selectedIndex;
-                    contextMenuStrip1.Show(projectListBox, e.Location);
+                    contextMenuStrip.Show(projectListBox, e.Location);
                 }
             }
         }
@@ -322,7 +323,7 @@ namespace HydroneerStager
         {
             if (e.Button == MouseButtons.Right)
             {
-                contextMenuStrip1.Show(projectItemsView, e.Location);
+                contextMenuStrip.Show(projectItemsView, e.Location);
             }
         }
 

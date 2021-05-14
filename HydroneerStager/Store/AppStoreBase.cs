@@ -32,7 +32,7 @@ namespace HydroneerStager
 
         public void Save()
         {
-            Configuration.Save(AppConfiguration);
+            //Configuration.Save(AppConfiguration);
         }
 
         internal abstract Task InitAsync();

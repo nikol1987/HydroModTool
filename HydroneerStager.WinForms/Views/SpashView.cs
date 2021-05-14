@@ -23,7 +23,7 @@ namespace HydroneerStager.WinForms.Views
             loadingWorker.DoWork += async (object sender, DoWorkEventArgs e) => {
                 loadingWorker.ReportProgress(1, new LoadingWorkerStage("Loading Configuration"));
 
-                //await Store.GetInstance().InitAsync();
+                //await Store.GetInstance().InitAsync(); //TODO: Get Store DIed
             };
 
             loadingWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) => {
@@ -43,10 +43,6 @@ namespace HydroneerStager.WinForms.Views
                 spashViewModel.ShowAppCommand.Execute();
                 Close();
             };
-
-            this.WhenActivated(d => {
-                d(this.OneWayBind(ViewModel, vm => vm.ApplicationTitle, v => v.Text));
-            });
 
             ViewModel = spashViewModel;
 

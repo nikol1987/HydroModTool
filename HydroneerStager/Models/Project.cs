@@ -6,6 +6,21 @@ namespace HydroneerStager.Models
 {
     public sealed class Project
     {
+        public Project() { }
+
+        public Project(Guid id,
+                       string name,
+                       string path,
+                       string outputPath,
+                       IList<ProjectItem> items)
+        {
+            Id = id;
+            Name = name;
+            Path = path;
+            OutputPath = outputPath;
+            Items = items;
+        }
+
         public Guid Id { get; set; }
 
         public string Name { get; set; }

@@ -8,27 +8,33 @@ namespace HydroneerStager
 {
     public sealed class Configuration
     {
-        private static readonly string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config");
+        private readonly string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config");
 
-        private static IConfiguration Configuraton;
+        private AppConfiguration _appConfiguration;
 
-        public static async Task<AppConfiguration> GetConfigurationAsync()
+        public async Task<AppConfiguration> GetConfigurationAsync()
         {
-            var appConfiguration = new AppConfiguration();
 
             if (!File.Exists($"{ConfigPath}.json"))
             {
                 CreateConfigFile(null);
             }
 
-            if (Configuraton == null)
+            if (_appConfiguration == null)
             {
                 var configurationBuilder = new ConfigurationBuilder();
                 configurationBuilder.AddJsonFile($"{ConfigPath}.json", false, true);
 
                 try
                 {
-                    Configuraton = configurationBuilder.Build();
+                    var appConfiguration = new AppConfiguration();
+
+                    var configuration = configurationBuilder.Build();
+                    configuration.GetSection(nameof(AppConfiguration)).Bind(appConfiguration);
+
+                    _appConfiguration = appConfiguration;
+
+                    return appConfiguration;
                 }
                 catch (Exception)
                 {
@@ -38,17 +44,18 @@ namespace HydroneerStager
                 } 
             }
 
-            Configuraton.GetSection(nameof(AppConfiguration)).Bind(appConfiguration);
 
-            return appConfiguration;
+            return _appConfiguration;
         }
 
-        public static void Save(AppConfiguration config)
+        public void Save(AppConfiguration config)
         {
             CreateConfigFile(config);
+
+            _appConfiguration = config;
         }
 
-        private static void CreateConfigFile(AppConfiguration appConfiguration)
+        private void CreateConfigFile(AppConfiguration appConfiguration)
         {
             if (File.Exists($"{ConfigPath}.json") && appConfiguration == null)
             {

@@ -58,7 +58,7 @@ namespace HydroneerStager
             _projects = _projects.Where(e => e.Id != id).ToList();
             OnChange("Projects");
             AppConfiguration.Projects = _projects.ToList();
-            Configuration.Save(AppConfiguration);
+            //Configuration.Save(AppConfiguration);
         }
 
         public void RemoveItems(Guid id,IReadOnlyCollection<Guid> guids)
@@ -74,12 +74,7 @@ namespace HydroneerStager
             var project = _projects.First(e => e.Id == id);
 
             var items = selectedFiles
-                    .Select(e => new ProjectItem()
-                    {
-                        Id = Guid.NewGuid(),
-                        Path = e.Replace(project.Path, ""),
-                        Name = Path.GetFileName(e)
-                    })
+                    .Select(e => new ProjectItem(Guid.NewGuid(), e.Replace(project.Path, ""), Path.GetFileName(e)))
                     .ToList();
 
             project.AddItems(items);
@@ -87,7 +82,7 @@ namespace HydroneerStager
 
             OnChange("ProjectItems");
             AppConfiguration.Projects = _projects.ToList();
-            Configuration.Save(AppConfiguration);
+            //Configuration.Save(AppConfiguration);
         }
 
         internal void SaveGuids(IReadOnlyCollection<GuidItem> guids)
@@ -98,7 +93,7 @@ namespace HydroneerStager
 
         internal override async Task InitAsync()
         {
-            var AppConfiguration = await Configuration.GetConfigurationAsync();
+            /*var AppConfiguration = await Configuration.GetConfigurationAsync();
 
             _instance = new Store()
             {
@@ -106,7 +101,7 @@ namespace HydroneerStager
                 _selectedProject = AppConfiguration.DefaultProject,
                 _projects = AppConfiguration.Projects,
                 _guids = AppConfiguration.Guids
-            };
+            };*/
         }
     
         public static Store GetInstance()

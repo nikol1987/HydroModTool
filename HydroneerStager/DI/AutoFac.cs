@@ -1,5 +1,9 @@
 ﻿using Autofac;
+using HydroneerStager.Extensions;
+using HydroneerStager.WinForms.Converters;
+using HydroneerStager.WinForms.Data;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace HydroneerStager.DI
 {
@@ -13,13 +17,22 @@ namespace HydroneerStager.DI
 
             builder.RegisterType<AutofacFormFactory>().As<IFormFactory>();
 
+            builder.RegisterAssemblyTypes(typeof(Program).Assembly)
+            .Where(t => t.Name.EndsWith("Service"))
+            .InstancePerLifetimeScope()
+            .AsImplementedInterfaces();
+
             builder.Register(ct => {
                 return new HttpClient();
             });
 
-            RegisterDataAccess(builder);
+            builder
+                .RegisterDataAccess()
+                .RegisterForms()
+                .RegisterConverters();
 
-            RegisterForms(builder);
+            builder.RegisterType<Configuration>()
+                .SingleInstance();
 
             var container = builder.Build();
 
@@ -28,22 +41,59 @@ namespace HydroneerStager.DI
             Services = container;
         }
 
-        private static void RegisterDataAccess(ContainerBuilder builder)
+        private static ContainerBuilder RegisterDataAccess(this ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(typeof(DataAccess.Assembly).Assembly)
             .Where(t => t.Name.EndsWith("Service"))
             .InstancePerLifetimeScope();
+
+            return builder;
         }
 
-        private static void RegisterForms(ContainerBuilder builder)
+        private static ContainerBuilder RegisterForms(this ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(typeof(WinForms.Assembly).Assembly)
-            .Where(t => t.Name.EndsWith("ViewModel"))
+            .Where(t => t.Name.EndsWith("Service"))
+            .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(typeof(WinForms.Assembly).Assembly)
+            .Where(t => t.Name.EndsWith("Model"))
             .InstancePerDependency();
 
             builder.RegisterAssemblyTypes(typeof(WinForms.Assembly).Assembly)
             .Where(t => t.Name.EndsWith("View"))
             .SingleInstance();
+
+            builder.Register(ct => {
+                var configuration = Services.Resolve<Configuration>();
+                var appConfig = configuration.GetConfigurationAsync().Result;
+                var appModel = appConfig.ToAppSateModel();
+
+                var applicationStore = new ApplicationStore(appModel);
+                applicationStore.LoadConfig += async () => await ApplicationStore_LoadConfig();
+                applicationStore.SaveConfig += ApplicationStore_SaveConfig;
+                
+                return applicationStore;
+            })
+            .SingleInstance();
+
+            return builder;
+        }
+
+        private static async void ApplicationStore_SaveConfig(AppStateModel appState)
+        {
+            var configuration = Services.Resolve<Configuration>();
+            var updatedConfig = (await configuration.GetConfigurationAsync()).Update(appState);
+            configuration.Save(updatedConfig);
+        }
+
+        private static async Task<AppStateModel> ApplicationStore_LoadConfig()
+        {
+            var configuration = Services.Resolve<Configuration>();
+
+            var appConfig = await configuration.GetConfigurationAsync();
+
+            return appConfig.ToAppSateModel();
         }
     }
 }
