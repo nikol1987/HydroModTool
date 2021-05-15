@@ -75,7 +75,7 @@ namespace HydroneerStager
             this.projectListBox.SelectedIndexChanged += new System.EventHandler(this.projectListBox_Change);
             this.projectListBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.projectListBox_MouseClick);
             // 
-            // contextMenuStrip1
+            // contextMenuStrip
             // 
             this.contextMenuStrip.MinimumSize = new System.Drawing.Size(100, 0);
             this.contextMenuStrip.Name = "contextMenuStrip1";

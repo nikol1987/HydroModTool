@@ -1,50 +1,34 @@
-﻿using HydroneerStager.Models;
+﻿using Hydroneer.Contracts.Models;
+using HydroneerStager.Models;
 using Ionic.Zlib;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Forms;
 
-namespace HydroneerStager
+namespace HydroneerStager.Tools
 {
-    internal static class Packager
+    public class Packager
     {
-        public static void Package(BackgroundWorker thisWorker, Project project)
+        public void Package(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, Project project)
         {
-            var stagedFilesDir = Path.Combine(project.OutputPath, "Staging", "Mining");
+            var stagedFilesDir = Path.Combine(project.OutputPath, "Staging", project.Name, "Mining");
             var outputFile = Utilities.GetOutFile(project);
 
             var stuff = new OldStuff();
 
-
-            thisWorker.ReportProgress(10, new PackageProgressReport()
-            {
-                Stage = "Preparing to Package"
-            });
+            reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(10, 0, 100, progressMin, progressMax)), "Preparing to Package"));
 
             var bytes = stuff.GetBytes(stagedFilesDir);
 
-            thisWorker.ReportProgress(90, new PackageProgressReport()
-            {
-                Stage = "Creating pak"
-            });
+            reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(80, 0, 100, progressMin, progressMax)), "Creating pak"));
 
             Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
             File.WriteAllBytes(outputFile, bytes);
 
-            thisWorker.ReportProgress(100, new PackageProgressReport()
-            {
-                Stage = "Pak created"
-            });
-        }
-
-        public class PackageProgressReport
-        {
-            public string Stage { get; set; }
+            reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(80, 0, 100, progressMin, progressMax)), "Pak created"));
         }
         
         public class OldStuff

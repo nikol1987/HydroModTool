@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using HydroneerStager.Extensions;
+using HydroneerStager.Tools;
 using HydroneerStager.WinForms.Converters;
 using HydroneerStager.WinForms.Data;
 using System.Net.Http;
@@ -15,7 +16,15 @@ namespace HydroneerStager.DI
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<AutofacFormFactory>().As<IFormFactory>();
+            builder.RegisterType<AutofacFormFactory>()
+                .SingleInstance()
+                .As<IFormFactory>();
+
+            builder.RegisterType<Packager>()
+                .SingleInstance();
+
+            builder.RegisterType<Stager>()
+                .SingleInstance();
 
             builder.RegisterAssemblyTypes(typeof(Program).Assembly)
             .Where(t => t.Name.EndsWith("Service"))

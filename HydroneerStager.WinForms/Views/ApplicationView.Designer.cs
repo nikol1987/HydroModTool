@@ -29,6 +29,7 @@ namespace HydroneerStager.WinForms.Views
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ApplicationView));
             this.kryptonNavigator1 = new ComponentFactory.Krypton.Navigator.KryptonNavigator();
             this.kryptonPage1 = new ComponentFactory.Krypton.Navigator.KryptonPage();
             this.kryptonPage2 = new ComponentFactory.Krypton.Navigator.KryptonPage();
@@ -72,7 +73,7 @@ namespace HydroneerStager.WinForms.Views
             this.kryptonPage1.LastVisibleSet = true;
             this.kryptonPage1.MinimumSize = new System.Drawing.Size(50, 50);
             this.kryptonPage1.Name = "kryptonPage1";
-            this.kryptonPage1.Size = new System.Drawing.Size(798, 423);
+            this.kryptonPage1.Size = new System.Drawing.Size(853, 494);
             this.kryptonPage1.Text = "kryptonPage1";
             this.kryptonPage1.ToolTipTitle = "Page ToolTip";
             this.kryptonPage1.UniqueName = "10B091E427D2494F028FD6F0AF561B5F";
@@ -107,6 +108,7 @@ namespace HydroneerStager.WinForms.Views
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(855, 521);
             this.Controls.Add(this.kryptonNavigator1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1140, 770);
             this.MinimumSize = new System.Drawing.Size(590, 560);
             this.Name = "ApplicationView";

@@ -20,9 +20,14 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
 
             this.WhenActivated(d =>
             {
-                d(this.OneWayBind(ViewModel, vm => vm.SelectedProject, v => v.label2.Text));
                 d(this.Bind(ViewModel, vm => vm.Projects, v => v.projectListBox.DataSource));
 
+                d(ViewModel
+                    .WhenAnyValue(vm => vm.ProgressBarState)
+                    .Subscribe(progress => {
+                        progressBar.Value = progress.Value;
+                        progressBarLabel.Text = progress.Label;
+                    }));
 
                 d(ViewModel
                     .WhenAnyValue(vm => vm.ProjectItems)
@@ -55,20 +60,20 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
             });
 
 
-            projectItemsTree.MouseUp += (object sender, MouseEventArgs e) => {
-                if (e.Button == MouseButtons.Right)
+            projectItemsTree.MouseUp += (sender, ea) => {
+                if (ea.Button == MouseButtons.Right)
                 {
                     contextMenu.Show(projectItemsTree);
                 }
             };
 
-            projectListBox.MouseUp += (object sender, MouseEventArgs e) =>
+            projectListBox.ListBox.MouseUp += (sender, ea) =>
             {
-                if (e.Button == MouseButtons.Right)
+                if (ea.Button == MouseButtons.Right)
                 {
-                    var selectedIndex = projectListBox.IndexFromPoint(e.Location);
+                    var selectedIndex = projectListBox.IndexFromPoint(ea.Location);
 
-                    if (selectedIndex != -1)
+                    if (selectedIndex != -1 && selectedIndex != 65535)
                     {
                         projectListBox.SelectedIndex = selectedIndex;
                         contextMenu.Show(projectListBox);

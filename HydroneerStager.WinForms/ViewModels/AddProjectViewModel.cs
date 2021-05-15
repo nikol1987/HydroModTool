@@ -65,9 +65,12 @@ namespace HydroneerStager.WinForms.ViewModels
         public async void AddProject(Form form)
         {
             var projects = new List<ProjectModel>(_applicationStore.AppState.Projects);
-            projects.Add(new ProjectModel(Id, Name, Path, OutputPath, new List<ProjectItemModel>()));
+            var newProject = new ProjectModel(Id, Name, Path, OutputPath, new List<ProjectItemModel>());
+
+            projects.Add(newProject);
 
             _applicationStore.AppState.Projects = projects;
+            _applicationStore.AppState.SelectedProject = newProject.Id;
             await _applicationStore.ReloadState();
             form.Close();
         }

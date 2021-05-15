@@ -1,18 +1,21 @@
-﻿using HydroneerStager.Models;
+﻿using Hydroneer.Contracts.Models;
+using HydroneerStager.Models;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 
-namespace HydroneerStager
+namespace HydroneerStager.Tools
 {
-    public static class Stager
+    public class Stager
     {
-        public static void Stage(BackgroundWorker thisWorker, Project project)
+        public void Stage(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, Project project, IReadOnlyCollection<GuidItem> guids)
         {
             var store = Store.GetInstance();
 
             var basePathSrc = project.Path;
-            var basePathOut = Path.Combine(project.OutputPath, "Staging", "Mining");
+            var basePathOut = Path.Combine(project.OutputPath, "Staging", project.Name, "Mining");
+
+            reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(10, 0, 100, progressMin, progressMax)), "Checking path"));
 
             if (Directory.Exists(basePathOut))
             {
@@ -22,7 +25,7 @@ namespace HydroneerStager
             var count = 0;
             foreach (var projectItem in project.Items)
             {
-                thisWorker.ReportProgress(MapProgress((decimal)count, (decimal)project.Items.Count), projectItem);
+                reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap((decimal)count, 0, (decimal)project.Items.Count, progressMin, progressMax)), $"Staging {count}/{project.Items.Count} ({projectItem.Name})"));
 
                 var newPath = projectItem.Path.Replace(basePathSrc, basePathOut);
                 Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath));
@@ -31,7 +34,7 @@ namespace HydroneerStager
 
                 if (projectItem.Name.EndsWith(".uexp"))
                 {
-                    var patched = PatchFile(basePathSrc + projectItem.Path, store.Guids);
+                    var patched = PatchFile(basePathSrc + projectItem.Path, guids);
                     Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath));
 
                     using (var file = File.Create(basePathOut + newPath, (int)patched.Length, FileOptions.Asynchronous | FileOptions.SequentialScan))
@@ -49,7 +52,7 @@ namespace HydroneerStager
             }
         }
 
-        private static MemoryStream PatchFile(string fileSrc, IReadOnlyCollection<GuidItem> guids)
+        private MemoryStream PatchFile(string fileSrc, IReadOnlyCollection<GuidItem> guids)
         {
             var bytes = new HashSet<byte>();
             foreach (var entry in guids)
@@ -93,13 +96,6 @@ namespace HydroneerStager
             }
 
             return ms;
-        }
-
-        private static int MapProgress(this decimal value, decimal toSource)
-        {
-            decimal part1 = (value / toSource) * (decimal)100.00;
-
-            return (int)part1 ;
         }
     }
 }

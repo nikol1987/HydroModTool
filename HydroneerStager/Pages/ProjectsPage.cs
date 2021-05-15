@@ -1,4 +1,5 @@
 ﻿using HydroneerStager.Models;
+using HydroneerStager.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using static HydroneerStager.Packager;
+using static HydroneerStager.Tools.Packager;
 
 namespace HydroneerStager
 {
@@ -35,7 +36,7 @@ namespace HydroneerStager
                     return;
                 }
 
-                Stager.Stage(stagerWorker, project);
+                //(new Stager()).Stage(stagerWorker, project);
             };
             stagerWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) => {
                 stageProgressbar.Value = e.ProgressPercentage;
@@ -65,11 +66,11 @@ namespace HydroneerStager
                     return;
                 }
 
-                Packager.Package(packagerWorker, project);
+                //(new Packager()).Package(packagerWorker, project);
             };
             packagerWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) => {
                 stageProgressbar.Value = e.ProgressPercentage;
-                progressLabel.Text = ((PackageProgressReport)e.UserState).Stage;
+                //progressLabel.Text = ((PackageProgressReport)e.UserState).Stage;
             };
             packagerWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
                 var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
@@ -194,8 +195,8 @@ namespace HydroneerStager
 
             var sortedItems = project.Items.OrderBy(e => e.Path).ToList();
 
-            var assetTree = Utilities.BuildFileStruture(contextMenuStrip, sortedItems);
-            projectItemsView.Nodes.Add(assetTree.FirstNode);
+            //var assetTree = Utilities.BuildFileStruture(contextMenuStrip, sortedItems);
+            //projectItemsView.Nodes.Add(assetTree.FirstNode);
             projectItemsView.ExpandAll();
         }
 

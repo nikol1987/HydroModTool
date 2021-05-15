@@ -1,70 +1,15 @@
 ﻿using HydroneerStager.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace HydroneerStager
 {
     internal static class Utilities
     {
-        public static TreeNode BuildFileStruture(ContextMenuStrip menuStrip, IReadOnlyCollection<ProjectItem> items)
+        public static decimal Remap(decimal value, decimal from1, decimal to1, decimal from2, decimal to2)
         {
-            var root = new TreeNode()
-            {
-                Text = "Root",
-                Name = "root"
-            };
-
-            foreach (var item in items)
-            {
-                var pathParts = item.Path.Split("\\", StringSplitOptions.RemoveEmptyEntries);
-
-                for (int i = 0; i < pathParts.Length; i++)
-                {
-                    var pathPart = pathParts[i];
-
-                    var partNode = root.Nodes.Find("node-" + pathPart, true).FirstOrDefault();
-
-                    if (partNode == null && i == 0)
-                    {
-                        root.Nodes.Add(new TreeNode(pathPart)
-                        {
-                            Name = "node-"+pathPart,
-                            ContextMenuStrip = menuStrip,
-                            Text = pathPart
-                        });
-                        continue;
-                    }
-                    else if (partNode == null && i == pathParts.Length-1)
-                    {
-                        var parentNode = root.Nodes.Find("node-" + pathParts[i - 1], true).FirstOrDefault();
-
-                        parentNode.Nodes.Add(new TreeNode(pathPart)
-                        {
-                            Name = item.Id.ToString(),
-                            ContextMenuStrip = menuStrip,
-                            Text = pathPart
-                        });
-                    }
-                    else if (partNode == null && i > 0)
-                    {
-                        var parentNode = root.Nodes.Find("node-" + pathParts[i - 1], true).FirstOrDefault();
-
-                        parentNode.Nodes.Add(new TreeNode(pathPart)
-                        {
-                            Name = "node-" + pathPart,
-                            ContextMenuStrip = menuStrip,
-                            Text = pathPart
-                        });
-                        continue;
-                    }
-                }
-            }
-
-            return root;
+            return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
         }
 
         public static bool CompareBytes(byte[] a, byte[] b)
