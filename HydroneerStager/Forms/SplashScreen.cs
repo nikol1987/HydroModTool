@@ -9,16 +9,19 @@ namespace HydroneerStager
         {
             InitializeComponent();
 
-            loadingWorker.DoWork += async (object sender, DoWorkEventArgs e) => {
+            loadingWorker.DoWork += async (object sender, DoWorkEventArgs e) =>
+            {
                 loadingWorker.ReportProgress(1, new LoadingWorkerStage("Loading Configuration"));
 
                 await Store.GetInstance().InitAsync();
             };
 
-            loadingWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) => {
+            loadingWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
+            {
                 loadingPhaseLabel.Text = ((LoadingWorkerStage)e.UserState).Phase;
             };
-            loadingWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
+            loadingWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+            {
                 loadingPhaseLabel.Text = "Starting App";
 
                 splashTimer.Enabled = true;
@@ -27,7 +30,8 @@ namespace HydroneerStager
             loadingWorker.WorkerReportsProgress = true;
             loadingWorker.WorkerSupportsCancellation = true;
 
-            splashTimer.Tick += (object sender, System.EventArgs e) => {
+            splashTimer.Tick += (object sender, System.EventArgs e) =>
+            {
                 splashTimer.Enabled = false;
                 splashTimer.Stop();
 

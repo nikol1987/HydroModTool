@@ -9,12 +9,16 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs
     {
         public ProjectsTabView(
             ProjectsView projectView,
-            ProjectTabViewModel projectsTabViewModel)
+            ProjectTabViewModel projectsTabViewModel,
+            GuidsView guidsView)
         {
             InitializeComponent();
 
             projectView.Dock = DockStyle.Fill;
             this.kryptonPage1.Controls.Add(projectView);
+
+            guidsView.Dock = DockStyle.Fill;
+            this.kryptonPage2.Controls.Add(guidsView);
 
             this.WhenActivated(d =>
             {

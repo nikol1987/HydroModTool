@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HydroneerStager.Models
+namespace HydroneerStager.Contracts.Models.AppModels
 {
     public class ProjectItem
     {

@@ -1,4 +1,4 @@
-﻿using HydroneerStager.Models;
+﻿using HydroneerStager.Contracts.Models.AppModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -61,7 +61,7 @@ namespace HydroneerStager
             //Configuration.Save(AppConfiguration);
         }
 
-        public void RemoveItems(Guid id,IReadOnlyCollection<Guid> guids)
+        public void RemoveItems(Guid id, IReadOnlyCollection<Guid> guids)
         {
             var project = _projects.First(e => e.Id == id);
 
@@ -103,7 +103,7 @@ namespace HydroneerStager
                 _guids = AppConfiguration.Guids
             };*/
         }
-    
+
         public static Store GetInstance()
         {
             if (_instance == null)

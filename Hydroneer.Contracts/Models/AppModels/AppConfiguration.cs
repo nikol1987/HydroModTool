@@ -1,8 +1,7 @@
-﻿using HydroneerStager.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace HydroneerStager
+namespace HydroneerStager.Contracts.Models.AppModels
 {
     public class AppConfiguration
     {

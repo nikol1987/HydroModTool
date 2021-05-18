@@ -1,5 +1,4 @@
-﻿using HydroneerStager.Models;
-using HydroneerStager.Tools;
+﻿using HydroneerStager.Contracts.Models.AppModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using static HydroneerStager.Tools.Packager;
 
 namespace HydroneerStager
 {
@@ -26,7 +24,8 @@ namespace HydroneerStager
             projectSettings.Items["copyMod"].Click += CopyMod_Click;
 
 
-            stagerWorker.DoWork += (object sender, DoWorkEventArgs e) => {
+            stagerWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+            {
                 var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
 
                 if (project == null)
@@ -38,11 +37,13 @@ namespace HydroneerStager
 
                 //(new Stager()).Stage(stagerWorker, project);
             };
-            stagerWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) => {
+            stagerWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
+            {
                 stageProgressbar.Value = e.ProgressPercentage;
                 progressLabel.Text = $"Copying {((ProjectItem)e.UserState).Name}";
             };
-            stagerWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
+            stagerWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+            {
                 var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
 
                 if (project == null)
@@ -57,7 +58,8 @@ namespace HydroneerStager
             stagerWorker.WorkerReportsProgress = true;
             stagerWorker.WorkerSupportsCancellation = true;
 
-            packagerWorker.DoWork += (object sender, DoWorkEventArgs e) => {
+            packagerWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+            {
                 var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
 
                 if (project == null)
@@ -68,11 +70,13 @@ namespace HydroneerStager
 
                 //(new Packager()).Package(packagerWorker, project);
             };
-            packagerWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) => {
+            packagerWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
+            {
                 stageProgressbar.Value = e.ProgressPercentage;
                 //progressLabel.Text = ((PackageProgressReport)e.UserState).Stage;
             };
-            packagerWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
+            packagerWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+            {
                 var project = Store.Projects.FirstOrDefault(e => e.Id == Store.SelectedProject);
 
                 if (project == null)
@@ -219,7 +223,8 @@ namespace HydroneerStager
                     Text = "Delete Project",
                 };
 
-                deleteProjectStripItem.Click += (object sender, EventArgs e) => {
+                deleteProjectStripItem.Click += (object sender, EventArgs e) =>
+                {
                     var project = ((KeyValuePair<string, Project>)projectListBox.SelectedItem).Value;
 
                     Store.DeleteProject(project.Id);
@@ -238,7 +243,8 @@ namespace HydroneerStager
                         Text = "Remove Asset",
                     };
 
-                    deleteItemStripItem.Click += (object sender, EventArgs e) => {
+                    deleteItemStripItem.Click += (object sender, EventArgs e) =>
+                    {
                         var project = ((KeyValuePair<string, Project>)projectListBox.SelectedItem).Value;
 
                         Store.RemoveItems(project.Id, new[] { new Guid(selectedNode.Name) });
@@ -254,7 +260,8 @@ namespace HydroneerStager
                         Text = "Add Assets",
                     };
 
-                    addProjectItemStripItem.Click += (object sender, EventArgs e) => {
+                    addProjectItemStripItem.Click += (object sender, EventArgs e) =>
+                    {
                         var project = ((KeyValuePair<string, Project>)projectListBox.SelectedItem).Value;
 
                         ChooseFilesHelper("Select assets", project, (selectedFiles) =>

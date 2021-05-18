@@ -1,5 +1,7 @@
 ﻿using Autofac;
-using HydroneerStager.Extensions;
+using Hydroneer.Contracts.Models.AppModels;
+using HydroneerStager.Contracts.Extensions;
+using HydroneerStager.Contracts.Models.WinformModels;
 using HydroneerStager.Tools;
 using HydroneerStager.WinForms.Converters;
 using HydroneerStager.WinForms.Data;
@@ -31,7 +33,8 @@ namespace HydroneerStager.DI
             .InstancePerLifetimeScope()
             .AsImplementedInterfaces();
 
-            builder.Register(ct => {
+            builder.Register(ct =>
+            {
                 return new HttpClient();
             });
 
@@ -73,7 +76,8 @@ namespace HydroneerStager.DI
             .Where(t => t.Name.EndsWith("View"))
             .SingleInstance();
 
-            builder.Register(ct => {
+            builder.Register(ct =>
+            {
                 var configuration = Services.Resolve<Configuration>();
                 var appConfig = configuration.GetConfigurationAsync().Result;
                 var appModel = appConfig.ToAppSateModel();
@@ -81,7 +85,7 @@ namespace HydroneerStager.DI
                 var applicationStore = new ApplicationStore(appModel);
                 applicationStore.LoadConfig += async () => await ApplicationStore_LoadConfig();
                 applicationStore.SaveConfig += ApplicationStore_SaveConfig;
-                
+
                 return applicationStore;
             })
             .SingleInstance();
@@ -92,8 +96,10 @@ namespace HydroneerStager.DI
         private static async void ApplicationStore_SaveConfig(AppStateModel appState)
         {
             var configuration = Services.Resolve<Configuration>();
-            var updatedConfig = (await configuration.GetConfigurationAsync()).Update(appState);
-            configuration.Save(updatedConfig);
+            var appConfig = await configuration.GetConfigurationAsync();
+
+            var updatedConfig = appConfig.AppConfiguration.Update(appState);
+            configuration.Save(new ConfigurationModel(updatedConfig, appConfig.GuidConfiguration), Configuration.ConfigFile.General);
         }
 
         private static async Task<AppStateModel> ApplicationStore_LoadConfig()

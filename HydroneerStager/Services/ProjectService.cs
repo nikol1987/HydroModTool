@@ -1,6 +1,6 @@
 ﻿using Hydroneer.Contracts.Models;
 using Hydroneer.Contracts.WinFormsServices;
-using HydroneerStager.Models;
+using HydroneerStager.Contracts.Models.AppModels;
 using HydroneerStager.Tools;
 using System;
 using System.Collections.Generic;
@@ -29,18 +29,18 @@ namespace HydroneerStager.Services
 
 
             var newProjects = new List<Project>();
-            newProjects.AddRange(configuration.Projects);
+            newProjects.AddRange(configuration.AppConfiguration.Projects);
             newProjects.Add(new Project(id, name, assetsPath, outputPath, new List<ProjectItem>()));
 
-            configuration.Projects = newProjects;
-            _configuration.Save(configuration);
+            configuration.AppConfiguration.Projects = newProjects;
+            _configuration.Save(configuration, Configuration.ConfigFile.General);
         }
 
         public async Task CopyProject(Guid id, int progressMin, int progressMax, Action<ProgressbarStateModel> reportProgress)
         {
             var configuration = await _configuration.GetConfigurationAsync();
 
-            var project = configuration.Projects.FirstOrDefault(e => e.Id == id);
+            var project = configuration.AppConfiguration.Projects.FirstOrDefault(e => e.Id == id);
 
             if (project == null || project.Items == null || project.Items.Count == 0)
             {
@@ -75,7 +75,7 @@ namespace HydroneerStager.Services
         {
             var configuration = await _configuration.GetConfigurationAsync();
 
-            var project = configuration.Projects.FirstOrDefault(e => e.Id == id);
+            var project = configuration.AppConfiguration.Projects.FirstOrDefault(e => e.Id == id);
 
             if (project == null)
             {
@@ -84,7 +84,8 @@ namespace HydroneerStager.Services
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(10, 0, 100, progressMin, progressMax)), "Start Packaging"));
 
-            _packager.Package((progress) => {
+            _packager.Package((progress) =>
+            {
                 reportProgress.Invoke(progress);
             }, 10, 90, project);
         }
@@ -93,7 +94,7 @@ namespace HydroneerStager.Services
         {
             var configuration = await _configuration.GetConfigurationAsync();
 
-            var project = configuration.Projects.FirstOrDefault(e => e.Id == id);
+            var project = configuration.AppConfiguration.Projects.FirstOrDefault(e => e.Id == id);
 
             if (project == null)
             {
@@ -102,9 +103,10 @@ namespace HydroneerStager.Services
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(10, 0, 100, progressMin, progressMax)), "Start Staging"));
 
-            _stager.Stage((progress) => {
+            _stager.Stage((progress) =>
+            {
                 reportProgress.Invoke(progress);
-            }, 10, 90, project, configuration.Guids);
+            }, 10, 90, project, configuration.GuidConfiguration.Guids);
         }
     }
 }

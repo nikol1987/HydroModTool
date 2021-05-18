@@ -1,7 +1,6 @@
 ﻿using HydroneerStager.WinForms.ViewModels;
 using ReactiveUI;
 using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
@@ -32,14 +31,16 @@ namespace HydroneerStager
 
         private void selectCookedDirBtn_Click(object sender, System.EventArgs e)
         {
-            ChooseFolderHelper("Select Cooked assets folder", (path) => {
+            ChooseFolderHelper("Select Cooked assets folder", (path) =>
+            {
                 cookedAssetsDirTextBox.Text = path;
             });
         }
 
         private void outputPathDirBtn_Click(object sender, EventArgs e)
         {
-            ChooseFolderHelper("Select output assets folder", (path) => {
+            ChooseFolderHelper("Select output assets folder", (path) =>
+            {
                 outputPathDirTextBox.Text = path;
             });
         }
@@ -75,10 +76,10 @@ namespace HydroneerStager
         public AddProjectViewModel ViewModel { get; set; }
 
         object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (AddProjectViewModel)value; }
-         
+
         private void cancel_Click(object sender, EventArgs e)
         {
             this.ParentForm.Close();
-        } 
+        }
     }
 }

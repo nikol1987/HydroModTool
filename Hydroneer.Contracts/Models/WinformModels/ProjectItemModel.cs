@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HydroneerStager.WinForms.Data
+namespace HydroneerStager.Contracts.Models.WinformModels
 {
     public sealed class ProjectItemModel
     {

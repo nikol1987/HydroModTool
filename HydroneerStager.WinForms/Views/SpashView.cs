@@ -20,23 +20,27 @@ namespace HydroneerStager.WinForms.Views
             this.loadingLabel.Parent = this.pictureBox1;
             this.loadingLabel.BringToFront();
 
-            loadingWorker.DoWork += async (object sender, DoWorkEventArgs e) => {
+            loadingWorker.DoWork += async (object sender, DoWorkEventArgs e) =>
+            {
                 loadingWorker.ReportProgress(1, new LoadingWorkerStage("Loading Configuration"));
 
                 //await Store.GetInstance().InitAsync(); //TODO: Get Store DIed
             };
 
-            loadingWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) => {
+            loadingWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
+            {
                 loadingLabel.Text = ((LoadingWorkerStage)e.UserState).Phase;
             };
-            loadingWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
+            loadingWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+            {
                 loadingLabel.Text = "Starting App";
 
                 splashTimer.Enabled = true;
                 splashTimer.Start();
             };
 
-            splashTimer.Tick += (object sender, System.EventArgs e) => {
+            splashTimer.Tick += (object sender, System.EventArgs e) =>
+            {
                 splashTimer.Enabled = false;
                 splashTimer.Stop();
 

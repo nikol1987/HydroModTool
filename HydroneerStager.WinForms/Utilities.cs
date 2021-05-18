@@ -1,5 +1,5 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
-using HydroneerStager.WinForms.Data;
+using HydroneerStager.Contracts.Models.WinformModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +42,7 @@ namespace HydroneerStager.WinForms
                         root.Nodes.Add(node);
                         continue;
                     }
-                    else if (partNode == null && i == pathParts.Length-1)
+                    else if (partNode == null && i == pathParts.Length - 1)
                     {
                         lastTraversedNode.Nodes.Add(new KryptonTreeNode(pathPart)
                         {

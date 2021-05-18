@@ -1,6 +1,5 @@
 ﻿using Hydroneer.Contracts.Models;
-using HydroneerStager.Models;
-using Ionic.Zlib;
+using HydroneerStager.Contracts.Models.AppModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +29,7 @@ namespace HydroneerStager.Tools
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(80, 0, 100, progressMin, progressMax)), "Pak created"));
         }
-        
+
         public class OldStuff
         {
             private class FileList

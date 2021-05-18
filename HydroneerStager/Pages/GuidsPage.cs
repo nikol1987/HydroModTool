@@ -1,4 +1,4 @@
-﻿using HydroneerStager.Models;
+﻿using HydroneerStager.Contracts.Models.AppModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -49,25 +49,27 @@ namespace HydroneerStager.Pages
                 column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 column.HeaderText = DataSource.Columns[column.Name].Caption;
             }
-            
-           menuStrip1.Items["addGuid"].Click += (object sender, System.EventArgs e) => {
-               var row = DataSource.NewRow();
-               row["id"] = Guid.NewGuid();
 
-               DataSource.Rows.Add(row);
-           };
+            menuStrip1.Items["addGuid"].Click += (object sender, System.EventArgs e) =>
+            {
+                var row = DataSource.NewRow();
+                row["id"] = Guid.NewGuid();
 
-            menuStrip1.Items["saveGuids"].Click += (object sender, System.EventArgs e) => {
-                var guids = DataSourceToGuidItems(DataSource);
-                Store.SaveGuids(guids);
+                DataSource.Rows.Add(row);
             };
 
-            var items = GuidItemsDataRows(Store.Guids);
+            menuStrip1.Items["saveGuids"].Click += (object sender, System.EventArgs e) =>
+            {
+                var guids = DataSourceToGuidItems(DataSource);
+                // Store.SaveGuids(guids);
+            };
+
+            /*var items = GuidItemsDataRows(Store.Guids);
 
             foreach (var item in items)
             {
                 DataSource.Rows.Add(item);
-            }
+            }*/
         }
 
         private void guidsGrid_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
@@ -83,13 +85,13 @@ namespace HydroneerStager.Pages
             {
                 var row = dt.Rows[0];
 
-                result.Add(new GuidItem()
+                /*result.Add(new GuidItem()
                 {
                     Id = (Guid)row["id"],
                     ModdedGuid = (Guid)row["moddedid"],
                     OriginalGuid = (Guid)row["originalid"],
                     Name = (string)row["name"]
-                });
+                });*/
             }
 
             return result;
@@ -99,7 +101,7 @@ namespace HydroneerStager.Pages
         {
             var result = new List<DataRow>();
 
-            foreach (var item in items) 
+            foreach (var item in items)
             {
                 var row = DataSource.NewRow();
                 row["id"] = item.Id;

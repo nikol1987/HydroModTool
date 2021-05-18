@@ -24,14 +24,16 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
 
                 d(ViewModel
                     .WhenAnyValue(vm => vm.ProgressBarState)
-                    .Subscribe(progress => {
+                    .Subscribe(progress =>
+                    {
                         progressBar.Value = progress.Value;
                         progressBarLabel.Text = progress.Label;
                     }));
 
                 d(ViewModel
                     .WhenAnyValue(vm => vm.ProjectItems)
-                    .Subscribe(x => {
+                    .Subscribe(x =>
+                    {
                         if (x == null)
                         {
                             projectItemsTree.Nodes.Clear();
@@ -60,7 +62,8 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
             });
 
 
-            projectItemsTree.MouseUp += (sender, ea) => {
+            projectItemsTree.MouseUp += (sender, ea) =>
+            {
                 if (ea.Button == MouseButtons.Right)
                 {
                     contextMenu.Show(projectItemsTree);

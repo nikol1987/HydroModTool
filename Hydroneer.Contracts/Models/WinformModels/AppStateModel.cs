@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HydroneerStager.WinForms.Data
+namespace HydroneerStager.Contracts.Models.WinformModels
 {
     public sealed class AppStateModel : ReactiveObject
     {
@@ -10,7 +10,8 @@ namespace HydroneerStager.WinForms.Data
         public Guid? SelectedProject
         {
             get => _selectedProject;
-            set {
+            set
+            {
                 this.RaiseAndSetIfChanged(ref _selectedProject, value);
                 this.RaisePropertyChanged();
             }
@@ -23,6 +24,17 @@ namespace HydroneerStager.WinForms.Data
             set
             {
                 this.RaiseAndSetIfChanged(ref _projects, value);
+                this.RaisePropertyChanged();
+            }
+        }
+
+        private IReadOnlyCollection<GuidModel> _guids;
+        public IReadOnlyCollection<GuidModel> Guids
+        {
+            get => _guids;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _guids, value);
                 this.RaisePropertyChanged();
             }
         }

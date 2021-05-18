@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Hydroneer.Contracts.Models.AppModels;
+using HydroneerStager.Contracts.Models.AppModels;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -9,74 +11,123 @@ namespace HydroneerStager
     public sealed class Configuration
     {
         private readonly string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config");
+        private readonly string GuidsConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "guids");
 
-        private AppConfiguration _appConfiguration;
+        private ConfigurationModel _configurationModel;
 
-        public async Task<AppConfiguration> GetConfigurationAsync()
+        public async Task<ConfigurationModel> GetConfigurationAsync()
         {
 
             if (!File.Exists($"{ConfigPath}.json"))
             {
-                CreateConfigFile(null);
+                CreateConfigFile(null, ConfigFile.General);
             }
 
-            if (_appConfiguration == null)
+            if (!File.Exists($"{GuidsConfigPath}.json"))
+            {
+                CreateConfigFile(null, ConfigFile.Guids);
+            }
+
+            if (_configurationModel == null)
             {
                 var configurationBuilder = new ConfigurationBuilder();
                 configurationBuilder.AddJsonFile($"{ConfigPath}.json", false, true);
+                configurationBuilder.AddJsonFile($"{GuidsConfigPath}.json", false, true);
 
                 try
                 {
-                    var appConfiguration = new AppConfiguration();
-
                     var configuration = configurationBuilder.Build();
+
+                    var appConfiguration = new AppConfiguration();
                     configuration.GetSection(nameof(AppConfiguration)).Bind(appConfiguration);
 
-                    _appConfiguration = appConfiguration;
+                    var guidConfiguration = new GuidConfiguration();
+                    configuration.GetSection(nameof(GuidConfiguration)).Bind(guidConfiguration);
 
-                    return appConfiguration;
+                    _configurationModel = new ConfigurationModel(appConfiguration, guidConfiguration);
+
+                    return _configurationModel;
                 }
                 catch (Exception)
                 {
-                    CreateConfigFile(null);
+                    CreateConfigFile(null, ConfigFile.Both);
 
                     return await GetConfigurationAsync();
-                } 
+                }
             }
 
 
-            return _appConfiguration;
+            return _configurationModel;
         }
 
-        public void Save(AppConfiguration config)
+        public void Save(ConfigurationModel config, ConfigFile configFile)
         {
-            CreateConfigFile(config);
+            CreateConfigFile(config, configFile);
 
-            _appConfiguration = config;
+            _configurationModel = config;
         }
 
-        private void CreateConfigFile(AppConfiguration appConfiguration)
+        private void CreateConfigFile(ConfigurationModel configurationModel, ConfigFile configFile)
         {
-            if (File.Exists($"{ConfigPath}.json") && appConfiguration == null)
+            if (configurationModel == null)
             {
-                File.Copy($"{ConfigPath}.json", ConfigPath + "-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".json");
+                if ((configFile == ConfigFile.General || configFile == ConfigFile.Both) && File.Exists($"{ConfigPath}.json"))
+                {
+                    File.Copy($"{ConfigPath}.json", ConfigPath + "-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".json");
+                }
+
+                if ((configFile == ConfigFile.Guids || configFile == ConfigFile.Both) && File.Exists($"{GuidsConfigPath}.json"))
+                {
+                    File.Copy($"{GuidsConfigPath}.json", GuidsConfigPath + "-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".json");
+                }
             }
 
-            string json = JsonSerializer.Serialize(new FileConfig(appConfiguration), new JsonSerializerOptions()
+
+            if (configFile == ConfigFile.General || configFile == ConfigFile.Both)
             {
-                WriteIndented = true
-            });
-            File.WriteAllText($"{ConfigPath}.json", json);
+                string json = JsonSerializer.Serialize(new GeneralConfig(configurationModel?.AppConfiguration), new JsonSerializerOptions()
+                {
+                    WriteIndented = true
+                });
+                File.WriteAllText($"{ConfigPath}.json", json);
+            }
+
+            if (configFile == ConfigFile.Guids || configFile == ConfigFile.Both)
+            {
+                string json = JsonSerializer.Serialize(new GuidsConfig(configurationModel?.GuidConfiguration), new JsonSerializerOptions()
+                {
+                    WriteIndented = true
+                });
+                File.WriteAllText($"{GuidsConfigPath}.json", json);
+            }
         }
 
-        private class FileConfig
+        private class GeneralConfig
         {
-            public FileConfig(AppConfiguration appConfiguration)
+            public GeneralConfig(AppConfiguration appConfiguration)
             {
                 AppConfiguration = appConfiguration ?? new AppConfiguration();
             }
 
             public AppConfiguration AppConfiguration { get; set; }
+        }
+
+        private class GuidsConfig
+        {
+            public GuidsConfig(GuidConfiguration guidConfiguration)
+            {
+                GuidConfiguration = guidConfiguration ?? new GuidConfiguration();
+            }
+
+            public GuidConfiguration GuidConfiguration { get; set; }
+        }
+
+
+        public enum ConfigFile
+        {
+            General,
+            Guids,
+            Both
         }
     }
 }

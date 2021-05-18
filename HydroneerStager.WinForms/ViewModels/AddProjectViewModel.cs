@@ -1,4 +1,5 @@
 ﻿using Hydroneer.Contracts.WinFormsServices;
+using HydroneerStager.Contracts.Models.WinformModels;
 using HydroneerStager.WinForms.Data;
 using ReactiveUI;
 using System;

@@ -1,17 +1,19 @@
-﻿using HydroneerStager.Models;
-using HydroneerStager.WinForms.Data;
+﻿using Hydroneer.Contracts.Models.AppModels;
+using HydroneerStager.Contracts.Models.AppModels;
+using HydroneerStager.Contracts.Models.WinformModels;
 using System.Collections.Generic;
 
-namespace HydroneerStager.Extensions
+namespace HydroneerStager.Contracts.Extensions
 {
-    internal static class ConfigurationExtensions
+    public static class ConfigurationExtensions
     {
-        public static AppStateModel ToAppSateModel(this AppConfiguration appConfig)
+        public static AppStateModel ToAppSateModel(this ConfigurationModel appConfig)
         {
             return new AppStateModel()
             {
-                SelectedProject = appConfig.DefaultProject,
-                Projects = appConfig.Projects.ToProjectsModel()
+                SelectedProject = appConfig.AppConfiguration.DefaultProject,
+                Projects = appConfig.AppConfiguration.Projects.ToProjectsModel(),
+                Guids = appConfig.GuidConfiguration.Guids.ToGuidsModel()
             };
         }
 
@@ -87,6 +89,40 @@ namespace HydroneerStager.Extensions
             foreach (var item in projectItems)
             {
                 result.Add(new ProjectItemModel(item.Id, item.Name, item.Path));
+            }
+
+            return result;
+        }
+
+        public static IReadOnlyCollection<GuidModel> ToGuidsModel(this IReadOnlyCollection<GuidItem> guids)
+        {
+            var result = new List<GuidModel>();
+
+            if (guids == null)
+            {
+                return result;
+            }
+
+            foreach (var guid in guids)
+            {
+                result.Add(new GuidModel(guid.Id, guid.Name, guid.GuidModdedGuid, guid.GuidOriginalGuid));
+            }
+
+            return result;
+        }
+
+        public static List<GuidItem> ToGuids(this IReadOnlyCollection<GuidModel> guids)
+        {
+            var result = new List<GuidItem>();
+
+            if (guids == null)
+            {
+                return result;
+            }
+
+            foreach (var guid in guids)
+            {
+                result.Add(new GuidItem(guid.Id, guid.Name, guid.ModdedGuid, guid.OriginalGuid));
             }
 
             return result;

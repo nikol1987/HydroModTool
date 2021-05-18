@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HydroneerStager.Models
+namespace HydroneerStager.Contracts.Models.AppModels
 {
     public sealed class Project
     {
@@ -31,7 +31,7 @@ namespace HydroneerStager.Models
 
         public IList<ProjectItem> Items { get; set; } = new List<ProjectItem>();
 
-        internal void AddItems(List<ProjectItem> items)
+        public void AddItems(List<ProjectItem> items)
         {
             var newItems = Items
                 .ToList();
@@ -41,7 +41,7 @@ namespace HydroneerStager.Models
             Items = newItems;
         }
 
-        internal void RemoveItems(IReadOnlyCollection<Guid> guids)
+        public void RemoveItems(IReadOnlyCollection<Guid> guids)
         {
             Items = Items.Where(e => !guids.Contains(e.Id)).ToList();
         }

@@ -1,8 +1,5 @@
-﻿using HydroneerStager.WinForms.Data;
-using ReactiveUI;
+﻿using ReactiveUI;
 using System;
-using System.Collections.Generic;
-using static HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs.ProjectsView;
 
 namespace HydroneerStager.WinForms.Converters
 {

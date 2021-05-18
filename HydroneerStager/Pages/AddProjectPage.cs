@@ -1,4 +1,4 @@
-﻿using HydroneerStager.Models;
+﻿using HydroneerStager.Contracts.Models.AppModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,14 +24,16 @@ namespace HydroneerStager
 
         private void selectCookedDirBtn_Click(object sender, System.EventArgs e)
         {
-            ChooseFolderHelper("Select Cooked assets folder", (path) => {
+            ChooseFolderHelper("Select Cooked assets folder", (path) =>
+            {
                 cookedAssetsDirTextBox.Text = path;
             });
         }
 
         private void outputPathDirBtn_Click(object sender, EventArgs e)
         {
-            ChooseFolderHelper("Select output assets folder", (path) => {
+            ChooseFolderHelper("Select output assets folder", (path) =>
+            {
                 outputPathDirTextBox.Text = path;
             });
         }

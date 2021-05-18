@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HydroneerStager.WinForms.Data
+namespace HydroneerStager.Contracts.Models.WinformModels
 {
     internal sealed class ProjectListModel
     {

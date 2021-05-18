@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using HydroneerStager.Contracts.Models.WinformModels;
+using ReactiveUI;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -12,7 +13,9 @@ namespace HydroneerStager.WinForms.Data
         public event Action<AppStateModel> SaveConfig;
 
         private AppStateModel _appStateModel;
-        public AppStateModel AppState { get => _appStateModel; set
+        public AppStateModel AppState
+        {
+            get => _appStateModel; set
             {
                 this.RaiseAndSetIfChanged(ref _appStateModel, value);
             }

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HydroneerStager.WinForms.Data
+namespace HydroneerStager.Contracts.Models.WinformModels
 {
     public sealed class ProjectModel : ReactiveObject
     {

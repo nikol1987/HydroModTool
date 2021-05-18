@@ -8,9 +8,9 @@ namespace HydroneerStager.DataAccess.Services
 {
     public class BridgepourService : ServiceBase
     {
-        public BridgepourService(HttpClient httpClient):
+        public BridgepourService(HttpClient httpClient) :
             base(httpClient, "https://api.bridgepour.com/api")
-        {}
+        { }
 
         public async Task<BridgepourModsResult> GetModsAsync()
         {

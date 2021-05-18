@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HydroneerStager.Contracts.Models.AppModels;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;

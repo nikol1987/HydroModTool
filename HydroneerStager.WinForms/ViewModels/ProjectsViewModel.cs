@@ -1,5 +1,6 @@
 ﻿using Hydroneer.Contracts.Models;
 using Hydroneer.Contracts.WinFormsServices;
+using HydroneerStager.Contracts.Models.WinformModels;
 using HydroneerStager.WinForms.Data;
 using ReactiveUI;
 using System;
@@ -29,7 +30,8 @@ namespace HydroneerStager.WinForms.ViewModels
 
             _applicationStore
                 .WhenAnyValue(appStore => appStore.AppState)
-                .Subscribe(newState => {
+                .Subscribe(newState =>
+                {
                     _selectedProject = newState.SelectedProject ?? Guid.Empty;
                     SetProjects();
                     SetItems(_selectedProject);
@@ -65,7 +67,8 @@ namespace HydroneerStager.WinForms.ViewModels
         internal Guid SelectedProject
         {
             get => _selectedProject;
-            set {
+            set
+            {
                 this.RaiseAndSetIfChanged(ref _selectedProject, value);
             }
         }
@@ -143,7 +146,8 @@ namespace HydroneerStager.WinForms.ViewModels
                 case "stageProject":
                     ProgressBarState = new ProgressbarStateModel(10, $"Staging project {project.Name}");
 
-                    await _projectsService.StageProject(project.Id, 10, 95, (progess) => {
+                    await _projectsService.StageProject(project.Id, 10, 95, (progess) =>
+                    {
                         ProgressBarState = progess;
                     });
 
@@ -163,7 +167,8 @@ namespace HydroneerStager.WinForms.ViewModels
                 case "packageProject":
                     ProgressBarState = new ProgressbarStateModel(10, $"Packaging project {project.Name}");
 
-                    await _projectsService.PackageProject(project.Id, 10, 95, (progess) => {
+                    await _projectsService.PackageProject(project.Id, 10, 95, (progess) =>
+                    {
                         ProgressBarState = progess;
                     });
 
@@ -183,7 +188,8 @@ namespace HydroneerStager.WinForms.ViewModels
                 case "copyMod":
                     ProgressBarState = new ProgressbarStateModel(10, $"Copying project {project.Name}");
 
-                    await _projectsService.CopyProject(project.Id, 10, 95, (progess) => {
+                    await _projectsService.CopyProject(project.Id, 10, 95, (progess) =>
+                    {
                         ProgressBarState = progess;
                     });
 
@@ -219,19 +225,22 @@ namespace HydroneerStager.WinForms.ViewModels
                 case "devExpress":
                     ProgressBarState = new ProgressbarStateModel(10, $"Staging project {project.Name}");
 
-                    await _projectsService.StageProject(project.Id, 10, 35, (progess) => {
+                    await _projectsService.StageProject(project.Id, 10, 35, (progess) =>
+                    {
                         ProgressBarState = progess;
                     });
 
                     ProgressBarState = new ProgressbarStateModel(36, $"Packaging project {project.Name}");
 
-                    await _projectsService.PackageProject(project.Id, 36, 80, (progess) => {
+                    await _projectsService.PackageProject(project.Id, 36, 80, (progess) =>
+                    {
                         ProgressBarState = progess;
                     });
 
                     ProgressBarState = new ProgressbarStateModel(81, $"Copying project {project.Name}");
 
-                    await _projectsService.CopyProject(project.Id, 81, 90, (progess) => {
+                    await _projectsService.CopyProject(project.Id, 81, 90, (progess) =>
+                    {
                         ProgressBarState = progess;
                     });
 
@@ -382,10 +391,10 @@ namespace HydroneerStager.WinForms.ViewModels
             ProgressBarState = new ProgressbarStateModel(100, "Added assets");
 
             var timer = new System.Windows.Forms.Timer()
-                {
-                    Enabled = true,
-                    Interval = 500
-                };
+            {
+                Enabled = true,
+                Interval = 500
+            };
 
             timer.Tick += (sender, ea) =>
             {

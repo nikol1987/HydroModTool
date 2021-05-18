@@ -16,7 +16,8 @@ namespace HydroneerStager.WinForms.Views
             projectTabView.Dock = DockStyle.Fill;
             this.kryptonPage2.Controls.Add(projectTabView);
 
-            this.WhenActivated(d => {
+            this.WhenActivated(d =>
+            {
                 d(this.OneWayBind(ViewModel, vm => vm.ApplicationTitle, v => v.Text));
                 d(this.OneWayBind(ViewModel, vm => vm.Tab1Title, v => v.kryptonPage1.Text));
                 d(this.OneWayBind(ViewModel, vm => vm.Tab2Title, v => v.kryptonPage2.Text));
