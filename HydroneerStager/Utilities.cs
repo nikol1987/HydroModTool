@@ -1,70 +1,18 @@
-﻿using HydroneerStager.Models;
+﻿using HydroneerStager.Contracts.Models.AppModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace HydroneerStager
 {
     internal static class Utilities
     {
-        public static TreeNode BuildFileStruture(ContextMenuStrip menuStrip, IReadOnlyCollection<ProjectItem> items)
+        public static decimal Remap(decimal value, decimal from1, decimal to1, decimal from2, decimal to2)
         {
-            var root = new TreeNode()
-            {
-                Text = "Root",
-                Name = "root"
-            };
-
-            foreach (var item in items)
-            {
-                var pathParts = item.Path.Split("\\", StringSplitOptions.RemoveEmptyEntries);
-
-                for (int i = 0; i < pathParts.Length; i++)
-                {
-                    var pathPart = pathParts[i];
-
-                    var partNode = root.Nodes.Find("node-" + pathPart, true).FirstOrDefault();
-
-                    if (partNode == null && i == 0)
-                    {
-                        root.Nodes.Add(new TreeNode(pathPart)
-                        {
-                            Name = "node-"+pathPart,
-                            ContextMenuStrip = menuStrip,
-                            Text = pathPart
-                        });
-                        continue;
-                    }
-                    else if (partNode == null && i == pathParts.Length-1)
-                    {
-                        var parentNode = root.Nodes.Find("node-" + pathParts[i - 1], true).FirstOrDefault();
-
-                        parentNode.Nodes.Add(new TreeNode(pathPart)
-                        {
-                            Name = item.Id.ToString(),
-                            ContextMenuStrip = menuStrip,
-                            Text = pathPart
-                        });
-                    }
-                    else if (partNode == null && i > 0)
-                    {
-                        var parentNode = root.Nodes.Find("node-" + pathParts[i - 1], true).FirstOrDefault();
-
-                        parentNode.Nodes.Add(new TreeNode(pathPart)
-                        {
-                            Name = "node-" + pathPart,
-                            ContextMenuStrip = menuStrip,
-                            Text = pathPart
-                        });
-                        continue;
-                    }
-                }
-            }
-
-            return root;
+            return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
         }
 
         public static bool CompareBytes(byte[] a, byte[] b)
@@ -80,7 +28,7 @@ namespace HydroneerStager
 
             return true;
         }
-    
+
         public static uint Adler32Checksum(byte[] blockData)
         {
             uint num = 1U;
@@ -92,7 +40,7 @@ namespace HydroneerStager
             }
             return num2 << 16 | num;
         }
-    
+
         public static byte[] FileNameToHeaderBytes(string fileName)
         {
             var bytes = new byte[fileName.Length + 5];
@@ -109,6 +57,46 @@ namespace HydroneerStager
             var outputFile = Path.Combine(outPath, fileName);
 
             return outputFile;
+        }
+
+        public static int? SearchBytePattern(byte[] pattern, byte[] bytes)
+        {
+            List<int> positions = new List<int>();
+            int patternLength = pattern.Length;
+            int totalLength = bytes.Length;
+            byte firstMatchByte = pattern[0];
+            for (int i = 0; i < totalLength; i++)
+            {
+                if (firstMatchByte == bytes[i] && totalLength - i >= patternLength)
+                {
+                    byte[] match = new byte[patternLength];
+                    Array.Copy(bytes, i, match, 0, patternLength);
+                    if (match.SequenceEqual<byte>(pattern))
+                    {
+                        positions.Add(i);
+                        i += patternLength - 1;
+                    }
+                }
+            }
+
+            if (positions.Count == 0)
+            {
+                return null;
+            }
+
+            return positions.First();
+        }
+
+        public static byte[] Hex2Binary(string hex)
+        {
+            var chars = hex.ToCharArray();
+            var bytes = new List<byte>();
+            for (int index = 0; index < chars.Length; index += 2)
+            {
+                var chunk = new string(chars, index, 2);
+                bytes.Add(byte.Parse(chunk, NumberStyles.AllowHexSpecifier));
+            }
+            return bytes.ToArray();
         }
     }
 }

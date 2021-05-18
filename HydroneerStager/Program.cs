@@ -1,12 +1,19 @@
+using Autofac;
+using HydroneerStager.DI;
+using HydroneerStager.WinForms.Views;
 using System;
 using System.Windows.Forms;
+//using System.Runtime.InteropServices;
+
 
 namespace HydroneerStager
 {
     static class Program
     {
-        private static Form _app = new App();
-        private static Form _splashScreen = new SplashScreen();
+
+        /*[DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();*/
 
         /// <summary>
         ///  The main entry point for the application.
@@ -18,18 +25,28 @@ namespace HydroneerStager
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            _splashScreen.ShowDialog();
+            AutoFac.BuildDependencies();
 
-            _app.Hide();
-            Application.Run(_app);
-            Application.ApplicationExit += (object sender, EventArgs e) => {
-                Store.GetInstance().Save();
+            Application.ApplicationExit += async (sender, e) =>
+            {
+                var configuration = AutoFac.Services.Resolve<Configuration>();
+
+                await configuration.Save();
             };
+
+            var appForm = FormFactory.Create<ApplicationView>();
+            appForm.Hide();
+
+            var spashForm = FormFactory.Create<SpashView>();
+            spashForm.ShowDialog();
+
+            Application.Run(appForm);
         }
 
         public static void ShowApp()
         {
-            _app.Show();
+            var appForm = FormFactory.Create<ApplicationView>();
+            appForm.Show();
         }
     }
 }
