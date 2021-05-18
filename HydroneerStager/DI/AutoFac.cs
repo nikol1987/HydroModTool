@@ -99,7 +99,7 @@ namespace HydroneerStager.DI
             var appConfig = await configuration.GetConfigurationAsync();
 
             var updatedConfig = appConfig.AppConfiguration.Update(appState);
-            configuration.Save(new ConfigurationModel(updatedConfig, appConfig.GuidConfiguration), Configuration.ConfigFile.General);
+            await configuration.Save(new ConfigurationModel(updatedConfig, appConfig.GuidConfiguration), Configuration.ConfigFile.General);
         }
 
         private static async Task<AppStateModel> ApplicationStore_LoadConfig()

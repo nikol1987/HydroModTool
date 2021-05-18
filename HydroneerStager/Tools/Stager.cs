@@ -79,7 +79,7 @@ namespace HydroneerStager.Tools
                 var patchedBytes = new byte[fileBytes.Length];
                 Buffer.BlockCopy(fileBytes, 0, patchedBytes, 0, position.Value);
                 Buffer.BlockCopy(originalGuidBytes, 0, patchedBytes, position.Value, 16);
-                Buffer.BlockCopy(fileBytes, position.Value + 16, patchedBytes, position.Value + 16, fileBytes.Length-(position.Value + 16));
+                Buffer.BlockCopy(fileBytes, position.Value + 16, patchedBytes, position.Value + 16, fileBytes.Length - (position.Value + 16));
 
 
                 var ms = new MemoryStream(patchedBytes);

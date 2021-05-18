@@ -33,7 +33,7 @@ namespace HydroneerStager.Services
             newProjects.Add(new Project(id, name, assetsPath, outputPath, new List<ProjectItem>()));
 
             configuration.AppConfiguration.Projects = newProjects;
-            _configuration.Save(configuration, Configuration.ConfigFile.General);
+            await _configuration.Save(configuration, Configuration.ConfigFile.General);
         }
 
         public async Task CopyProject(Guid id, int progressMin, int progressMax, Action<ProgressbarStateModel> reportProgress)

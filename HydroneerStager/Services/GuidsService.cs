@@ -19,7 +19,7 @@ namespace HydroneerStager.Services
         {
             var appConfig = await _configuration.GetConfigurationAsync();
 
-            _configuration.Save(new ConfigurationModel(appConfig.AppConfiguration, new GuidConfiguration(guids)), Configuration.ConfigFile.Guids);
+            await _configuration.Save(new ConfigurationModel(appConfig.AppConfiguration, new GuidConfiguration(guids)), Configuration.ConfigFile.Guids);
         }
     }
 }

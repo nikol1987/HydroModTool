@@ -60,9 +60,12 @@ namespace HydroneerStager
             return _configurationModel;
         }
 
-        public void Save(ConfigurationModel config, ConfigFile configFile)
+        public async Task Save(ConfigurationModel config, ConfigFile configFile)
         {
-            CreateConfigFile(config, configFile);
+            await Task.Run(() =>
+            {
+                CreateConfigFile(config, configFile);
+            });
 
             _configurationModel = config;
         }
@@ -100,6 +103,11 @@ namespace HydroneerStager
                 });
                 File.WriteAllText($"{GuidsConfigPath}.json", json);
             }
+        }
+
+        internal async Task Save()
+        {
+            await Save(_configurationModel, ConfigFile.Both);
         }
 
         private class GeneralConfig
