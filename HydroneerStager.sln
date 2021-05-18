@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HydroneerStager.WinForms", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HydroneerStager.DataAccess", "HydroneerStager.DataAccess\HydroneerStager.DataAccess.csproj", "{B89AE020-E786-4103-837C-5D9FE101124F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hydroneer.Contracts", "Hydroneer.Contracts\Hydroneer.Contracts.csproj", "{06DCDB7A-8EEE-4D09-8FC6-9CD67ABAFF0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hydroneer.Contracts", "Hydroneer.Contracts\Hydroneer.Contracts.csproj", "{06DCDB7A-8EEE-4D09-8FC6-9CD67ABAFF0F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AF8E0570-00F7-4B8A-8EA4-296ABE8A2F3D}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

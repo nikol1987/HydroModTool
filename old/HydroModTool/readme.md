@@ -1,1 +1,0 @@
-﻿A tool to automate the annoying parts of mod making.
