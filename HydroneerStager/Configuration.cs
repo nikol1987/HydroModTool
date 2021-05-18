@@ -60,14 +60,16 @@ namespace HydroneerStager
             return _configurationModel;
         }
 
-        public async Task Save(ConfigurationModel config, ConfigFile configFile)
+        public Task Save(ConfigurationModel config, ConfigFile configFile)
         {
-            await Task.Run(() =>
+            lock (config)
             {
                 CreateConfigFile(config, configFile);
-            });
 
-            _configurationModel = config;
+                _configurationModel = config;
+            }
+
+            return Task.CompletedTask;
         }
 
         private void CreateConfigFile(ConfigurationModel configurationModel, ConfigFile configFile)
