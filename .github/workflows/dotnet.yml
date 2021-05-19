@@ -47,7 +47,7 @@ jobs:
       uses: papeloto/action-zip@v1
       with:
         files: HydroneerStager\publish\
-        dest: HydroneerStager\HydroneerStager.zip
+        dest: HydroneerStager\Hydroneer Modding Toolchain.zip
 
     - name: release
       uses: actions/create-release@v1
@@ -55,7 +55,7 @@ jobs:
       with:
         draft: false
         prerelease: false
-        release_name: HydroneerStager
+        release_name: Hydroneer Modding Toolchain
         tag_name: ${{ github.ref }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
@@ -67,5 +67,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ github.workspace }}\HydroneerStager\HydroneerStager.zip
-        asset_name: HydroneerStager.zip
+        asset_name: Hydroneer Modding Toolchain.zip
         asset_content_type: application/zip
