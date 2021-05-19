@@ -2,6 +2,7 @@
 using HydroneerStager.Contracts.Models.WinformModels;
 using HydroneerStager.WinForms.Data;
 using HydroneerStager.WinForms.Extensions;
+using HydroneerStager.WinForms.Structs;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -38,9 +39,11 @@ namespace HydroneerStager.WinForms.ViewModels
         {
             var dt = new DataTable();
 
-            var tablePrimaryKey = new DataColumn("id", typeof(Guid))
+            var tablePrimaryKey = new DataColumn("id", typeof(GuidWrapper))
             {
-                Caption = "ID"
+                Caption = "ID",
+                ReadOnly = true,
+                Unique = true
             };
 
             dt.Columns.AddRange(new[] {
@@ -48,10 +51,10 @@ namespace HydroneerStager.WinForms.ViewModels
                 new DataColumn("name", typeof(string)){
                     Caption = "Name"
                 },
-                new DataColumn("originalid", typeof(Guid)){
+                new DataColumn("originalid", typeof(GuidWrapper)){
                     Caption = "Retail ID"
                 },
-                new DataColumn("moddedid", typeof(Guid)){
+                new DataColumn("moddedid", typeof(GuidWrapper)){
                     Caption = "Modded ID"
                 }
             });
@@ -79,9 +82,9 @@ namespace HydroneerStager.WinForms.ViewModels
             foreach (var item in items)
             {
                 var row = dt.NewRow();
-                row["id"] = item.Id;
-                row["moddedid"] = item.ModdedGuid;
-                row["originalid"] = item.OriginalGuid;
+                row["id"] = new GuidWrapper(item.Id);
+                row["moddedid"] = new GuidWrapper(item.ModdedGuid);
+                row["originalid"] = new GuidWrapper(item.OriginalGuid);
                 row["name"] = item.Name;
 
                 result.Add(row);
@@ -111,7 +114,7 @@ namespace HydroneerStager.WinForms.ViewModels
             {
                 case "addGuid":
                     var row = Guids.NewRow();
-                    row["id"] = Guid.NewGuid();
+                    row["id"] = new GuidWrapper(Guid.NewGuid());
 
                     Guids.Rows.Add(row);
                     this.RaisePropertyChanged("Guids");

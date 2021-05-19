@@ -1,4 +1,5 @@
-﻿using HydroneerStager.WinForms.ViewModels;
+﻿using HydroneerStager.WinForms.Structs;
+using HydroneerStager.WinForms.ViewModels;
 using ReactiveUI;
 using System;
 using System.ComponentModel;
@@ -41,7 +42,7 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
                     .RowStateChanged
                     .Where(ea => ea.StateChanged == DataGridViewElementStates.Selected)
                     .Where(ea => this.guidsDataGrid.SelectedRows.Count == 1)
-                    .Select(ea => (Guid)this.guidsDataGrid.SelectedRows[0].Cells["id"].Value)
+                    .Select(ea => ((GuidWrapper)this.guidsDataGrid.SelectedRows[0].Cells["id"].Value).GetGuid())
                     .Where(val => !val.Equals(ViewModel.SelectedRow))
                     .InvokeCommand(ViewModel.SelectGuidCommand));
             });

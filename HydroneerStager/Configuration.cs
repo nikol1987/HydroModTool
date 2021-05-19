@@ -2,6 +2,7 @@
 using HydroneerStager.Contracts.Models.AppModels;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;

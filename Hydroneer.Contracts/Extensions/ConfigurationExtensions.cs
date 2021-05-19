@@ -1,6 +1,7 @@
 ﻿using Hydroneer.Contracts.Models.AppModels;
 using HydroneerStager.Contracts.Models.AppModels;
 using HydroneerStager.Contracts.Models.WinformModels;
+using System;
 using System.Collections.Generic;
 
 namespace HydroneerStager.Contracts.Extensions
@@ -105,7 +106,7 @@ namespace HydroneerStager.Contracts.Extensions
 
             foreach (var guid in guids)
             {
-                result.Add(new GuidModel(guid.Id, guid.Name, guid.GuidModdedGuid, guid.GuidOriginalGuid));
+                result.Add(new GuidModel(guid.Id, guid.Name, new Guid(guid.ModdedGuid), new Guid(guid.OriginalGuid)));
             }
 
             return result;
@@ -122,7 +123,7 @@ namespace HydroneerStager.Contracts.Extensions
 
             foreach (var guid in guids)
             {
-                result.Add(new GuidItem(guid.Id, guid.Name, guid.ModdedGuid, guid.OriginalGuid));
+                result.Add(new GuidItem(guid.Id, guid.Name, guid.ModdedGuid.ToString("N"), guid.OriginalGuid.ToString("N")));
             }
 
             return result;

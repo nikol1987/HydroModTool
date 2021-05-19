@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 
 namespace HydroneerStager.Contracts.Models.AppModels
 {
@@ -7,12 +6,12 @@ namespace HydroneerStager.Contracts.Models.AppModels
     {
         public GuidItem() { }
 
-        public GuidItem(Guid id, string name, Guid guiModdedGuid, Guid guiOriginalGuid)
+        public GuidItem(Guid id, string name, string moddedGuid, string originalGuid)
         {
             Id = id;
             Name = name;
-            GuidModdedGuid = guiModdedGuid;
-            GuidOriginalGuid = guiOriginalGuid;
+            ModdedGuid = moddedGuid;
+            OriginalGuid = originalGuid;
         }
 
         public Guid Id { get; set; }
@@ -22,19 +21,5 @@ namespace HydroneerStager.Contracts.Models.AppModels
         public string ModdedGuid { get; set; }
 
         public string OriginalGuid { get; set; }
-
-        [JsonIgnore]
-        public virtual Guid GuidModdedGuid
-        {
-            get => new Guid(ModdedGuid);
-            set => ModdedGuid = value.ToString("N");
-        }
-
-        [JsonIgnore]
-        public virtual Guid GuidOriginalGuid
-        {
-            get => new Guid(OriginalGuid);
-            set => OriginalGuid = value.ToString("N");
-        }
     }
 }

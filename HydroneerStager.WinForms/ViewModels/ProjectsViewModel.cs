@@ -230,12 +230,16 @@ namespace HydroneerStager.WinForms.ViewModels
                         ProgressBarState = progess;
                     });
 
+                    await Task.Delay(1000);
+
                     ProgressBarState = new ProgressbarStateModel(36, $"Packaging project {project.Name}");
 
                     await _projectsService.PackageProject(project.Id, 36, 80, (progess) =>
                     {
                         ProgressBarState = progess;
                     });
+
+                    await Task.Delay(1000);
 
                     ProgressBarState = new ProgressbarStateModel(81, $"Copying project {project.Name}");
 
@@ -244,15 +248,17 @@ namespace HydroneerStager.WinForms.ViewModels
                         ProgressBarState = progess;
                     });
 
+                    await Task.Delay(1000);
+
                     ProgressBarState = new ProgressbarStateModel(95, $"Starting Game");
 
                     Process.Start(processInfo);
 
-                    timer.Tick += (sender, ea) =>
+                    timer.Tick += async (sender, ea) =>
                     {
-                        _applicationStore.ReloadState();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                         timer.Stop();
+                        await _applicationStore.ReloadState();
+                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
                     timer.Start();

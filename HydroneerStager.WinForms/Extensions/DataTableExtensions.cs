@@ -1,4 +1,5 @@
 ﻿using HydroneerStager.Contracts.Models.AppModels;
+using HydroneerStager.WinForms.Structs;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,7 +21,15 @@ namespace HydroneerStager.WinForms.Extensions
             {
                 var dataRow = (DataRow)row;
 
-                result.Add(new GuidItem((Guid)dataRow["id"], (string)dataRow["name"], (Guid)dataRow["moddedid"], (Guid)dataRow["originalid"]));
+                if (dataRow["id"] == DBNull.Value ||
+                    dataRow["name"] == DBNull.Value ||
+                    dataRow["moddedid"] == DBNull.Value ||
+                    dataRow["originalid"] == DBNull.Value)
+                {
+                    continue;
+                }
+
+                result.Add(new GuidItem(((GuidWrapper)dataRow["id"]).GetGuid(), (string)dataRow["name"], ((GuidWrapper)dataRow["moddedid"]).ToString(), ((GuidWrapper)dataRow["originalid"]).ToString()));
             }
 
             return result;
