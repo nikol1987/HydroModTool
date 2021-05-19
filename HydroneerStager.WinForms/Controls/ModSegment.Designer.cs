@@ -42,30 +42,32 @@ namespace HydroneerStager.WinForms.Controls
             // 
             this.modName.AutoSize = true;
             this.modName.BackColor = System.Drawing.Color.Transparent;
-            this.modName.Font = new System.Drawing.Font("Roboto", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.modName.Font = new System.Drawing.Font("Roboto", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.modName.Location = new System.Drawing.Point(10, 9);
             this.modName.MaximumSize = new System.Drawing.Size(500, 0);
             this.modName.Name = "modName";
-            this.modName.Size = new System.Drawing.Size(132, 29);
+            this.modName.Size = new System.Drawing.Size(144, 39);
             this.modName.TabIndex = 0;
             this.modName.Text = "Mod Name";
+            this.modName.UseCompatibleTextRendering = true;
             // 
             // author
             // 
             this.author.AutoSize = true;
             this.author.BackColor = System.Drawing.Color.Transparent;
             this.author.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.author.Location = new System.Drawing.Point(10, 38);
+            this.author.Location = new System.Drawing.Point(10, 39);
             this.author.Name = "author";
-            this.author.Size = new System.Drawing.Size(85, 19);
+            this.author.Size = new System.Drawing.Size(85, 25);
             this.author.TabIndex = 1;
             this.author.Text = "ResaloliPT";
+            this.author.UseCompatibleTextRendering = true;
             // 
             // description
             // 
             this.description.AutoSize = true;
             this.description.BackColor = System.Drawing.Color.Transparent;
-            this.description.Location = new System.Drawing.Point(10, 68);
+            this.description.Location = new System.Drawing.Point(10, 73);
             this.description.MaximumSize = new System.Drawing.Size(460, 70);
             this.description.Name = "description";
             this.description.Size = new System.Drawing.Size(95, 15);
@@ -74,7 +76,7 @@ namespace HydroneerStager.WinForms.Controls
             // 
             // downloadMod
             // 
-            this.downloadMod.Location = new System.Drawing.Point(10, 142);
+            this.downloadMod.Location = new System.Drawing.Point(10, 143);
             this.downloadMod.Name = "downloadMod";
             this.downloadMod.Size = new System.Drawing.Size(90, 25);
             this.downloadMod.TabIndex = 3;
@@ -82,10 +84,10 @@ namespace HydroneerStager.WinForms.Controls
             // 
             // kryptonPanel1
             // 
-            this.kryptonPanel1.Controls.Add(this.modName);
-            this.kryptonPanel1.Controls.Add(this.downloadMod);
             this.kryptonPanel1.Controls.Add(this.description);
             this.kryptonPanel1.Controls.Add(this.author);
+            this.kryptonPanel1.Controls.Add(this.modName);
+            this.kryptonPanel1.Controls.Add(this.downloadMod);
             this.kryptonPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.kryptonPanel1.Location = new System.Drawing.Point(0, 0);
             this.kryptonPanel1.Name = "kryptonPanel1";
