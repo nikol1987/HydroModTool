@@ -1,4 +1,4 @@
-# Hydroneer Modding Toolchain [![Master Build Status](https://github.com/ResaloliPT/HydroModTool/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/ResaloliPT/HydroModTool/actions/workflows/dotnet.yml) [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://paypal.me/ResaloliPT?locale.x=pt_PT)
+# Hydroneer Modding Toolchain [![Master Build Status](https://github.com/ResaloliPT/HydroModTool/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/ResaloliPT/HydroModTool/actions/workflows/dotnet.yml) [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://paypal.me/ResaloliPT)
 
 Hydroneer Modding Toolchain is a simple multi propouse tool to be used in the 2 scenarios of modding, either it be a user wanting to use mods or a developer using as a toolchain to stage, package and test the mod fast.
 
@@ -39,7 +39,7 @@ This is licenced under [MIT License](https://github.com/ResaloliPT/HydroModTool/
 
 If you have some cents pay me coffee, consider donating!
 
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://paypal.me/ResaloliPT?locale.x=pt_PT)
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://paypal.me/ResaloliPT)
 
 ## Credits
 
