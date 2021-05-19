@@ -13,6 +13,7 @@ namespace HydroneerStager.WinForms.Views
         public ApplicationView(
             ModInstallerTabView modInstallerTabView,
             ApplicationViewModel applicationViewModel,
+            AboutTabView aboutTabView,
             ProjectsTabView projectTabView)
         {
             Utilities.SetupFonts();
@@ -26,6 +27,9 @@ namespace HydroneerStager.WinForms.Views
 
             projectTabView.Dock = DockStyle.Fill;
             kryptonPage2.Controls.Add(projectTabView);
+
+            aboutTabView.Dock = DockStyle.Fill;
+            kryptonPage3.Controls.Add(aboutTabView);
 
             this.WhenActivated(d =>
             {

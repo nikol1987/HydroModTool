@@ -7,7 +7,7 @@ Hydroneer Modding Toolchain is a simple multi propouse tool to be used in the 2 
 ## Features
 
 - User
-  - Install mods -> Install mods listed from [Bridgepour wiki](https://bridgepour.com/legacy-mods) (Not yet implemented)
+  - Install mods -> Install mods listed from [Bridgepour wiki](https://bridgepour.com/legacy-mods) (Mods are direclty downloaded to game folder)
 - Developer
   - Stage -> Select assets to be copied to another folder to work on, also replaces GUIDs
   - Package -> Packaged staged assets into a .pak based on the Project name (Ex: Project Name = MenuMod -> 500-MenuMod_P.pak)
