@@ -1,14 +1,14 @@
-﻿using HydroneerStager.DataAccess.Extensions;
-using HydroneerStager.DataAccess.Models;
+﻿using HydroneerStager.Contracts.Models.Api.Bridgepour;
+using HydroneerStager.DataAccess.Extensions;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace HydroneerStager.DataAccess.Services
 {
-    public class BridgepourService : ServiceBase
+    public class ApiBridgepourService : ServiceBase
     {
-        public BridgepourService(HttpClient httpClient) :
+        public ApiBridgepourService(HttpClient httpClient) :
             base(httpClient, "https://api.bridgepour.com/api")
         { }
 

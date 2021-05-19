@@ -3,7 +3,6 @@ using Hydroneer.Contracts.Models.AppModels;
 using HydroneerStager.Contracts.Extensions;
 using HydroneerStager.Contracts.Models.WinformModels;
 using HydroneerStager.Tools;
-using HydroneerStager.WinForms.Converters;
 using HydroneerStager.WinForms.Data;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -40,8 +39,7 @@ namespace HydroneerStager.DI
 
             builder
                 .RegisterDataAccess()
-                .RegisterForms()
-                .RegisterConverters();
+                .RegisterForms();
 
             builder.RegisterType<Configuration>()
                 .SingleInstance();

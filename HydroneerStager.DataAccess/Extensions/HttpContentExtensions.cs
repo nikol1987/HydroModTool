@@ -1,4 +1,4 @@
-﻿using HydroneerStager.DataAccess.Models;
+﻿using HydroneerStager.Contracts.Models.Api.Bridgepour;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;

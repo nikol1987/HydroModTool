@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HydroneerStager.DataAccess.Models
+namespace HydroneerStager.Contracts.Models.Api.Bridgepour
 {
     public sealed class BridgepourModsResult
     {

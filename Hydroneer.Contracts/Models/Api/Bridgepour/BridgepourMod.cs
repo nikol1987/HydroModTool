@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace HydroneerStager.DataAccess.Models
+namespace HydroneerStager.Contracts.Models.Api.Bridgepour
 {
     public sealed class BridgepourMod
     {

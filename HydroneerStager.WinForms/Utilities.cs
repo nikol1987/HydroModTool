@@ -2,13 +2,36 @@
 using HydroneerStager.Contracts.Models.WinformModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace HydroneerStager.WinForms
 {
     internal static class Utilities
     {
+        public static FontCollection FontCollection;
+
+        public static void SetupFonts()
+        {
+            var fontCollection = new PrivateFontCollection();
+
+            var fontLength = Properties.Resources.AlmendraSC_Bold.Length;
+            var fontData = Properties.Resources.AlmendraSC_Bold;
+
+            var data = Marshal.AllocCoTaskMem(fontLength);
+            Marshal.Copy(fontData, 0, data, fontLength);
+            fontCollection.AddMemoryFont(data, fontLength);
+
+            FontCollection = fontCollection;
+        }
+
+        public enum Fonts
+        {
+            Almenda = 0
+        }
+
         public static TreeNode BuildFileStruture(IReadOnlyCollection<ProjectItemModel> items)
         {
             var root = new TreeNode()
