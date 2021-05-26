@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HydroneerStager.WinForms.Structs
+namespace HydroModTools.WinForms.Structs
 {
     internal struct GuidWrapper
     {

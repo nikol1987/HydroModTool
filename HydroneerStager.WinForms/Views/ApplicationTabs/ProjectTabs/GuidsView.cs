@@ -1,5 +1,5 @@
-﻿using HydroneerStager.WinForms.Structs;
-using HydroneerStager.WinForms.ViewModels;
+﻿using HydroModTools.WinForms.Structs;
+using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System;
 using System.ComponentModel;
@@ -7,7 +7,7 @@ using System.Data;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
+namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
     public partial class GuidsView : UserControl, IViewFor<GuidsViewModel>
     {

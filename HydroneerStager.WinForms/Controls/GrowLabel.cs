@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Controls
+namespace HydroModTools.WinForms.Controls
 {
     public class GrowLabel : Label
     {

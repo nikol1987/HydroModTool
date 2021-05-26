@@ -1,0 +1,27 @@
+﻿using HydroModTools.DataAccess.Extensions;
+using HydroModTools.DataAccess.Models;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+namespace HydroModTools.DataAccess.Services
+{
+    public class ApiBridgepourService : ServiceBase
+    {
+        public ApiBridgepourService(HttpClient httpClient) :
+            base(httpClient, "https://api.bridgepour.com/api")
+        { }
+
+        public async Task<BridgepourModsResult> GetModsAsync()
+        {
+            var result = await httpClient.GetAsync(GetRoute("/mods"));
+
+            if (result.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                throw new Exception(result.StatusCode.ToString());
+            }
+
+            return await result.Content.ToBridgepourModsResultAsync();
+        }
+    }
+}

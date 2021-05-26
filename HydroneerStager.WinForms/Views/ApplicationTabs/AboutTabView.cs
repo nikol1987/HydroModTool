@@ -1,10 +1,10 @@
-﻿using HydroneerStager.WinForms.ViewModels;
-using ReactiveUI;
+﻿using ReactiveUI;
 using System.Windows.Forms;
 using System;
 using System.Reactive.Linq;
+using HydroModTools.WinForms.ViewModels;
 
-namespace HydroneerStager.WinForms.Views.ApplicationTabs
+namespace HydroModTools.WinForms.Views.ApplicationTabs
 {
     public partial class AboutTabView : UserControl, IViewFor<AboutTabViewModel>
     {

@@ -1,5 +1,5 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
-using HydroneerStager.Contracts.Models.WinformModels;
+using HydroModTools.WinForms.Data;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Text;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms
+namespace HydroModTools.WinForms
 {
     internal static class Utilities
     {
@@ -32,7 +32,7 @@ namespace HydroneerStager.WinForms
             Almenda = 0
         }
 
-        public static TreeNode BuildFileStruture(IReadOnlyCollection<ProjectItemModel> items)
+        public static TreeNode BuildFileStruture(IReadOnlyCollection<ProjectItemStore> items)
         {
             var root = new TreeNode()
             {

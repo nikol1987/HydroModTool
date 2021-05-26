@@ -1,7 +1,7 @@
-﻿using Hydroneer.Contracts.Models;
-using Hydroneer.Contracts.WinFormsServices;
-using HydroneerStager.Contracts.Models.WinformModels;
-using HydroneerStager.WinForms.Data;
+﻿using HydroModTools.Common.Models;
+using HydroModTools.Contracts.Services;
+using HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs;
+using HydroModTools.WinForms.Data;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -14,28 +14,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.ViewModels
+namespace HydroModTools.WinForms.ViewModels
 {
     public sealed class ProjectsViewModel : ReactiveObject
     {
-        private readonly ApplicationStore _applicationStore;
         private readonly AddProjectView _addProjectView;
         private readonly IProjectsService _projectsService;
 
-        public ProjectsViewModel(ApplicationStore applicationStore, AddProjectView addProjectView, IProjectsService projectsService)
+        public ProjectsViewModel(AddProjectView addProjectView, IProjectsService projectsService)
         {
-            _applicationStore = applicationStore;
             _addProjectView = addProjectView;
             _projectsService = projectsService;
 
-            _applicationStore
-                .WhenAnyValue(appStore => appStore.AppState)
-                .Subscribe(newState =>
-                {
-                    _selectedProject = newState.SelectedProject ?? Guid.Empty;
-                    SetProjects();
-                    SetItems(_selectedProject);
-                });
+            _selectedProject = ApplicationStore.Store.DefaultProject ?? Guid.Empty;
+            SetProjects();
+            SetItems(_selectedProject);
 
 
             ExecuteStripMenuCommand = ReactiveCommand.Create<string>(ExecuteStripMenu);
@@ -47,13 +40,13 @@ namespace HydroneerStager.WinForms.ViewModels
 
         private void SetProjects()
         {
-            var projects = _applicationStore.AppState.Projects.Select(p => KeyValuePair.Create(p.Id, p.Name)).ToArray();
+            var projects = ApplicationStore.Store.Projects.Select(p => KeyValuePair.Create(p.Id, p.Name)).ToArray();
             _projects.DataSource = projects;
         }
 
         private void SetItems(Guid selectedProject)
         {
-            var project = _applicationStore.AppState.Projects.Where(p => p.Id == selectedProject).FirstOrDefault();
+            var project = ApplicationStore.Store.Projects.Where(p => p.Id == selectedProject).FirstOrDefault();
 
             if (project == null)
             {
@@ -97,7 +90,7 @@ namespace HydroneerStager.WinForms.ViewModels
         internal ReactiveCommand<string, Unit> ExecuteStripMenuCommand;
         private async void ExecuteStripMenu(string stripItemName)
         {
-            var project = _applicationStore.AppState.Projects.Where(p => p.Id == SelectedProject).FirstOrDefault();
+            var project = ApplicationStore.Store.Projects.Where(p => p.Id == SelectedProject).FirstOrDefault();
 
             var timer = new System.Windows.Forms.Timer()
             {
@@ -116,13 +109,13 @@ namespace HydroneerStager.WinForms.ViewModels
                 case "refresh":
                     ProgressBarState = new ProgressbarStateModel(10, $"Refreshing state");
 
-                    await _applicationStore.ReloadState();
+                    await ApplicationStore.RefreshStore();
 
-                    timer.Tick += (sender, ea) =>
+                    timer.Tick += async (sender, ea) =>
                     {
-                        _applicationStore.ReloadState();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                         timer.Stop();
+                        await ApplicationStore.RefreshStore();
+                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
                     timer.Start();
@@ -154,11 +147,11 @@ namespace HydroneerStager.WinForms.ViewModels
                     ProgressBarState = new ProgressbarStateModel(100, "Project staged");
 
 
-                    timer.Tick += (sender, ea) =>
+                    timer.Tick += async (sender, ea) =>
                     {
-                        _applicationStore.ReloadState();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                         timer.Stop();
+                        await ApplicationStore.RefreshStore();
+                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
                     timer.Start();
@@ -174,11 +167,11 @@ namespace HydroneerStager.WinForms.ViewModels
 
                     ProgressBarState = new ProgressbarStateModel(100, "Project packaged");
 
-                    timer.Tick += (sender, ea) =>
+                    timer.Tick += async (sender, ea) =>
                     {
-                        _applicationStore.ReloadState();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                         timer.Stop();
+                        await ApplicationStore.RefreshStore();
+                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
                     timer.Start();
@@ -195,11 +188,11 @@ namespace HydroneerStager.WinForms.ViewModels
 
                     ProgressBarState = new ProgressbarStateModel(100, "Project copied");
 
-                    timer.Tick += (sender, ea) =>
+                    timer.Tick += async (sender, ea) =>
                     {
-                        _applicationStore.ReloadState();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                         timer.Stop();
+                        await ApplicationStore.RefreshStore();
+                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
                     timer.Start();
@@ -211,11 +204,11 @@ namespace HydroneerStager.WinForms.ViewModels
 
                     Process.Start(processInfo);
 
-                    timer.Tick += (sender, ea) =>
+                    timer.Tick += async (sender, ea) =>
                     {
-                        _applicationStore.ReloadState();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                         timer.Stop();
+                        await ApplicationStore.RefreshStore();
+                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
                     timer.Start();
@@ -257,7 +250,7 @@ namespace HydroneerStager.WinForms.ViewModels
                     timer.Tick += async (sender, ea) =>
                     {
                         timer.Stop();
-                        await _applicationStore.ReloadState();
+                        await ApplicationStore.RefreshStore();
                         ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
@@ -277,7 +270,7 @@ namespace HydroneerStager.WinForms.ViewModels
         internal ReactiveCommand<Guid, Unit> SelectProjectCommand;
         private void SelectProject(Guid projectId)
         {
-            _applicationStore.AppState.SelectedProject = projectId;
+            ApplicationStore.Store.DefaultProject = projectId;
             SelectedProject = projectId;
 
             SetItems(projectId);
@@ -293,13 +286,8 @@ namespace HydroneerStager.WinForms.ViewModels
                 return;
             }
 
-            var projects = new List<ProjectModel>(_applicationStore.AppState.Projects.Where(p => p.Id != projectId).ToList());
-
-            ProgressBarState = new ProgressbarStateModel(10, $"Removing project {_applicationStore.AppState.Projects.Where(p => p.Id == projectId).First().Name}");
-
-            _applicationStore.AppState.Projects = projects;
-            _applicationStore.AppState.SelectedProject = null;
-            ProjectItems = null;
+            ProgressBarState = new ProgressbarStateModel(10, $"Removing project {ApplicationStore.Store.Projects.Where(p => p.Id == projectId).First().Name}");
+            await _projectsService.DeleteProject(ApplicationStore.Store.Projects.Where(p => p.Id == projectId).First().Id);
 
             ProgressBarState = new ProgressbarStateModel(100, "Removed project");
 
@@ -309,11 +297,11 @@ namespace HydroneerStager.WinForms.ViewModels
                 Interval = 500
             };
 
-            timer.Tick += (sender, ea) =>
+            timer.Tick += async (sender, ea) =>
             {
-                _applicationStore.ReloadState();
-                ProgressBarState = new ProgressbarStateModel(0, "Ready");
                 timer.Stop();
+                await ApplicationStore.RefreshStore();
+                ProgressBarState = new ProgressbarStateModel(0, "Ready");
             };
 
             timer.Start();
@@ -324,13 +312,13 @@ namespace HydroneerStager.WinForms.ViewModels
         internal ReactiveCommand<IList<Guid>, Unit> DeleteAssetsCommand;
         private async void DeleteAssets(IList<Guid> assetsId)
         {
-            var project = _applicationStore.AppState.Projects.Where(p => p.Id == SelectedProject).First();
+            var project = ApplicationStore.Store.Projects.Where(p => p.Id == SelectedProject).First();
             ProgressBarState = new ProgressbarStateModel(10, $"Removing project {project.Name}");
 
             project.Items = project.Items.Where(item => !assetsId.Contains(item.Id)).ToList();
-            _applicationStore.AppState.Projects = _applicationStore.AppState.Projects;
+            ApplicationStore.Store.Projects = ApplicationStore.Store.Projects;
 
-            await _applicationStore.ReloadState();
+            await ApplicationStore.RefreshStore();
 
             ProgressBarState = new ProgressbarStateModel(100, "Removed assets");
 
@@ -340,11 +328,11 @@ namespace HydroneerStager.WinForms.ViewModels
                 Interval = 500
             };
 
-            timer.Tick += (sender, ea) =>
+            timer.Tick += async (sender, ea) =>
             {
-                _applicationStore.ReloadState();
-                ProgressBarState = new ProgressbarStateModel(0, "Ready");
                 timer.Stop();
+                await ApplicationStore.RefreshStore();
+                ProgressBarState = new ProgressbarStateModel(0, "Ready");
             };
 
             timer.Start();
@@ -353,12 +341,12 @@ namespace HydroneerStager.WinForms.ViewModels
         internal ReactiveCommand<Unit, Unit> AddAssetsCommand;
         private async void AddAssets()
         {
-            if (_applicationStore.AppState.Projects.Count == 0)
+            if (ApplicationStore.Store.Projects.Count == 0)
             {
                 return;
             }
 
-            var project = _applicationStore.AppState.Projects.Where(p => p.Id == SelectedProject).First();
+            var project = ApplicationStore.Store.Projects.Where(p => p.Id == SelectedProject).First();
             ProgressBarState = new ProgressbarStateModel(10, $"Add assets to project {project.Name}");
 
             var files = await ChooseFilesHelper("Select assets", project.Path);
@@ -371,7 +359,7 @@ namespace HydroneerStager.WinForms.ViewModels
                 return;
             }
 
-            var projectItems = new List<ProjectItemModel>(project.Items);
+            var projectItems = new List<ProjectItemStore>(project.Items);
 
             foreach (var item in files)
             {
@@ -384,15 +372,15 @@ namespace HydroneerStager.WinForms.ViewModels
                     continue;
                 }
 
-                projectItems.Add(new ProjectItemModel(Guid.NewGuid(), Path.GetFileName(item), partialPath));
+                projectItems.Add(new ProjectItemStore(Guid.NewGuid(), Path.GetFileName(item), partialPath));
             }
 
             project.Items = projectItems;
 
-            var projects = new List<ProjectModel>(_applicationStore.AppState.Projects.Where(p => p.Id != project.Id).ToList());
+            var projects = new List<ProjectStore>(ApplicationStore.Store.Projects.Where(p => p.Id != project.Id).ToList());
             projects.Add(project);
 
-            _applicationStore.AppState.Projects = projects;
+            ApplicationStore.Store.Projects = projects;
 
             ProgressBarState = new ProgressbarStateModel(100, "Added assets");
 
@@ -402,11 +390,11 @@ namespace HydroneerStager.WinForms.ViewModels
                 Interval = 500
             };
 
-            timer.Tick += (sender, ea) =>
+            timer.Tick += async (sender, ea) =>
             {
-                _applicationStore.ReloadState();
-                ProgressBarState = new ProgressbarStateModel(0, "Ready");
                 timer.Stop();
+                await ApplicationStore.RefreshStore();
+                ProgressBarState = new ProgressbarStateModel(0, "Ready");
             };
 
             timer.Start();

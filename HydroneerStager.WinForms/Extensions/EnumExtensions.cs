@@ -1,4 +1,4 @@
-﻿namespace HydroneerStager.WinForms.Extensions
+﻿namespace HydroModTools.WinForms.Extensions
 {
     internal static class EnumExtensions
     {

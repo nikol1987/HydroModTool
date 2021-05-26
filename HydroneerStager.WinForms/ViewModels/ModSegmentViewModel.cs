@@ -1,10 +1,10 @@
-﻿using Hydroneer.Contracts.Models.WinformModels;
-using Hydroneer.Contracts.WinFormsServices;
+﻿using HydroModTools.DataAccess.Contracts.Models;
+using HydroModTools.DataAccess.Contracts.Services;
 using ReactiveUI;
 using System.Reactive;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.ViewModels
+namespace HydroModTools.WinForms.ViewModels
 {
     public sealed class ModSegmentViewModel : ReactiveObject
     {

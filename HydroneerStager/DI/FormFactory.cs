@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace HydroneerStager.DI
+namespace HydroModTools.DI
 {
     public static class FormFactory
     {

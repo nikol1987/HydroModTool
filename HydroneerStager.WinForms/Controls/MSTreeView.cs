@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Controls
+namespace HydroModTools.WinForms.Controls
 {
     public sealed class MSTreeView : TreeView
     {

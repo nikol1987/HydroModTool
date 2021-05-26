@@ -1,7 +1,7 @@
-﻿using Hydroneer.Contracts.WinFormsServices;
+﻿using HydroModTools.Contracts.Services;
 using ReactiveUI;
 
-namespace HydroneerStager.WinForms.ViewModels
+namespace HydroModTools.WinForms.ViewModels
 {
     public sealed class AboutTabViewModel : ReactiveObject
     {

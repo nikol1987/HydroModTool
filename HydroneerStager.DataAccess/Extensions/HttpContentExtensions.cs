@@ -1,9 +1,9 @@
-﻿using HydroneerStager.Contracts.Models.Api.Bridgepour;
+﻿using HydroModTools.DataAccess.Models;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace HydroneerStager.DataAccess.Extensions
+namespace HydroModTools.DataAccess.Extensions
 {
     internal static class HttpContentExtensions
     {

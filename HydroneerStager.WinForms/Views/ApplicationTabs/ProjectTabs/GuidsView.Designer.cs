@@ -1,5 +1,5 @@
 ﻿
-namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
+namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
     partial class GuidsView
     {

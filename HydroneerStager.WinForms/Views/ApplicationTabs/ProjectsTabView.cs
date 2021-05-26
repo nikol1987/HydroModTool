@@ -1,9 +1,9 @@
-﻿using HydroneerStager.WinForms.ViewModels;
-using HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs;
+﻿using HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs;
+using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Views.ApplicationTabs
+namespace HydroModTools.WinForms.Views.ApplicationTabs
 {
     public partial class ProjectsTabView : UserControl, IViewFor<ProjectTabViewModel>
     {

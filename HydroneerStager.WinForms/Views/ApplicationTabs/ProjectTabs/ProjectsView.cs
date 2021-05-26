@@ -1,5 +1,7 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
-using HydroneerStager.WinForms.ViewModels;
+using HydroModTools.Contracts.Services;
+using HydroModTools.WinForms.ViewModels;
+using HydroneerStager.WinForms.Abstractions;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -8,15 +10,13 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
+namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
-    public partial class ProjectsView : UserControl, IViewFor<ProjectsViewModel>
+    public partial class ProjectsView : ViewBase<ProjectsViewModel>
     {
-        public ProjectsView(ProjectsViewModel projectsViewModel)
+        public ProjectsView(AddProjectView addProjectView, IProjectsService projectsService) : base(new ProjectsViewModel(addProjectView, projectsService))
         {
             InitializeComponent();
-
-            ViewModel = projectsViewModel;
 
             this.WhenActivated(d =>
             {
@@ -121,9 +121,9 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
                         .Where(a => !a.Name.StartsWith("node-"))
                         .ToList();
 
-                    if (selectedItems.Count != 0)
+                    if (selectedItems.Count() != 0)
                     {
-                        var deleteItemStripItem = new KryptonContextMenuItem($"Remove Asset{(selectedItems.Count == 1 ? "" : "s")}");
+                        var deleteItemStripItem = new KryptonContextMenuItem($"Remove Asset{(selectedItems.Count() == 1 ? "" : "s")}");
 
                         var deleteClick = Observable.FromEventPattern<EventArgs>(deleteItemStripItem, "Click");
                         deleteClick
@@ -154,9 +154,5 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
 
             e.Cancel = false;
         }
-
-        public ProjectsViewModel ViewModel { get; set; }
-
-        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (ProjectsViewModel)value; }
     }
 }

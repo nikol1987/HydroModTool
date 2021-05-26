@@ -1,8 +1,7 @@
-﻿using Hydroneer.Contracts.WinFormsServices;
-using HydroneerStager.Contracts.Models.WinformModels;
-using HydroneerStager.WinForms.Data;
-using HydroneerStager.WinForms.Extensions;
-using HydroneerStager.WinForms.Structs;
+﻿using HydroModTools.Contracts.Services;
+using HydroModTools.WinForms.Data;
+using HydroModTools.WinForms.Extensions;
+using HydroModTools.WinForms.Structs;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -11,28 +10,20 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.ViewModels
+namespace HydroModTools.WinForms.ViewModels
 {
     public sealed class GuidsViewModel : ReactiveObject
     {
-        private readonly ApplicationStore _applicationStore;
         private readonly IGuidsService _guidsService;
 
-        public GuidsViewModel(ApplicationStore applicationStore, IGuidsService guidsService)
+        public GuidsViewModel(IGuidsService guidsService)
         {
-            _applicationStore = applicationStore;
             _guidsService = guidsService;
-
-            _applicationStore
-                .WhenAnyValue(appStore => appStore.AppState)
-                .Subscribe(newState =>
-                {
-                    SetGuids();
-                });
-
 
             ExecuteStripMenuCommand = ReactiveCommand.Create<string>(ExecuteStripMenu);
             SelectGuidCommand = ReactiveCommand.Create<Guid>(SelectGuid);
+
+            SetGuids();
         }
 
         private void SetGuids()
@@ -65,7 +56,7 @@ namespace HydroneerStager.WinForms.ViewModels
 
             dt.Rows.Clear();
 
-            var items = GuidItemsDataRows(dt, _applicationStore.AppState.Guids);
+            var items = GuidItemsDataRows(dt, ApplicationStore.Store.Guids);
 
             foreach (var item in items)
             {
@@ -75,7 +66,7 @@ namespace HydroneerStager.WinForms.ViewModels
             Guids = dt;
         }
 
-        private IReadOnlyCollection<DataRow> GuidItemsDataRows(DataTable dt, IReadOnlyCollection<GuidModel> items)
+        private IReadOnlyCollection<DataRow> GuidItemsDataRows(DataTable dt, IReadOnlyCollection<GuidItemStore> items)
         {
             var result = new List<DataRow>();
 

@@ -1,25 +1,20 @@
-﻿using Hydroneer.Contracts.WinFormsServices;
-using HydroneerStager.Contracts.Models.WinformModels;
-using HydroneerStager.WinForms.Data;
+﻿using HydroModTools.Contracts.Services;
+using HydroModTools.WinForms.Data;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Reactive;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.ViewModels
+namespace HydroModTools.WinForms.ViewModels
 {
     public sealed class AddProjectViewModel : ReactiveObject
     {
         private readonly IProjectsService _projectService;
-        private readonly ApplicationStore _applicationStore;
 
-        public AddProjectViewModel(IProjectsService projectService, ApplicationStore applicationStore)
+        public AddProjectViewModel(IProjectsService projectService)
         {
             AddProjectCommand = ReactiveCommand.Create<Form>(AddProject);
-            _projectService = projectService;
-            _applicationStore = applicationStore;
-        }
+            _projectService = projectService;        }
 
         private Guid _id = Guid.NewGuid();
         internal Guid Id
@@ -62,17 +57,10 @@ namespace HydroneerStager.WinForms.ViewModels
         }
 
         public ReactiveCommand<Form, Unit> AddProjectCommand;
-
         public async void AddProject(Form form)
         {
-            var projects = new List<ProjectModel>(_applicationStore.AppState.Projects);
-            var newProject = new ProjectModel(Id, Name, Path, OutputPath, new List<ProjectItemModel>());
-
-            projects.Add(newProject);
-
-            _applicationStore.AppState.Projects = projects;
-            _applicationStore.AppState.SelectedProject = newProject.Id;
-            await _applicationStore.ReloadState();
+            await _projectService.AddProject(Id, Name, Path, OutputPath);
+            await ApplicationStore.RefreshStore();
             form.Close();
         }
     }

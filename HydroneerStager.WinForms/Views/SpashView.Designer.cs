@@ -1,7 +1,6 @@
-﻿
-namespace HydroneerStager.WinForms.Views
+﻿namespace HydroModTools.WinForms.Views
 {
-    partial class SpashView
+    public partial class SpashView
     {
         /// <summary>
         /// Required designer variable.
@@ -48,7 +47,7 @@ namespace HydroneerStager.WinForms.Views
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = global::HydroneerStager.WinForms.Properties.Resources.SpashBG;
+            this.pictureBox1.Image = HydroModTools.WinForms.Properties.Resources.SpashBG;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(500, 251);
@@ -60,7 +59,7 @@ namespace HydroneerStager.WinForms.Views
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pictureBox2.Image = global::HydroneerStager.WinForms.Properties.Resources.HydroneerLogo;
+            this.pictureBox2.Image = HydroModTools.WinForms.Properties.Resources.HydroneerLogo;
             this.pictureBox2.Location = new System.Drawing.Point(0, -39);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(300, 169);
@@ -81,8 +80,8 @@ namespace HydroneerStager.WinForms.Views
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;

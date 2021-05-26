@@ -1,14 +1,14 @@
-﻿using Hydroneer.Contracts.Models.WinformModels;
-using Hydroneer.Contracts.WinFormsServices;
-using HydroneerStager.WinForms.Extensions;
-using HydroneerStager.WinForms.ViewModels;
+﻿using HydroModTools.DataAccess.Contracts.Models;
+using HydroModTools.DataAccess.Contracts.Services;
+using HydroModTools.WinForms.Extensions;
+using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System.Drawing;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Controls
+namespace HydroModTools.WinForms.Controls
 {
     public partial class ModSegmentView : UserControl, IViewFor<ModSegmentViewModel>
     {

@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace HydroneerStager.WinForms.ViewModels
+namespace HydroModTools.WinForms.ViewModels
 {
     public sealed class ProjectTabViewModel : ReactiveObject
     {

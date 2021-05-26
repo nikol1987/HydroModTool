@@ -1,12 +1,12 @@
-﻿using HydroneerStager.WinForms.ViewModels;
-using HydroneerStager.WinForms.Views.ApplicationTabs;
+﻿using HydroModTools.WinForms.ViewModels;
+using HydroModTools.WinForms.Views.ApplicationTabs;
 using ReactiveUI;
 using System;
 using System.Drawing;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Views
+namespace HydroModTools.WinForms.Views
 {
     public partial class ApplicationView : Form, IViewFor<ApplicationViewModel>
     {

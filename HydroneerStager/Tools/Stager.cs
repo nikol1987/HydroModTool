@@ -1,14 +1,16 @@
-﻿using Hydroneer.Contracts.Models;
-using HydroneerStager.Contracts.Models.AppModels;
+﻿using HydroModTools;
+using HydroModTools.Common.Models;
+using HydroModTools.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace HydroneerStager.Tools
 {
     public class Stager
     {
-        public void Stage(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, Project project, IReadOnlyCollection<GuidItem> guids)
+        public async Task StageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project, IReadOnlyCollection<GuidItemModel> guids)
         {
             var basePathSrc = project.Path;
             var basePathOut = Path.Combine(project.OutputPath, "Staging", project.Name, "Mining");
@@ -59,15 +61,15 @@ namespace HydroneerStager.Tools
             }
         }
 
-        private MemoryStream PatchFile(string fileSrc, IReadOnlyCollection<GuidItem> guids)
+        private MemoryStream PatchFile(string fileSrc, IReadOnlyCollection<GuidItemModel> guids)
         {
 
             var fileBytes = File.ReadAllBytes(fileSrc);
 
             foreach (var guid in guids)
             {
-                var moddedGuidBytes = Utilities.Hex2Binary(guid.ModdedGuid);
-                var originalGuidBytes = Utilities.Hex2Binary(guid.OriginalGuid);
+                var moddedGuidBytes = Utilities.Hex2Binary(guid.ModdedGuid.ToString("N"));
+                var originalGuidBytes = Utilities.Hex2Binary(guid.OriginalGuid.ToString("N"));
 
                 var position = Utilities.SearchBytePattern(moddedGuidBytes, fileBytes);
 

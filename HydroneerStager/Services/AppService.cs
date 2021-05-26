@@ -1,11 +1,11 @@
-﻿using Hydroneer.Contracts.WinFormsServices;
+﻿using HydroModTools.Contracts.Services;
 using Markdig;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace HydroneerStager.Services
 {
-    public sealed class AppService : IAppService
+    internal sealed class AppService : IAppService
     {
         public async Task<string> LoadAboutHtml()
         {

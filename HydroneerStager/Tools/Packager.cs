@@ -1,17 +1,19 @@
-﻿using Hydroneer.Contracts.Models;
-using HydroneerStager.Contracts.Models.AppModels;
+﻿using HydroModTools;
+using HydroModTools.Common.Models;
+using HydroModTools.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace HydroneerStager.Tools
 {
     public class Packager
     {
-        public void Package(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, Project project)
+        public async Task PackageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project)
         {
             var stagedFilesDir = Path.Combine(project.OutputPath, "Staging", project.Name, "Mining");
             var outputFile = Utilities.GetOutFile(project);

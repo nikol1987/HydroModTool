@@ -1,13 +1,14 @@
-﻿using HydroneerStager.WinForms.ViewModels;
-using ReactiveUI;
+﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Views
+namespace HydroModTools.WinForms.Views
 {
-    public partial class SpashView : Form, IViewFor<SpashViewModel>
+    public partial class SpashView : Form
     {
-        public SpashView(SpashViewModel spashViewModel)
+        public event Action TimeOutEvent; 
+
+        public SpashView()
         {
             InitializeComponent();
 
@@ -23,15 +24,13 @@ namespace HydroneerStager.WinForms.Views
             loadingWorker.DoWork += async (object sender, DoWorkEventArgs e) =>
             {
                 loadingWorker.ReportProgress(1, new LoadingWorkerStage("Loading Configuration"));
-
-                //await Store.GetInstance().InitAsync(); //TODO: Get Store DIed
             };
 
-            loadingWorker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
+            loadingWorker.ProgressChanged += (sender, e) =>
             {
                 loadingLabel.Text = ((LoadingWorkerStage)e.UserState).Phase;
             };
-            loadingWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+            loadingWorker.RunWorkerCompleted += (sender, e) =>
             {
                 loadingLabel.Text = "Starting App";
 
@@ -39,23 +38,17 @@ namespace HydroneerStager.WinForms.Views
                 splashTimer.Start();
             };
 
-            splashTimer.Tick += (object sender, System.EventArgs e) =>
+            splashTimer.Tick += (sender, e) =>
             {
                 splashTimer.Enabled = false;
                 splashTimer.Stop();
 
-                spashViewModel.ShowAppCommand.Execute();
+                TimeOutEvent.Invoke();
                 Close();
             };
 
-            ViewModel = spashViewModel;
-
             loadingWorker.RunWorkerAsync();
         }
-
-        public SpashViewModel ViewModel { get; set; }
-
-        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (SpashViewModel)value; }
 
         internal class LoadingWorkerStage
         {

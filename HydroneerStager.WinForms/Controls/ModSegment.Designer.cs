@@ -1,5 +1,5 @@
 ﻿
-namespace HydroneerStager.WinForms.Controls
+namespace HydroModTools.WinForms.Controls
 {
     partial class ModSegmentView
     {
@@ -31,7 +31,7 @@ namespace HydroneerStager.WinForms.Controls
         {
             this.modName = new System.Windows.Forms.Label();
             this.author = new System.Windows.Forms.Label();
-            this.description = new HydroneerStager.WinForms.Controls.GrowLabel();
+            this.description = new HydroModTools.WinForms.Controls.GrowLabel();
             this.downloadMod = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.kryptonPanel1 = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel1)).BeginInit();

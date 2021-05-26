@@ -1,5 +1,5 @@
 ﻿
-namespace HydroneerStager.WinForms.Views
+namespace HydroModTools.WinForms.Views
 {
     partial class ApplicationView
     {

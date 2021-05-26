@@ -1,7 +1,7 @@
-﻿using Hydroneer.Contracts.Models.WinformModels;
-using Hydroneer.Contracts.WinFormsServices;
-using HydroneerStager.WinForms.Controls;
-using HydroneerStager.WinForms.ViewModels;
+﻿using HydroModTools.DataAccess.Contracts.Models;
+using HydroModTools.DataAccess.Contracts.Services;
+using HydroModTools.WinForms.Controls;
+using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Views.ApplicationTabs
+namespace HydroModTools.WinForms.Views.ApplicationTabs
 {
     public partial class ModInstallerTabView : UserControl, IViewFor<ModInstallerTabViewModel>
     {

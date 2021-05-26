@@ -1,25 +1,22 @@
-﻿using Hydroneer.Contracts.Models.AppModels;
-using Hydroneer.Contracts.WinFormsServices;
-using HydroneerStager.Contracts.Models.AppModels;
+﻿using HydroModTools.Contracts.Models;
+using HydroModTools.Contracts.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HydroneerStager.Services
 {
-    public sealed class GuidsService : IGuidsService
+    internal sealed class GuidsService : IGuidsService
     {
-        private readonly Configuration _configuration;
+        private readonly IConfigurationService _configurationService;
 
-        public GuidsService(Configuration configuration)
+        public GuidsService(IConfigurationService configurationService)
         {
-            _configuration = configuration;
+            _configurationService = configurationService;
         }
 
-        public async Task SaveGuids(IReadOnlyCollection<GuidItem> guids)
+        public async Task SaveGuids(IReadOnlyCollection<GuidItemModel> guids)
         {
-            var appConfig = await _configuration.GetConfigurationAsync();
-
-            await _configuration.Save(new ConfigurationModel(appConfig.AppConfiguration, new GuidConfiguration(guids)), Configuration.ConfigFile.Guids);
+            await _configurationService.SaveGuids(guids);
         }
     }
 }

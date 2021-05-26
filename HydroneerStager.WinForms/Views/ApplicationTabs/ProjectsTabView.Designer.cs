@@ -1,5 +1,5 @@
 ﻿
-namespace HydroneerStager.WinForms.Views.ApplicationTabs
+namespace HydroModTools.WinForms.Views.ApplicationTabs
 {
     partial class ProjectsTabView
     {

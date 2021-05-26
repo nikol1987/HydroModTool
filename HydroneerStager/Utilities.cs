@@ -1,4 +1,4 @@
-﻿using HydroneerStager.Contracts.Models.AppModels;
+﻿using HydroModTools.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace HydroneerStager
+namespace HydroModTools
 {
     internal static class Utilities
     {
@@ -50,7 +50,7 @@ namespace HydroneerStager
             return bytes;
         }
 
-        public static string GetOutFile(Project project)
+        public static string GetOutFile(ProjectModel project)
         {
             var fileName = $"500-{project.Name}_P.pak";
             var outPath = Path.Combine(project.OutputPath, "dist");

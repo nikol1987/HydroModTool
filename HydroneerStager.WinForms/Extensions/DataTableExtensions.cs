@@ -1,16 +1,16 @@
-﻿using HydroneerStager.Contracts.Models.AppModels;
-using HydroneerStager.WinForms.Structs;
+﻿using HydroModTools.Contracts.Models;
+using HydroModTools.WinForms.Structs;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace HydroneerStager.WinForms.Extensions
+namespace HydroModTools.WinForms.Extensions
 {
     internal static class DataTableExtensions
     {
-        public static IReadOnlyCollection<GuidItem> ToGuidItems(this DataTable dt)
+        public static IReadOnlyCollection<GuidItemModel> ToGuidItems(this DataTable dt)
         {
-            var result = new List<GuidItem>();
+            var result = new List<GuidItemModel>();
 
             if (dt == null || dt.Rows.Count == 0)
             {
@@ -29,7 +29,7 @@ namespace HydroneerStager.WinForms.Extensions
                     continue;
                 }
 
-                result.Add(new GuidItem(((GuidWrapper)dataRow["id"]).GetGuid(), (string)dataRow["name"], ((GuidWrapper)dataRow["moddedid"]).ToString(), ((GuidWrapper)dataRow["originalid"]).ToString()));
+                result.Add(new GuidItemModel(((GuidWrapper)dataRow["id"]).GetGuid(), (string)dataRow["name"], ((GuidWrapper)dataRow["moddedid"]).GetGuid(), ((GuidWrapper)dataRow["originalid"]).GetGuid()));
             }
 
             return result;

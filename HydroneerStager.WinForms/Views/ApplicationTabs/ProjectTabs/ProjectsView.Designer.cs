@@ -1,5 +1,5 @@
 ﻿
-namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
+namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
     partial class ProjectsView
     {
@@ -43,7 +43,7 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
             this.launchGame = new System.Windows.Forms.ToolStripMenuItem();
             this.devExpress = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu = new ComponentFactory.Krypton.Toolkit.KryptonContextMenu();
-            this.projectItemsTree = new HydroneerStager.WinForms.Controls.MSTreeView();
+            this.projectItemsTree = new HydroModTools.WinForms.Controls.MSTreeView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -200,7 +200,7 @@ namespace HydroneerStager.WinForms.Views.ApplicationTabs.ProjectTabs
         private System.Windows.Forms.ToolStripMenuItem packageProject;
         private System.Windows.Forms.ToolStripMenuItem copyMod;
         public ComponentFactory.Krypton.Toolkit.KryptonContextMenu contextMenu;
-        private Controls.MSTreeView projectItemsTree;
+        private HydroModTools.WinForms.Controls.MSTreeView projectItemsTree;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripMenuItem refresh;
         private System.Windows.Forms.ToolStripMenuItem launchGame;

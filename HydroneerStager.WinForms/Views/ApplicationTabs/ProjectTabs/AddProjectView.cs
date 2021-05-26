@@ -1,4 +1,4 @@
-﻿using HydroneerStager.WinForms.ViewModels;
+﻿using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System;
 using System.Reactive.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace HydroneerStager
+namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
     public partial class AddProjectView : UserControl, IViewFor<AddProjectViewModel>
     {
@@ -79,7 +79,7 @@ namespace HydroneerStager
 
         private void cancel_Click(object sender, EventArgs e)
         {
-            this.ParentForm.Close();
+            this.FindForm().Close();
         }
     }
 }
