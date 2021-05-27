@@ -3,7 +3,7 @@ using Markdig;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace HydroneerStager.Services
+namespace HydroModTools.Services
 {
     internal sealed class AppService : IAppService
     {

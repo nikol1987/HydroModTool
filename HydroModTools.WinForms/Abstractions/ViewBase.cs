@@ -1,7 +1,7 @@
 ﻿using ReactiveUI;
 using System.Windows.Forms;
 
-namespace HydroneerStager.WinForms.Abstractions
+namespace HydroModTools.WinForms.Abstractions
 {
     public partial class ViewBase<TViewModel> : UserControl, IViewFor<TViewModel> where TViewModel : ReactiveObject
     {

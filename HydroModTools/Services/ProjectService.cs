@@ -1,13 +1,13 @@
 ﻿using HydroModTools;
 using HydroModTools.Common.Models;
 using HydroModTools.Contracts.Services;
-using HydroneerStager.Tools;
+using HydroModTools.Tools;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HydroneerStager.Services
+namespace HydroModTools.Services
 {
     internal class ProjectService : IProjectsService
     {

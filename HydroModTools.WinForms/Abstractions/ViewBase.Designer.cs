@@ -1,5 +1,5 @@
 ﻿
-namespace HydroneerStager.WinForms.Abstractions
+namespace HydroModTools.WinForms.Abstractions
 {
     partial class ViewBase<TViewModel>
     {

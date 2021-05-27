@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HydroModTools.Common\HydroModTools.Common.csproj" />
-    <ProjectReference Include="..\HydroneerStager.DataAccess.Contracts\HydroModTools.DataAccess.Contracts.csproj" />
+    <ProjectReference Include="..\HydroModTools.DataAccess.Contracts\HydroModTools.DataAccess.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

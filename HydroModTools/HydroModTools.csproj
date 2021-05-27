@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>..\HydroModTools.WinForms\Resources\hydroneer H.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,10 +23,11 @@
   <ItemGroup>
     <ProjectReference Include="..\HydroModTools.Business\HydroModTools.Business.csproj" />
     <ProjectReference Include="..\HydroModTools.Common\HydroModTools.Common.csproj" />
+    <ProjectReference Include="..\HydroModTools.Contracts\HydroModTools.Contracts.csproj" />
     <ProjectReference Include="..\Hydroneer.Contracts\HydroModTools.Contracts.csproj" />
-    <ProjectReference Include="..\HydroneerStager.DataAccess.Contracts\HydroModTools.DataAccess.Contracts.csproj" />
-    <ProjectReference Include="..\HydroneerStager.DataAccess\HydroModTools.DataAccess.csproj" />
-    <ProjectReference Include="..\HydroneerStager.WinForms\HydroModTools.WinForms.csproj" />
+    <ProjectReference Include="..\HydroModTools.DataAccess.Contracts\HydroModTools.DataAccess.Contracts.csproj" />
+    <ProjectReference Include="..\HydroModTools.DataAccess\HydroModTools.DataAccess.csproj" />
+    <ProjectReference Include="..\HydroModTools.WinForms\HydroModTools.WinForms.csproj" />
   </ItemGroup>
 
   <ItemGroup>

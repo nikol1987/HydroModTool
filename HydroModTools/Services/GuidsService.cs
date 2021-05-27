@@ -3,7 +3,7 @@ using HydroModTools.Contracts.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace HydroneerStager.Services
+namespace HydroModTools.Services
 {
     internal sealed class GuidsService : IGuidsService
     {
