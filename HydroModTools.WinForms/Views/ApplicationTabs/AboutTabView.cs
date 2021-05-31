@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using System;
 using System.Reactive.Linq;
 using HydroModTools.WinForms.ViewModels;
+using HydroModTools.Contracts.Services;
+using System.Threading.Tasks;
 
 namespace HydroModTools.WinForms.Views.ApplicationTabs
 {
@@ -10,24 +12,28 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
     {
         private WebBrowser _webControl;
 
-
-        public AboutTabView(AboutTabViewModel aboutTabViewModel)
+        public AboutTabView(IAppService appService)
         {
-            InitializeComponent();
+            ViewModel = new AboutTabViewModel(appService);
 
-            ViewModel = aboutTabViewModel;
+            InitializeComponent();
 
             _webControl = new WebBrowser()
             {
                 Dock = DockStyle.Fill
             };
-            this.Controls.Add(_webControl);
+            Controls.Add(_webControl);
 
             this.WhenActivated(d => {
                 d(ViewModel
                     .WhenAnyValue(vm => vm.AboutHtml)
-                    .Subscribe(aboutHtml => {
+                    .Subscribe(async aboutHtml => {
+                        await Task.Delay(2500);
+
                         _webControl.DocumentText = aboutHtml;
+                        await Task.Delay(2500);
+
+                        _webControl.AllowNavigation = false;
                     }));
             });
                 

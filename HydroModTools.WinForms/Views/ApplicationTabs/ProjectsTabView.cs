@@ -9,9 +9,11 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
     {
         public ProjectsTabView(
             ProjectsView projectView,
-            ProjectTabViewModel projectsTabViewModel,
             GuidsView guidsView)
         {
+
+            ViewModel = new ProjectTabViewModel();
+
             InitializeComponent();
 
             projectView.Dock = DockStyle.Fill;
@@ -25,8 +27,6 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
                 d(this.OneWayBind(ViewModel, vm => vm.Tab1Title, v => v.kryptonPage1.Text));
                 d(this.OneWayBind(ViewModel, vm => vm.Tab2Title, v => v.kryptonPage2.Text));
             });
-
-            ViewModel = projectsTabViewModel;
         }
 
         public ProjectTabViewModel ViewModel { get; set; }

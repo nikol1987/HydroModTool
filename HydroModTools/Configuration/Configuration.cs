@@ -13,7 +13,7 @@ namespace HydroModTools.Configuration
 {
     internal sealed class Configuration
     {
-        private AppConfig? _configurationModel;
+        private AppConfig? _appConfiguration;
         private IConfiguration? _configuration;
 
         public async Task SetupConfigurationAsync()
@@ -27,22 +27,29 @@ namespace HydroModTools.Configuration
 
         public async Task<AppConfig> GetConfigurationAsync()
         {
-            if (_configurationModel == null)
+            if (_appConfiguration == null)
             {
                 throw new Exception("Config not loaded!");
             }
 
-            return await Task.FromResult(_configurationModel);
+            return await Task.FromResult(_appConfiguration);
         }
 
-        public async Task SaveConfigurationAsync(AppConfigModel appConfigModel)
+        public async Task SaveConfigurationAsync(AppConfigModel? appConfigModel = null)
         {
-            if (_configuration == null)
+            if (_configuration == null || _appConfiguration == null)
             {
                 throw new Exception("Config not loaded!");
             }
 
-            await CreateConfigFileAsync(ConfigFile.Both, appConfigModel.ToGeneralConfig());
+            if (appConfigModel == null)
+            {
+                await CreateConfigFileAsync(ConfigFile.Both, _appConfiguration.ToModel().ToGeneralConfig(), _appConfiguration.ToModel().ToGuidsConfig());
+
+                return;
+            }
+
+            await CreateConfigFileAsync(ConfigFile.Both, appConfigModel.ToGeneralConfig(), appConfigModel.ToGuidsConfig());
 
 
             await LoadConfigAsync(_configuration);
@@ -60,7 +67,7 @@ namespace HydroModTools.Configuration
                 var guidConfiguration = new GuidsConfig();
                 configuration.GetSection("GuidConfiguration").Bind(guidConfiguration);
 
-                _configurationModel = new AppConfig(generalConfig, guidConfiguration);
+                _appConfiguration = new AppConfig(generalConfig, guidConfiguration);
             }
             catch (Exception)
             {

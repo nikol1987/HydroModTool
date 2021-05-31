@@ -95,6 +95,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -192,7 +200,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HydroModTools"
         "ProductCode" = "8:{182817B1-C869-49CF-97C3-614BC3929F69}"
-        "PackageCode" = "8:{28F62E41-729B-4B98-B29D-2872A4AA66F2}"
+        "PackageCode" = "8:{59787B02-F677-4588-BD24-CDD493912366}"
         "UpgradeCode" = "8:{E52480EA-77AF-4151-980A-1D86D6DC0D78}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

@@ -11,9 +11,14 @@ namespace HydroModTools.WinForms.Data
     {
         internal static ApplicationStore Store;
 
-        public static async Task RefreshStore()
+        public static async Task RefreshStore(AppConfigModel appConfigModel)
         {
-            // TODO: implement
+            Store = new ApplicationStore()
+            {
+                Projects = appConfigModel.Projects.ToStore(),
+                DefaultProject = appConfigModel.DefaultProject,
+                Guids = appConfigModel.Guids.ToStore()
+            };
         } 
 
         private IReadOnlyCollection<ProjectStore> _projects;

@@ -10,11 +10,14 @@ namespace HydroModTools.WinForms.ViewModels
     public sealed class AddProjectViewModel : ReactiveObject
     {
         private readonly IProjectsService _projectService;
+        private readonly IConfigurationService _configurationService;
 
-        public AddProjectViewModel(IProjectsService projectService)
+        public AddProjectViewModel(IProjectsService projectService, IConfigurationService configurationService)
         {
             AddProjectCommand = ReactiveCommand.Create<Form>(AddProject);
-            _projectService = projectService;        }
+            _projectService = projectService;
+            _configurationService = configurationService;
+        }
 
         private Guid _id = Guid.NewGuid();
         internal Guid Id
@@ -60,7 +63,10 @@ namespace HydroModTools.WinForms.ViewModels
         public async void AddProject(Form form)
         {
             await _projectService.AddProject(Id, Name, Path, OutputPath);
-            await ApplicationStore.RefreshStore();
+
+            var config = await _configurationService.GetAsync();
+            await ApplicationStore.RefreshStore(config);
+
             form.Close();
         }
     }

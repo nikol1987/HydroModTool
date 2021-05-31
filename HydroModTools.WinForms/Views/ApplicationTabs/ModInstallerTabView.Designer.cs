@@ -32,6 +32,7 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.refreshMods = new System.Windows.Forms.ToolStripMenuItem();
             this.modsContainer = new System.Windows.Forms.FlowLayoutPanel();
+            this.clearMods = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,9 +40,11 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
             // 
             this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.refreshMods});
+            this.refreshMods,
+            this.clearMods});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.ShowItemToolTips = true;
             this.menuStrip1.Size = new System.Drawing.Size(651, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
@@ -64,6 +67,13 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
             this.modsContainer.Size = new System.Drawing.Size(651, 390);
             this.modsContainer.TabIndex = 1;
             // 
+            // clearMods
+            // 
+            this.clearMods.Name = "clearMods";
+            this.clearMods.Size = new System.Drawing.Size(79, 20);
+            this.clearMods.Text = "Clear mods";
+            this.clearMods.ToolTipText = "Removes all mods for a clean install";
+            // 
             // ModInstallerTabView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -84,5 +94,6 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem refreshMods;
         private System.Windows.Forms.FlowLayoutPanel modsContainer;
+        private System.Windows.Forms.ToolStripMenuItem clearMods;
     }
 }

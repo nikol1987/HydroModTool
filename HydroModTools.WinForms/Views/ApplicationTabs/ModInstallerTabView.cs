@@ -1,10 +1,11 @@
 ﻿using HydroModTools.DataAccess.Contracts.Models;
 using HydroModTools.DataAccess.Contracts.Services;
-using HydroModTools.WinForms.Controls;
+using HydroModTools.WinForms.ApplicationTabs;
 using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Forms;
@@ -15,13 +16,13 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
     {
         private readonly IBridgepourService _bridgepourService;
 
-        public ModInstallerTabView(ModInstallerTabViewModel modInstallerTabViewModel, IBridgepourService bridgepourService)
+        public ModInstallerTabView(IBridgepourService bridgepourService)
         {
             _bridgepourService = bridgepourService;
 
-            InitializeComponent();
+            ViewModel = new ModInstallerTabViewModel(bridgepourService);
 
-            ViewModel = modInstallerTabViewModel;
+            InitializeComponent();
 
             this.WhenActivated(d => {
                 d(ViewModel
@@ -45,6 +46,14 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
                         CreateModItems(modList);
                     }));
 
+                d(ViewModel
+                    .WhenAnyValue(vm => vm.LoadedMods)
+                    .Where(mf => mf.Count > 0)
+                    .Subscribe(modFiles =>
+                    {
+                        CreateModItems(ViewModel.ModList);
+                    }));
+
                 d(menuStrip1.Events()
                     .ItemClicked
                     .Select(e => e.ClickedItem.Name)
@@ -58,7 +67,9 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
 
             foreach (var mod in modList)
             {
-                modsContainer.Controls.Add(new ModSegmentView(mod, _bridgepourService));
+                var loaded = ViewModel.LoadedMods.Any(modFile => Path.GetFileName(mod.Url) == Path.GetFileName(modFile));
+
+                modsContainer.Controls.Add(new ModSegmentView(mod, _bridgepourService, loaded));
             }
         }
 

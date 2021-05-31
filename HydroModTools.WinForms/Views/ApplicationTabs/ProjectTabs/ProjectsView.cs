@@ -1,7 +1,6 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
 using HydroModTools.Contracts.Services;
 using HydroModTools.WinForms.ViewModels;
-using HydroModTools.WinForms.Abstractions;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -12,10 +11,12 @@ using System.Windows.Forms;
 
 namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
-    public partial class ProjectsView : ViewBase<ProjectsViewModel>
+    public partial class ProjectsView : UserControl, IViewFor<ProjectsViewModel>
     {
-        public ProjectsView(AddProjectView addProjectView, IProjectsService projectsService) : base(new ProjectsViewModel(addProjectView, projectsService))
+        public ProjectsView(AddProjectView addProjectView, IProjectsService projectsService, IConfigurationService configurationService)
         {
+            ViewModel = new ProjectsViewModel(addProjectView, projectsService, configurationService);
+
             InitializeComponent();
 
             this.WhenActivated(d =>
@@ -154,5 +155,9 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 
             e.Cancel = false;
         }
+
+        public ProjectsViewModel ViewModel { get; set; }
+
+        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (ProjectsViewModel)value; }
     }
 }

@@ -8,5 +8,8 @@ namespace HydroModTools.DataAccess.Contracts.Services
     {
         Task<IReadOnlyCollection<BridgepourModModel>> GetModList();
         Task DownloadMod(string url);
+        Task<IReadOnlyCollection<string>> LoadedMods();
+        Task DeleteMod(string url);
+        Task ClearMods();
     }
 }

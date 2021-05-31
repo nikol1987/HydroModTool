@@ -1,4 +1,5 @@
-﻿using HydroModTools.WinForms.Structs;
+﻿using HydroModTools.Contracts.Services;
+using HydroModTools.WinForms.Structs;
 using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System;
@@ -11,11 +12,11 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
     public partial class GuidsView : UserControl, IViewFor<GuidsViewModel>
     {
-        public GuidsView(GuidsViewModel guidsViewModel)
+        public GuidsView(IGuidsService guidsService)
         {
-            InitializeComponent();
+            ViewModel = new GuidsViewModel(guidsService);
 
-            ViewModel = guidsViewModel;
+            InitializeComponent();
 
             this.WhenActivated(d =>
             {
@@ -38,7 +39,7 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                     .Select(e => e.ClickedItem.Name)
                     .InvokeCommand(ViewModel, vm => vm.ExecuteStripMenuCommand));
 
-                d(this.guidsDataGrid.Events()
+                d(guidsDataGrid.Events()
                     .RowStateChanged
                     .Where(ea => ea.StateChanged == DataGridViewElementStates.Selected)
                     .Where(ea => this.guidsDataGrid.SelectedRows.Count == 1)

@@ -12,7 +12,6 @@ namespace HydroModTools.WinForms.Views
     {
         public ApplicationView(
             ModInstallerTabView modInstallerTabView,
-            ApplicationViewModel applicationViewModel,
             AboutTabView aboutTabView,
             ProjectsTabView projectTabView)
         {
@@ -20,7 +19,7 @@ namespace HydroModTools.WinForms.Views
 
             InitializeComponent();
 
-            ViewModel = applicationViewModel;
+            ViewModel = new ApplicationViewModel();
 
             modInstallerTabView.Dock = DockStyle.Fill;
             kryptonPage1.Controls.Add(modInstallerTabView);

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HydroModTools.Contracts.Services;
+using HydroModTools.WinForms.Data;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -8,22 +10,26 @@ namespace HydroModTools.WinForms.Views
     {
         public event Action TimeOutEvent; 
 
-        public SpashView()
+        public SpashView(IConfigurationService configurationService)
         {
             InitializeComponent();
 
-            this.pictureBox2.Parent = this.pictureBox1;
-            this.pictureBox2.BringToFront();
+            pictureBox2.Parent = this.pictureBox1;
+            pictureBox2.BringToFront();
 
-            this.label1.Parent = this.pictureBox1;
-            this.label1.BringToFront();
+            label1.Parent = this.pictureBox1;
+            label1.BringToFront();
 
-            this.loadingLabel.Parent = this.pictureBox1;
-            this.loadingLabel.BringToFront();
+            loadingLabel.Parent = this.pictureBox1;
+            loadingLabel.BringToFront();
 
             loadingWorker.DoWork += async (object sender, DoWorkEventArgs e) =>
             {
                 loadingWorker.ReportProgress(1, new LoadingWorkerStage("Loading Configuration"));
+
+                var config = await configurationService.GetAsync();
+
+                await ApplicationStore.RefreshStore(config);
             };
 
             loadingWorker.ProgressChanged += (sender, e) =>

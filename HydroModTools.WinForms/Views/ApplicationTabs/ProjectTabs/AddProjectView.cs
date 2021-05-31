@@ -1,4 +1,5 @@
-﻿using HydroModTools.WinForms.ViewModels;
+﻿using HydroModTools.Contracts.Services;
+using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System;
 using System.Reactive.Linq;
@@ -10,8 +11,10 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
     public partial class AddProjectView : UserControl, IViewFor<AddProjectViewModel>
     {
-        public AddProjectView(AddProjectViewModel addProjectViewModel)
+        public AddProjectView(IProjectsService projectsService, IConfigurationService configurationService)
         {
+            ViewModel = new AddProjectViewModel(projectsService, configurationService);
+
             InitializeComponent();
 
             this.WhenActivated(d =>
@@ -25,8 +28,6 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                     .Select(ea => this.ParentForm)
                     .InvokeCommand(ViewModel, vm => vm.AddProjectCommand);
             });
-
-            ViewModel = addProjectViewModel;
         }
 
         private void selectCookedDirBtn_Click(object sender, System.EventArgs e)

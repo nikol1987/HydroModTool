@@ -21,8 +21,10 @@ namespace HydroModTools
 
         public ApplicationView? MainForm { get; private set; }
 
-        public void StartApplication()
+        public async void StartApplication()
         {
+            await config.SetupConfigurationAsync();
+
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices(async (context, services) => {
                     await ConfigureServices(null, services, ConfigureServicesPhase.PreConfig);
@@ -37,7 +39,7 @@ namespace HydroModTools
                 .Build();
 
             Services = host.Services;
-
+            host.RunAsync(); //Should not await as it blocks the thread
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -51,13 +53,20 @@ namespace HydroModTools
                 await configuration.Save();
             };
 
-            MainForm = FormFactory.Create<ApplicationView>();
-            MainForm.Hide();
+            
 
             var spashForm = FormFactory.Create<SpashView>();
             spashForm.TimeOutEvent += () =>
             {
+                MainForm = FormFactory.Create<ApplicationView>();
+
+                MainForm.Disposed += (sender, ea) =>
+                {
+                    Application.Exit();
+                };
+
                 MainForm.Show();
+                spashForm.Close();
             };
 
             spashForm.ShowDialog();
@@ -69,7 +78,7 @@ namespace HydroModTools
         {
             if (configureServicesPhase == ConfigureServicesPhase.PreConfig)
             {
-                await config.SetupConfigurationAsync();
+                services.AddSingleton(config);
 
                 return;
             }
@@ -78,32 +87,39 @@ namespace HydroModTools
             {
                 await config.LoadConfigAsync(appConfiguration);
 
-                var formFactory = new DIFormFactory(Services);
-
-                FormFactory.Use(formFactory);
-
                 services
                     .AddSingleton<Packager>()
                     .AddSingleton<Stager>()
                     .AddSingleton<HttpClient>((_) => new HttpClient())
                     .Scan(s => {
                         s.FromAssemblyOf<Assembly>()
-                         .FromAssemblyOf<DataAccess.Assembly>()
-                         .AddClasses((filter) =>
-                         {
-                             filter.Where(type => type.Name.EndsWith("Service"));
-                         })
-                         .AsImplementedInterfaces()
-                         .WithSingletonLifetime();
+                        .AddClasses((filter) =>
+                        {
+                            filter.Where(type => type.Name.EndsWith("Service"));
+                        })
+                        .AsImplementedInterfaces()
+                        .WithSingletonLifetime();
+
+                        s.FromAssemblyOf<DataAccess.Assembly>()
+                        .AddClasses((filter) =>
+                        {
+                            filter.Where(type => type.Name.EndsWith("Service"));
+                        })
+                        .AsImplementedInterfaces()
+                        .WithSingletonLifetime();
 
                         s.FromAssemblyOf<WinForms.Assembly>()
-                         .AddClasses((filter) =>
-                         {
-                             filter.Where(type => type.Name.EndsWith("View"));
-                         })
-                         .AsSelf()
-                         .WithSingletonLifetime();
+                        .AddClasses((filter) =>
+                        {
+                            filter.Where(type => type.Name.EndsWith("View"));
+                        })
+                        .AsSelf()
+                        .WithSingletonLifetime();
                     });
+
+                var formFactory = new DIFormFactory(services.BuildServiceProvider());
+
+                FormFactory.Use(formFactory);
 
                 return;
             }

@@ -4,7 +4,9 @@ using HydroModTools.DataAccess.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace HydroModTools.DataAccess.Services
@@ -15,9 +17,25 @@ namespace HydroModTools.DataAccess.Services
 
         private readonly ApiBridgepourService _apiBridgepourService;
 
-        public BridgepourService(ApiBridgepourService apiBridgepourService)
+        public BridgepourService(HttpClient httpClient)
         {
-            _apiBridgepourService = apiBridgepourService;
+            _apiBridgepourService = new ApiBridgepourService(httpClient);
+        }
+
+        public Task ClearMods()
+        {
+            Directory.Delete(PaksFolder, true);
+            Directory.CreateDirectory(PaksFolder);
+
+            return Task.CompletedTask;
+        }
+
+        public async Task DeleteMod(string url)
+        {
+            var uri = new Uri(url);
+            var fileName = Path.GetFileName(uri.LocalPath);
+
+            File.Delete(Path.Combine(PaksFolder, fileName));
         }
 
         public async Task DownloadMod(string url)
@@ -41,6 +59,15 @@ namespace HydroModTools.DataAccess.Services
             }
 
             return result.Results.ToModel();
+        }
+
+        public async Task<IReadOnlyCollection<string>> LoadedMods()
+        {
+            var files = Directory.EnumerateFiles(PaksFolder, "*_P.pak", new EnumerationOptions() {
+                RecurseSubdirectories = false
+            });
+
+            return await Task.FromResult(files.ToList());
         }
     }
 }

@@ -20,11 +20,13 @@ namespace HydroModTools.WinForms.ViewModels
     {
         private readonly AddProjectView _addProjectView;
         private readonly IProjectsService _projectsService;
+        private readonly IConfigurationService _configurationService;
 
-        public ProjectsViewModel(AddProjectView addProjectView, IProjectsService projectsService)
+        public ProjectsViewModel(AddProjectView addProjectView, IProjectsService projectsService, IConfigurationService configurationService)
         {
             _addProjectView = addProjectView;
             _projectsService = projectsService;
+            _configurationService = configurationService;
 
             _selectedProject = ApplicationStore.Store.DefaultProject ?? Guid.Empty;
             SetProjects();
@@ -109,17 +111,10 @@ namespace HydroModTools.WinForms.ViewModels
                 case "refresh":
                     ProgressBarState = new ProgressbarStateModel(10, $"Refreshing state");
 
-                    await ApplicationStore.RefreshStore();
+                    var config = await _configurationService.GetAsync();
+                    await ApplicationStore.RefreshStore(config);
 
-                    timer.Tick += async (sender, ea) =>
-                    {
-                        timer.Stop();
-                        await ApplicationStore.RefreshStore();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
-                    };
-
-                    timer.Start();
-
+                    ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     break;
 
                 case "addProject":
@@ -150,7 +145,8 @@ namespace HydroModTools.WinForms.ViewModels
                     timer.Tick += async (sender, ea) =>
                     {
                         timer.Stop();
-                        await ApplicationStore.RefreshStore();
+                        var config = await _configurationService.GetAsync();
+                        await ApplicationStore.RefreshStore(config);
                         ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
@@ -170,7 +166,8 @@ namespace HydroModTools.WinForms.ViewModels
                     timer.Tick += async (sender, ea) =>
                     {
                         timer.Stop();
-                        await ApplicationStore.RefreshStore();
+                        var config = await _configurationService.GetAsync();
+                        await ApplicationStore.RefreshStore(config);
                         ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
@@ -191,7 +188,8 @@ namespace HydroModTools.WinForms.ViewModels
                     timer.Tick += async (sender, ea) =>
                     {
                         timer.Stop();
-                        await ApplicationStore.RefreshStore();
+                        var config = await _configurationService.GetAsync();
+                        await ApplicationStore.RefreshStore(config);
                         ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
@@ -207,7 +205,8 @@ namespace HydroModTools.WinForms.ViewModels
                     timer.Tick += async (sender, ea) =>
                     {
                         timer.Stop();
-                        await ApplicationStore.RefreshStore();
+                        var config = await _configurationService.GetAsync();
+                        await ApplicationStore.RefreshStore(config);
                         ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
@@ -250,7 +249,8 @@ namespace HydroModTools.WinForms.ViewModels
                     timer.Tick += async (sender, ea) =>
                     {
                         timer.Stop();
-                        await ApplicationStore.RefreshStore();
+                        var config = await _configurationService.GetAsync();
+                        await ApplicationStore.RefreshStore(config);
                         ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
@@ -300,7 +300,8 @@ namespace HydroModTools.WinForms.ViewModels
             timer.Tick += async (sender, ea) =>
             {
                 timer.Stop();
-                await ApplicationStore.RefreshStore();
+                var config = await _configurationService.GetAsync();
+                await ApplicationStore.RefreshStore(config);
                 ProgressBarState = new ProgressbarStateModel(0, "Ready");
             };
 
@@ -318,7 +319,8 @@ namespace HydroModTools.WinForms.ViewModels
             project.Items = project.Items.Where(item => !assetsId.Contains(item.Id)).ToList();
             ApplicationStore.Store.Projects = ApplicationStore.Store.Projects;
 
-            await ApplicationStore.RefreshStore();
+            var config = await _configurationService.GetAsync();
+            await ApplicationStore.RefreshStore(config);
 
             ProgressBarState = new ProgressbarStateModel(100, "Removed assets");
 
@@ -331,7 +333,8 @@ namespace HydroModTools.WinForms.ViewModels
             timer.Tick += async (sender, ea) =>
             {
                 timer.Stop();
-                await ApplicationStore.RefreshStore();
+                var config = await _configurationService.GetAsync();
+                await ApplicationStore.RefreshStore(config);
                 ProgressBarState = new ProgressbarStateModel(0, "Ready");
             };
 
@@ -393,7 +396,8 @@ namespace HydroModTools.WinForms.ViewModels
             timer.Tick += async (sender, ea) =>
             {
                 timer.Stop();
-                await ApplicationStore.RefreshStore();
+                var config = await _configurationService.GetAsync();
+                await ApplicationStore.RefreshStore(config);
                 ProgressBarState = new ProgressbarStateModel(0, "Ready");
             };
 

@@ -4,13 +4,14 @@ using ReactiveUI;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Threading.Tasks;
-using System.Timers;
+using System.Windows.Forms;
 
 namespace HydroModTools.WinForms.ViewModels
 {
     public sealed class ModInstallerTabViewModel : ReactiveObject
     {
         private readonly IBridgepourService _bridgepourService;
+        private System.Timers.Timer _timer;
 
         public ModInstallerTabViewModel(IBridgepourService bridgepourService)
         {
@@ -35,6 +36,13 @@ namespace HydroModTools.WinForms.ViewModels
             set => this.RaiseAndSetIfChanged(ref _modList, value);
         }
 
+        private IReadOnlyCollection<string> _loadedMods = new List<string>();
+        internal IReadOnlyCollection<string> LoadedMods
+        {
+            get => _loadedMods;
+            set => this.RaiseAndSetIfChanged(ref _loadedMods, value);
+        }
+
         internal ReactiveCommand<string, Unit> ExecuteStripMenuCommand;
         private async void ExecuteStripMenu(string stripItemName)
         {
@@ -48,45 +56,68 @@ namespace HydroModTools.WinForms.ViewModels
 
                     await RefreshModList(false);
                     break;
+                case "clearMods":
+
+                    await _bridgepourService.ClearMods();
+                    MessageBox.Show("Cleared mods folder", "Mods Removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await RefreshModList(true);
+                    break;
             }
         }
 
         public async Task RefreshModList(bool bypassTime)
         {
-            if (LockedRefresh.Locked && bypassTime == true)
+            if (LockedRefresh.Locked && bypassTime == false)
             {
                 return;
             }
 
             ModList =  await _bridgepourService.GetModList();
             LockedRefresh = new LockedRefreshModel(0, true);
+            LoadedMods = await _bridgepourService.LoadedMods();
 
             var bypassed = false;
-            
-            var timer = new Timer() {
-                Interval = 1000,
-                Enabled = true
-            };
-            timer.Elapsed += (sender, e) => {
-                if (LockedRefresh.Seconds >= 10)
-                {
-                    timer.Stop();
-                    LockedRefresh = new LockedRefreshModel(0, false);
-                    return;
-                }
 
-                var seconds = LockedRefresh.Seconds + 1;
-
-                if (bypassTime && !bypassed && seconds > 0)
+            if (_timer == null)
+            {
+                _timer = new System.Timers.Timer()
                 {
-                    seconds = 0;
+                    Interval = 1000,
+                    Enabled = true
+                };
+
+                _timer.Elapsed += (sender, e) => {
+                    if (LockedRefresh.Seconds >= 10)
+                    {
+                        _timer.Stop();
+                        LockedRefresh = new LockedRefreshModel(0, false);
+                        return;
+                    }
+
+                    var seconds = LockedRefresh.Seconds + 1;
+
+                    if (bypassTime && !bypassed && seconds > 0)
+                    {
+                        seconds = 0;
+                        bypassed = true;
+                    }
+
+                    LockedRefresh = new LockedRefreshModel(seconds, true);
+                    _timer.Start();
+                };
+                _timer.Start();
+            } else
+            {
+                if (bypassTime && !bypassed)
+                {
+                    _timer.Stop();
+                    _timer.Start();
                     bypassed = true;
                 }
+            }
 
-                LockedRefresh = new LockedRefreshModel(seconds, true);
-                timer.Start();
-            };
-            timer.Start();
+           
+            
         }
 
         internal class LockedRefreshModel

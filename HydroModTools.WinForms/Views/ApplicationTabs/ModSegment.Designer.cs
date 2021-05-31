@@ -1,5 +1,5 @@
 ﻿
-namespace HydroModTools.WinForms.Controls
+namespace HydroModTools.WinForms.ApplicationTabs
 {
     partial class ModSegmentView
     {
@@ -34,6 +34,7 @@ namespace HydroModTools.WinForms.Controls
             this.description = new HydroModTools.WinForms.Controls.GrowLabel();
             this.downloadMod = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.kryptonPanel1 = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
+            this.removeMod = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel1)).BeginInit();
             this.kryptonPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -84,6 +85,7 @@ namespace HydroModTools.WinForms.Controls
             // 
             // kryptonPanel1
             // 
+            this.kryptonPanel1.Controls.Add(this.removeMod);
             this.kryptonPanel1.Controls.Add(this.description);
             this.kryptonPanel1.Controls.Add(this.author);
             this.kryptonPanel1.Controls.Add(this.modName);
@@ -93,6 +95,14 @@ namespace HydroModTools.WinForms.Controls
             this.kryptonPanel1.Name = "kryptonPanel1";
             this.kryptonPanel1.Size = new System.Drawing.Size(493, 177);
             this.kryptonPanel1.TabIndex = 4;
+            // 
+            // removeMod
+            // 
+            this.removeMod.Location = new System.Drawing.Point(106, 143);
+            this.removeMod.Name = "removeMod";
+            this.removeMod.Size = new System.Drawing.Size(90, 25);
+            this.removeMod.TabIndex = 4;
+            this.removeMod.Values.Text = "Remove";
             // 
             // ModSegmentView
             // 
@@ -112,8 +122,9 @@ namespace HydroModTools.WinForms.Controls
 
         private System.Windows.Forms.Label modName;
         private System.Windows.Forms.Label author;
-        private GrowLabel description;
+        private HydroModTools.WinForms.Controls.GrowLabel description;
         private ComponentFactory.Krypton.Toolkit.KryptonButton downloadMod;
         private ComponentFactory.Krypton.Toolkit.KryptonPanel kryptonPanel1;
+        private ComponentFactory.Krypton.Toolkit.KryptonButton removeMod;
     }
 }

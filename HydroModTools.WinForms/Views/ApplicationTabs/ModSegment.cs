@@ -8,15 +8,16 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 
-namespace HydroModTools.WinForms.Controls
+namespace HydroModTools.WinForms.ApplicationTabs
 {
     public partial class ModSegmentView : UserControl, IViewFor<ModSegmentViewModel>
     {
-        public ModSegmentView(BridgepourModModel bridgepourModModel, IBridgepourService bridgepourService)
+        public ModSegmentView(BridgepourModModel bridgepourModModel, IBridgepourService bridgepourService, bool isLoaded)
         {
             InitializeComponent();
 
             ViewModel = new ModSegmentViewModel(bridgepourModModel, bridgepourService);
+            ViewModel.CanDownload = !isLoaded;
 
             SetFonts();
 
@@ -27,6 +28,7 @@ namespace HydroModTools.WinForms.Controls
             this.WhenActivated(d => {
 
                 d(this.OneWayBind(ViewModel, vm => vm.CanDownload, v => v.downloadMod.Enabled));
+                d(this.OneWayBind(ViewModel, vm => vm.CanRemove, v => v.removeMod.Enabled));
                 d(this.OneWayBind(ViewModel, vm => vm.BridgepourModModel.Author, v => v.author.Text));
                 d(this.OneWayBind(ViewModel, vm => vm.BridgepourModModel.Description, v => v.description.Text));
                 d(this.OneWayBind(ViewModel, vm => vm.BridgepourModModel.Name, v => v.modName.Text));
@@ -35,6 +37,11 @@ namespace HydroModTools.WinForms.Controls
                     .Click
                     .Select(ea => Unit.Default)
                     .InvokeCommand(ViewModel.DownloadModCommand));
+
+                d(this.removeMod.Events()
+                    .Click
+                    .Select(ea => Unit.Default)
+                    .InvokeCommand(ViewModel.RemoveModCommand));
             });
         }
 

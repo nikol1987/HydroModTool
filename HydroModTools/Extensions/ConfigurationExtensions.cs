@@ -117,5 +117,37 @@ namespace HydroModTools.Extensions
 
             return result;
         }
+
+        public static GuidsConfig ToGuidsConfig(this AppConfigModel appConfig)
+        {
+            return new GuidsConfig()
+            {
+                Guids = appConfig.Guids.ToConfig()
+            };
+        }
+
+        public static List<GuidConfigItem> ToConfig(this IReadOnlyCollection<GuidItemModel> projectItems)
+        {
+            var result = new List<GuidConfigItem>();
+
+            if (projectItems == null)
+            {
+                return result;
+            }
+
+            foreach (var item in projectItems)
+            {
+                result.Add(new GuidConfigItem()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    ModdedGuid = item.ModdedGuid.ToString("N"),
+                    OriginalGuid = item.OriginalGuid.ToString("N")
+                });
+            }
+
+            return result;
+        }
+
     }
 }
