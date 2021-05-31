@@ -154,11 +154,11 @@ namespace HydroneerStager.WinForms.ViewModels
                     ProgressBarState = new ProgressbarStateModel(100, "Project staged");
 
 
-                    timer.Tick += (sender, ea) =>
+                    timer.Tick += async (sender, ea) =>
                     {
-                        _applicationStore.ReloadState();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                         timer.Stop();
+                        await _applicationStore.ReloadState();
+                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
                     timer.Start();
@@ -174,11 +174,11 @@ namespace HydroneerStager.WinForms.ViewModels
 
                     ProgressBarState = new ProgressbarStateModel(100, "Project packaged");
 
-                    timer.Tick += (sender, ea) =>
+                    timer.Tick += async (sender, ea) =>
                     {
-                        _applicationStore.ReloadState();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                         timer.Stop();
+                        await _applicationStore.ReloadState();
+                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
                     timer.Start();
@@ -195,11 +195,11 @@ namespace HydroneerStager.WinForms.ViewModels
 
                     ProgressBarState = new ProgressbarStateModel(100, "Project copied");
 
-                    timer.Tick += (sender, ea) =>
+                    timer.Tick += async (sender, ea) =>
                     {
-                        _applicationStore.ReloadState();
-                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                         timer.Stop();
+                        await _applicationStore.ReloadState();
+                        ProgressBarState = new ProgressbarStateModel(0, "Ready");
                     };
 
                     timer.Start();
