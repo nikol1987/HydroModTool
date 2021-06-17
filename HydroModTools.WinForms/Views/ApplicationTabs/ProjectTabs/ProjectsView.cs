@@ -13,9 +13,9 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
     public partial class ProjectsView : UserControl, IViewFor<ProjectsViewModel>
     {
-        public ProjectsView(AddProjectView addProjectView, IProjectsService projectsService, IConfigurationService configurationService)
+        public ProjectsView(IServiceProvider services, IProjectsService projectsService, IConfigurationService configurationService)
         {
-            ViewModel = new ProjectsViewModel(addProjectView, projectsService, configurationService);
+            ViewModel = new ProjectsViewModel(services, projectsService, configurationService);
 
             InitializeComponent();
 
@@ -130,6 +130,12 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                         deleteClick
                           .Select(ea => selectedItems.Select(i => new Guid(i.Name)).ToList())
                           .InvokeCommand<List<Guid>>(ViewModel.DeleteAssetsCommand);
+
+                        deleteClick
+                          .Subscribe(ea => {
+                              projectItemsTree.SelectedNode = null;
+                              projectItemsTree.SelectedNode = null;
+                          });
 
                         items.Items.Add(deleteItemStripItem);
                     }

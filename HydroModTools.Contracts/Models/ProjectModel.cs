@@ -5,6 +5,15 @@ namespace HydroModTools.Contracts.Models
 {
     public sealed class ProjectModel
     {
+        public ProjectModel(Guid id, string name, string path, string outputPath)
+        {
+            Id = id;
+            Name = name;
+            Path = path;
+            OutputPath = outputPath;
+            Items = new List<ProjectItemModel>();
+        }
+
         public ProjectModel(Guid id, string name, string path, string outputPath, IReadOnlyCollection<ProjectItemModel> items)
         {
             Id = id;

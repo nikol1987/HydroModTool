@@ -5,7 +5,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>..\HydroModTools.WinForms\Resources\hydroneer H.ico</ApplicationIcon>
+    <ApplicationIcon>..\HydroModTools.WinForms\Resources\hydroneer.ico</ApplicationIcon>
+    <Authors>ResaloliPT</Authors>
+    <Version>2.3.0</Version>
+    <PackageIcon>hydroneer.ico</PackageIcon>
+    <RepositoryUrl>https://github.com/ResaloliPT/HydroModTool</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,10 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HydroModTools.Business\HydroModTools.Business.csproj" />
     <ProjectReference Include="..\HydroModTools.Common\HydroModTools.Common.csproj" />
     <ProjectReference Include="..\HydroModTools.Contracts\HydroModTools.Contracts.csproj" />
-    <ProjectReference Include="..\Hydroneer.Contracts\HydroModTools.Contracts.csproj" />
     <ProjectReference Include="..\HydroModTools.DataAccess.Contracts\HydroModTools.DataAccess.Contracts.csproj" />
     <ProjectReference Include="..\HydroModTools.DataAccess\HydroModTools.DataAccess.csproj" />
     <ProjectReference Include="..\HydroModTools.WinForms\HydroModTools.WinForms.csproj" />
@@ -32,6 +35,12 @@
 
   <ItemGroup>
     <Content Include="..\Readme.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\HydroModTools.WinForms\Resources\hydroneer.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -18,20 +18,29 @@ namespace HydroModTools.WinForms.ViewModels
 {
     public sealed class ProjectsViewModel : ReactiveObject
     {
-        private readonly AddProjectView _addProjectView;
+        private readonly IServiceProvider _services;
         private readonly IProjectsService _projectsService;
         private readonly IConfigurationService _configurationService;
 
-        public ProjectsViewModel(AddProjectView addProjectView, IProjectsService projectsService, IConfigurationService configurationService)
+        public ProjectsViewModel(IServiceProvider services, IProjectsService projectsService, IConfigurationService configurationService)
         {
-            _addProjectView = addProjectView;
+            _services = services;
             _projectsService = projectsService;
             _configurationService = configurationService;
 
-            _selectedProject = ApplicationStore.Store.DefaultProject ?? Guid.Empty;
+            var firstProject = ApplicationStore.Store.Projects.FirstOrDefault();
+
+            _selectedProject = ApplicationStore.Store.DefaultProject ?? (Guid?)firstProject?.Id ?? Guid.Empty;
+
             SetProjects();
             SetItems(_selectedProject);
 
+            ApplicationStore.StoreChanged += () =>
+            {
+                _selectedProject = ApplicationStore.Store.DefaultProject ?? Guid.Empty;
+                SetProjects();
+                SetItems(_selectedProject);
+            };
 
             ExecuteStripMenuCommand = ReactiveCommand.Create<string>(ExecuteStripMenu);
             SelectProjectCommand = ReactiveCommand.Create<Guid>(SelectProject);
@@ -55,7 +64,7 @@ namespace HydroModTools.WinForms.ViewModels
                 return;
             }
 
-            ProjectItems = Utilities.BuildFileStruture(project.Items).FirstNode;
+            ProjectItems = Utilities.BuildFileStruture(project.Items.OrderBy(item => item.Path).ToList()).FirstNode;
         }
 
         private Guid _selectedProject;
@@ -123,11 +132,13 @@ namespace HydroModTools.WinForms.ViewModels
                         FormBorderStyle = FormBorderStyle.None
                     };
 
-                    _addProjectView.Dock = DockStyle.Fill;
+                    var addProjectForm = (AddProjectView)_services.GetService(typeof(AddProjectView));
+
+                    addProjectForm.Dock = DockStyle.Fill;
 
 
-                    selectFolderForm.Size = _addProjectView.Size;
-                    selectFolderForm.Controls.Add(_addProjectView);
+                    selectFolderForm.Size = addProjectForm.Size;
+                    selectFolderForm.Controls.Add(addProjectForm);
                     selectFolderForm.ShowDialog();
                     break;
 
@@ -311,16 +322,12 @@ namespace HydroModTools.WinForms.ViewModels
         }
 
         internal ReactiveCommand<IList<Guid>, Unit> DeleteAssetsCommand;
-        private async void DeleteAssets(IList<Guid> assetsId)
+        private async void DeleteAssets(IList<Guid> assetsIds)
         {
             var project = ApplicationStore.Store.Projects.Where(p => p.Id == SelectedProject).First();
             ProgressBarState = new ProgressbarStateModel(10, $"Removing project {project.Name}");
 
-            project.Items = project.Items.Where(item => !assetsId.Contains(item.Id)).ToList();
-            ApplicationStore.Store.Projects = ApplicationStore.Store.Projects;
-
-            var config = await _configurationService.GetAsync();
-            await ApplicationStore.RefreshStore(config);
+            await _projectsService.RemoveAssets(project.Id, assetsIds.ToList());
 
             ProgressBarState = new ProgressbarStateModel(100, "Removed assets");
 
@@ -362,28 +369,7 @@ namespace HydroModTools.WinForms.ViewModels
                 return;
             }
 
-            var projectItems = new List<ProjectItemStore>(project.Items);
-
-            foreach (var item in files)
-            {
-                var partialPath = item.Replace(project.Path, "");
-
-                var contains = project.Items.Any(i => i.Name == Path.GetFileName(item) && i.Path == partialPath);
-
-                if (contains)
-                {
-                    continue;
-                }
-
-                projectItems.Add(new ProjectItemStore(Guid.NewGuid(), Path.GetFileName(item), partialPath));
-            }
-
-            project.Items = projectItems;
-
-            var projects = new List<ProjectStore>(ApplicationStore.Store.Projects.Where(p => p.Id != project.Id).ToList());
-            projects.Add(project);
-
-            ApplicationStore.Store.Projects = projects;
+            await _projectsService.AddAssets(project.Id, files.ToList());
 
             ProgressBarState = new ProgressbarStateModel(100, "Added assets");
 

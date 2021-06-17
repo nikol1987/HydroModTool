@@ -10,6 +10,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace HydroModTools
 {
@@ -17,15 +18,15 @@ namespace HydroModTools
     {
         private Configuration.Configuration config = new Configuration.Configuration();
 
-        public static IServiceProvider Services;
+        private IHost BuiltHost;
 
         public ApplicationView? MainForm { get; private set; }
 
-        public async void StartApplication()
+        public void StartApplication()
         {
-            await config.SetupConfigurationAsync();
+            config.SetupConfiguration();
 
-            var host = Host.CreateDefaultBuilder()
+            BuiltHost = Host.CreateDefaultBuilder()
                 .ConfigureServices(async (context, services) => {
                     await ConfigureServices(null, services, ConfigureServicesPhase.PreConfig);
                 })
@@ -38,22 +39,17 @@ namespace HydroModTools
                 })
                 .Build();
 
-            Services = host.Services;
-            host.RunAsync(); //Should not await as it blocks the thread
-
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var configuration = Services.GetService<IConfigurationService>();
+            var configuration = BuiltHost.Services.GetService<IConfigurationService>();
 
             Application.ApplicationExit += async (sender, e) =>
             {
 
                 await configuration.Save();
             };
-
-            
 
             var spashForm = FormFactory.Create<SpashView>();
             spashForm.TimeOutEvent += () =>
@@ -68,10 +64,6 @@ namespace HydroModTools
                 MainForm.Show();
                 spashForm.Close();
             };
-
-            spashForm.ShowDialog();
-
-            Application.Run(this); // TODO: Anti-crash
         }
 
         private async Task ConfigureServices(IConfiguration appConfiguration, IServiceCollection services, ConfigureServicesPhase configureServicesPhase)
@@ -114,7 +106,7 @@ namespace HydroModTools
                             filter.Where(type => type.Name.EndsWith("View"));
                         })
                         .AsSelf()
-                        .WithSingletonLifetime();
+                        .WithTransientLifetime();
                     });
 
                 var formFactory = new DIFormFactory(services.BuildServiceProvider());
@@ -124,6 +116,22 @@ namespace HydroModTools
                 return;
             }
         }
+
+        public void RunApplication() //Blocking!
+        {
+            var hostThread = new Thread(async () =>
+            {
+                await BuiltHost.RunAsync();
+            });
+
+            Application.ApplicationExit += (sender, ea) =>
+            {
+                hostThread.Interrupt();
+            };
+
+            Application.Run(this); // TODO: Anti-crash
+        }
+
 
         private enum ConfigureServicesPhase
         {

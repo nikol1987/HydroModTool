@@ -51,14 +51,22 @@ namespace HydroModTools.DataAccess.Services
 
         public async Task<IReadOnlyCollection<BridgepourModModel>> GetModList()
         {
-            var result = await _apiBridgepourService.GetModsAsync();
-
-            if (result.Status != 200)
+            try
             {
+                var result = await _apiBridgepourService.GetModsAsync();
+
+                if (result.Status != 200)
+                {
+                    return new List<BridgepourModModel>();
+                }
+
+                return result.Results.ToModel();
+            }
+            catch (Exception)
+            {
+
                 return new List<BridgepourModModel>();
             }
-
-            return result.Results.ToModel();
         }
 
         public async Task<IReadOnlyCollection<string>> LoadedMods()

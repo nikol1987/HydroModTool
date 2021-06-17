@@ -3,6 +3,7 @@ using HydroModTools.Common.Models;
 using HydroModTools.Contracts.Services;
 using HydroModTools.Tools;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,6 +27,20 @@ namespace HydroModTools.Services
         {
             await _configurationService.AddProject(id, name, assetsPath, outputPath);
         }
+        public async Task DeleteProject(Guid projectId)
+        {
+            await _configurationService.RemoveProject(projectId);
+        }
+
+        public async Task AddAssets(Guid projectId, IReadOnlyCollection<string> fileDirs)
+        {
+            await _configurationService.AddAssets(projectId, fileDirs);
+        }
+        public async Task RemoveAssets(Guid projectId, IReadOnlyCollection<Guid> assetsId)
+        {
+            await _configurationService.RemoveAssets(projectId, assetsId);
+        }
+
 
         public async Task CopyProject(Guid id, int progressMin, int progressMax, Action<ProgressbarStateModel> reportProgress)
         {
@@ -62,10 +77,6 @@ namespace HydroModTools.Services
             File.Copy(outFile, gamePak);
         }
 
-        public Task DeleteProject(Guid projectId)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task PackageProject(Guid id, int progressMin, int progressMax, Action<ProgressbarStateModel> reportProgress)
         {

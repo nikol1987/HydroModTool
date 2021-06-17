@@ -9,9 +9,11 @@ namespace HydroModTools.WinForms.Data
 {
     public sealed class ApplicationStore : ReactiveObject
     {
+        public static event Action StoreChanged;
+
         internal static ApplicationStore Store;
 
-        public static async Task RefreshStore(AppConfigModel appConfigModel)
+        public static Task RefreshStore(AppConfigModel appConfigModel)
         {
             Store = new ApplicationStore()
             {
@@ -19,6 +21,14 @@ namespace HydroModTools.WinForms.Data
                 DefaultProject = appConfigModel.DefaultProject,
                 Guids = appConfigModel.Guids.ToStore()
             };
+
+            if (StoreChanged != null && StoreChanged.Target != null)
+            {
+                StoreChanged.Invoke();
+            }
+
+
+            return Task.CompletedTask;
         } 
 
         private IReadOnlyCollection<ProjectStore> _projects;

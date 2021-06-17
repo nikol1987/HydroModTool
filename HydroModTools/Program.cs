@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 namespace HydroModTools
 {
@@ -10,7 +11,11 @@ namespace HydroModTools
         [STAThread]
         public static void Main()
         {
-            (new HydroModTools()).StartApplication();
+            var app = new HydroModTools();
+            
+            app.StartApplication();
+
+            app.RunApplication();
         }
     }
 }

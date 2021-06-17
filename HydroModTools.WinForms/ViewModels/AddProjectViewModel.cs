@@ -67,6 +67,7 @@ namespace HydroModTools.WinForms.ViewModels
             var config = await _configurationService.GetAsync();
             await ApplicationStore.RefreshStore(config);
 
+            form.Dispose();
             form.Close();
         }
     }

@@ -12,6 +12,10 @@ namespace HydroModTools.Extensions
             return new AppConfigModel(appConfig.Projects.ToModel(), appConfig.DefaultProject, appConfig.Guids.ToModel());
         }
 
+        public static ProjectModel ToModel(this ProjectConfig project)
+        {
+            return new ProjectModel(project.Id, project.Name, project.Path, project.OutputPath, project.Items.ToModel());
+        }
         public static IReadOnlyCollection<ProjectModel> ToModel(this IList<ProjectConfig> projects)
         {
             var result = new List<ProjectModel>();
@@ -23,7 +27,7 @@ namespace HydroModTools.Extensions
 
             foreach (var project in projects)
             {
-                result.Add(new ProjectModel(project.Id, project.Name, project.Path, project.OutputPath, project.Items.ToModel()));
+                result.Add(project.ToModel());
             }
 
             return result;
