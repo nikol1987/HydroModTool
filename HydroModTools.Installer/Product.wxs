@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    
+	<Product
+    Id="{B2CEDC93-F39D-47F5-A678-4C09998ED6F4}"
+    Name="HydroModTools"
+    Language="1033"
+    Version="$(var.BuildVersion)"
+    Manufacturer="ResaloliPT"
+    UpgradeCode="c2153af0-ae6b-4cbf-9238-823c88060f6f">
+    
+		<Package
+      InstallerVersion="200"
+      Compressed="yes"
+      InstallPrivileges="elevated" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" CompressionLevel="high"/>
+
+    <Icon Id="icon.ico" SourceFile="..\HydroModTools\publish\hydroneer.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+    <Feature Id="ProductFeature" Title="HydroModTools" Level="1">
+      <ComponentGroupRef Id="HydroModTools_Project" />
+      <ComponentRef Id="MainAppShortcut" />
+    </Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="InstallProgramMenuFolder" Name="Hydroneer" />
+      </Directory>
+      
+      <Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="HydroModTools" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+
+    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\HydroModTools\publish\">
+      <Component Id="MainAppShortcut" Guid="{5B26A1D0-6E95-4523-B83C-746CB0894D05}">
+        <Shortcut Id="MainAppShortcut"
+                  Name="Hydroneer Modding Toolchain"
+                  Target="[INSTALLFOLDER]HydroModTools.exe"
+                  Directory="InstallProgramMenuFolder"
+                  WorkingDirectory="INSTALLFOLDER"
+                  />
+        <RegistryValue Id="RegShortcutKey" Root="HKCU" Key="SOFTWARE\HydroModTools" Name="Shortcut" Value="1" Type="integer" KeyPath="yes" />
+
+        <RemoveFolder Id="RemoveStartMenu" Directory="InstallProgramMenuFolder" On="uninstall" />
+      </Component>
+    </DirectoryRef>
+	</Fragment>
+</Wix>
