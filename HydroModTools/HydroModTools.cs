@@ -82,7 +82,12 @@ namespace HydroModTools
                 services
                     .AddSingleton<Packager>()
                     .AddSingleton<Stager>()
-                    .AddSingleton<HttpClient>((_) => new HttpClient())
+                    .AddSingleton<HttpClient>((_) => {
+                        var httpClientHandler = new HttpClientHandler();
+                        httpClientHandler.AllowAutoRedirect = false;
+
+                        return new HttpClient(httpClientHandler);
+                    })
                     .Scan(s => {
                         s.FromAssemblyOf<Assembly>()
                         .AddClasses((filter) =>

@@ -9,12 +9,17 @@ namespace HydroModTools.DataAccess.Services
     public class ApiBridgepourService : ServiceBase
     {
         public ApiBridgepourService(HttpClient httpClient) :
-            base(httpClient, "https://api.bridgepour.com/api")
+            base(httpClient, "https://api-temporary-1.bridgepour.repl.co/api")
         { }
 
         public async Task<BridgepourModsResult> GetModsAsync()
         {
             var result = await httpClient.GetAsync(GetRoute("/mods"));
+
+            if (result.StatusCode == System.Net.HttpStatusCode.PermanentRedirect)
+            {
+                result = await RedoRedirect(result.Headers.Location.ToString());
+            }
 
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
             {
@@ -22,6 +27,18 @@ namespace HydroModTools.DataAccess.Services
             }
 
             return await result.Content.ToBridgepourModsResultAsync();
+        }
+
+        private async Task<HttpResponseMessage> RedoRedirect(string url)
+        {
+            var result = await httpClient.GetAsync(url);
+
+            if (result.StatusCode == System.Net.HttpStatusCode.PermanentRedirect)
+            {
+                return await RedoRedirect(result.Headers.Location.ToString());
+            }
+
+            return result;
         }
     }
 }
