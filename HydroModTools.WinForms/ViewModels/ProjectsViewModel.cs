@@ -411,7 +411,7 @@ namespace HydroModTools.WinForms.ViewModels
                     {
                         dialog.Title = title;
                         dialog.Multiselect = true;
-                        dialog.Filter = "UE Assets|*.uasset;*.uexp";
+                        dialog.Filter = "UE Assets|*.uasset;*.uexp;*.ubulk";
                         dialog.InitialDirectory = rootPath;
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
@@ -431,6 +431,7 @@ namespace HydroModTools.WinForms.ViewModels
                     {
                         files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.uasset", SearchOption.AllDirectories).ToList());
                         files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.uexp", SearchOption.AllDirectories).ToList());
+                        files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.ubulk", SearchOption.AllDirectories).ToList());
                     }
                 }
             });
