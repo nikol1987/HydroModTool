@@ -34,7 +34,10 @@ namespace HydroneerStager.DI
 
             builder.Register(ct =>
             {
-                return new HttpClient();
+                var httpClientHandler = new HttpClientHandler();
+                httpClientHandler.AllowAutoRedirect = false;
+
+                return new HttpClient(httpClientHandler);
             });
 
             builder
