@@ -11,7 +11,7 @@ namespace HydroModTools.WinForms.ViewModels
     public sealed class ModInstallerTabViewModel : ReactiveObject
     {
         private readonly IBridgepourService _bridgepourService;
-        private System.Timers.Timer _timer;
+        private Timer _timer;
 
         public ModInstallerTabViewModel(IBridgepourService bridgepourService)
         {
@@ -72,38 +72,39 @@ namespace HydroModTools.WinForms.ViewModels
                 return;
             }
 
-            ModList =  await _bridgepourService.GetModList();
             LockedRefresh = new LockedRefreshModel(0, true);
+            ModList =  await _bridgepourService.GetModList();
             LoadedMods = await _bridgepourService.LoadedMods();
 
             var bypassed = false;
 
             if (_timer == null)
             {
-                _timer = new System.Timers.Timer()
+                _timer = new Timer()
                 {
                     Interval = 1000,
                     Enabled = true
                 };
 
-                _timer.Elapsed += (sender, e) => {
-                    if (LockedRefresh.Seconds >= 10)
-                    {
-                        _timer.Stop();
-                        LockedRefresh = new LockedRefreshModel(0, false);
-                        return;
-                    }
+                _timer.Tick += (sender, e) => {
+                        if (LockedRefresh.Seconds >= 10)
+                        {
+                            _timer.Stop();
+                            LockedRefresh = new LockedRefreshModel(0, false);
+                            _timer = null;
+                            return;
+                        }
 
-                    var seconds = LockedRefresh.Seconds + 1;
+                        var seconds = LockedRefresh.Seconds + 1;
 
-                    if (bypassTime && !bypassed && seconds > 0)
-                    {
-                        seconds = 0;
-                        bypassed = true;
-                    }
+                        if (bypassTime && !bypassed && seconds > 0)
+                        {
+                            seconds = 0;
+                            bypassed = true;
+                        }
 
-                    LockedRefresh = new LockedRefreshModel(seconds, true);
-                    _timer.Start();
+                        LockedRefresh = new LockedRefreshModel(seconds, true);
+                        _timer.Start();
                 };
                 _timer.Start();
             } else

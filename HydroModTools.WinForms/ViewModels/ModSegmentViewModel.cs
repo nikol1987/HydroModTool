@@ -18,6 +18,17 @@ namespace HydroModTools.WinForms.ViewModels
             RemoveModCommand = ReactiveCommand.Create(RemoveMod);
         }
 
+        private bool _lockedButtons = false;
+        internal bool LockedButtons
+        {
+            get => _lockedButtons;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _lockedButtons, value);
+                this.RaisePropertyChanged("LockedButtons");
+            }
+        }
+
         private bool _canDownload = true;
         internal bool CanDownload
         {
@@ -43,27 +54,31 @@ namespace HydroModTools.WinForms.ViewModels
         internal ReactiveCommand<Unit, Unit> DownloadModCommand;
         private async void DownloadMod()
         {
-            if (!CanDownload)
+            if (!CanDownload || LockedButtons)
             {
                 return;
             }
 
-            CanDownload = false;
+            LockedButtons = true;
+
             await _bridgepourService.DownloadMod(_bridgepourModModel.Url);
-            MessageBox.Show($"Installed mod '{BridgepourModModel.Name}'", "Mod installed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            LockedButtons = false;
+            CanDownload = false;
         }
 
         internal ReactiveCommand<Unit, Unit> RemoveModCommand;
         private async void RemoveMod()
         {
-            if (CanDownload)
+            if (CanDownload || LockedButtons)
             {
                 return;
             }
 
+            LockedButtons = true;
+
             await _bridgepourService.DeleteMod(_bridgepourModModel.Url);
-            MessageBox.Show($"Removed mod '{BridgepourModModel.Name}'", "Mod removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
             CanDownload = true;
+            LockedButtons = false;
         }
     }
 }
