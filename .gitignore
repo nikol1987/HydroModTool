@@ -3,6 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 HydroModTools.Installer/Installs
+HydroModTools.Installer/HydroModtools.wxs
 
 # User-specific files
 *.rsuser

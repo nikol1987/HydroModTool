@@ -5,6 +5,7 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AF8E0570-00F7-4B8A-8EA4-296ABE8A2F3D}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
@@ -53,7 +54,6 @@ Global
 		{05C9CF22-A3CD-45DB-87AF-360041490F23}.Release|x64.ActiveCfg = Release|Any CPU
 		{05C9CF22-A3CD-45DB-87AF-360041490F23}.Release|x64.Build.0 = Release|Any CPU
 		{06C0948F-4253-4BBD-9D39-8FA504036E27}.Debug|x64.ActiveCfg = Debug|x86
-		{06C0948F-4253-4BBD-9D39-8FA504036E27}.Debug|x64.Build.0 = Debug|x86
 		{06C0948F-4253-4BBD-9D39-8FA504036E27}.Release|x64.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

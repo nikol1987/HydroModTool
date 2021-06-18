@@ -31,6 +31,12 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
 
+    # Add Wix installer
+    - name: Choco help
+      uses: crazy-max/ghaction-chocolatey@v1
+      with:
+        args: install wixtoolset
+
     - name: Restore dependencies
       run: dotnet restore
 
@@ -47,7 +53,19 @@ jobs:
       uses: papeloto/action-zip@v1
       with:
         files: HydroModTools\publish\
-        dest: HydroModTools\Hydroneer Modding Toolchain.zip
+        dest: Hydroneer Modding Toolchain.zip
+
+    - name: dir list
+      run: dir
+
+    - name: dir list1
+      run: dir HydroModTools\
+
+    - name: Build msi
+      run: msbuild HydroModTools.Installer\HydroModTools.Installer.wixproj
+
+    - name: dir list2
+      run: dir HydroModTools.Installer\Installs
 
     - name: release
       uses: actions/create-release@v1
@@ -60,12 +78,22 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
-    - name: upload windows artifact
+    - name: upload built app zip
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}\HydroModTools\HydroModTools.zip
+        asset_path: Hydroneer Modding Toolchain.zip
         asset_name: Hydroneer Modding Toolchain.zip
         asset_content_type: application/zip
+
+    - name: upload msi installer
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: HydroModTools.Installer\Installs\HydroModTools.msi
+        asset_name: HydroModTools.msi
+        asset_content_type: application/x-msi
