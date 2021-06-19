@@ -43,9 +43,20 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                     .RowStateChanged
                     .Where(ea => ea.StateChanged == DataGridViewElementStates.Selected)
                     .Where(ea => this.guidsDataGrid.SelectedRows.Count == 1)
-                    .Select(ea => ((GuidWrapper)this.guidsDataGrid.SelectedRows[0].Cells["id"].Value).GetGuid())
+                    .Select(ea => ((GuidWrapper)this.guidsDataGrid.SelectedRows[0].Cells["id"].Value))
                     .Where(val => !val.Equals(ViewModel.SelectedRow))
                     .InvokeCommand(ViewModel.SelectGuidCommand));
+
+                d(guidsDataGrid.Events()
+                    .DataError
+                    .Select(ea => ea.Exception)
+                    .Subscribe(ex =>
+                    {
+                        if (ex is InvalidCastException)
+                        {
+                            MessageBox.Show("Invalid Format!");
+                        }
+                    }));
             });
         }
 

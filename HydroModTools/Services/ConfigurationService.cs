@@ -106,7 +106,12 @@ namespace HydroModTools.Services
 
         public async Task SaveGuids(IReadOnlyCollection<GuidItemModel> guids)
         {
-            throw new NotImplementedException();
+            var config = await _configuration.GetConfigurationAsync();
+
+            var newConfig = new AppConfigModel(config.Projects.ToModel(), config.DefaultProject, guids);
+
+            await _configuration.SaveConfigurationAsync(newConfig);
+
         }
     }
 }

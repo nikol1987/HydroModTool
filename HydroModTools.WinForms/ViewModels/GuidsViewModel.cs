@@ -21,7 +21,7 @@ namespace HydroModTools.WinForms.ViewModels
             _guidsService = guidsService;
 
             ExecuteStripMenuCommand = ReactiveCommand.Create<string>(ExecuteStripMenu);
-            SelectGuidCommand = ReactiveCommand.Create<Guid>(SelectGuid);
+            SelectGuidCommand = ReactiveCommand.Create<GuidWrapper>(SelectGuid);
 
             SetGuids();
         }
@@ -84,8 +84,8 @@ namespace HydroModTools.WinForms.ViewModels
             return result;
         }
 
-        private Guid _selectedRow = Guid.Empty;
-        internal Guid SelectedRow
+        private GuidWrapper _selectedRow = new GuidWrapper(Guid.Empty);
+        internal GuidWrapper SelectedRow
         {
             get => _selectedRow;
             set => this.RaiseAndSetIfChanged(ref _selectedRow, value);
@@ -112,6 +112,11 @@ namespace HydroModTools.WinForms.ViewModels
                     break;
 
                 case "removeGuid":
+                    if (SelectedRow.GetGuid() == Guid.Empty)
+                    {
+                        return;
+                    }
+
                     Guids.Rows.Remove(Guids.Rows.Find(SelectedRow));
 
                     this.RaisePropertyChanged("Guids");
@@ -125,8 +130,8 @@ namespace HydroModTools.WinForms.ViewModels
             }
         }
 
-        internal ReactiveCommand<Guid, Unit> SelectGuidCommand;
-        private void SelectGuid(Guid selectedRow)
+        internal ReactiveCommand<GuidWrapper, Unit> SelectGuidCommand;
+        private void SelectGuid(GuidWrapper selectedRow)
         {
             SelectedRow = selectedRow;
         }
