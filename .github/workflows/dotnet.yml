@@ -55,17 +55,8 @@ jobs:
         files: HydroModTools\publish\
         dest: Hydroneer Modding Toolchain.zip
 
-    - name: dir list
-      run: dir
-
-    - name: dir list1
-      run: dir HydroModTools\
-
     - name: Build msi
       run: msbuild HydroModTools.Installer\HydroModTools.Installer.wixproj
-
-    - name: dir list2
-      run: dir HydroModTools.Installer\Installs
 
     - name: release
       uses: actions/create-release@v1
