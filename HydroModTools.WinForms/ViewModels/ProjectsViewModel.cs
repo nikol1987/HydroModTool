@@ -411,7 +411,7 @@ namespace HydroModTools.WinForms.ViewModels
                     {
                         dialog.Title = title;
                         dialog.Multiselect = true;
-                        dialog.Filter = "UE Assets|*.uasset;*.uexp;*.ubulk";
+                        dialog.Filter = "UE Assets|*.uasset;*.uexp;*.ubulk;*.ini;*.bin;*.umap;*.uplugin;*.uproject";
                         dialog.InitialDirectory = rootPath;
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
@@ -432,6 +432,11 @@ namespace HydroModTools.WinForms.ViewModels
                         files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.uasset", SearchOption.AllDirectories).ToList());
                         files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.uexp", SearchOption.AllDirectories).ToList());
                         files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.ubulk", SearchOption.AllDirectories).ToList());
+                        files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.ini", SearchOption.AllDirectories).ToList());
+                        files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.bin", SearchOption.AllDirectories).ToList());
+                        files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.umap", SearchOption.AllDirectories).ToList());
+                        files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.uplugin", SearchOption.AllDirectories).ToList());
+                        files.AddRange(Directory.GetFiles(dialog.SelectedPath, "*.uproject", SearchOption.AllDirectories).ToList());
                     }
                 }
             });
