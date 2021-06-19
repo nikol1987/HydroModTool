@@ -121,6 +121,7 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
             this.submit.TabIndex = 3;
             this.submit.Text = "Done";
             this.submit.UseVisualStyleBackColor = true;
+            this.submit.Click += new System.EventHandler(this.submit_Click);
             // 
             // cancel
             // 

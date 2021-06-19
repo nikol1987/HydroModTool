@@ -1,7 +1,10 @@
 ﻿using HydroModTools.Contracts.Services;
+using HydroModTools.WinForms.DTOs;
+using HydroModTools.WinForms.Validators;
 using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
@@ -22,11 +25,6 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                 d(this.Bind(ViewModel, vm => vm.Name, v => v.projectNameTextBox.Text));
                 d(this.Bind(ViewModel, vm => vm.Path, v => v.cookedAssetsDirTextBox.Text));
                 d(this.Bind(ViewModel, vm => vm.OutputPath, v => v.outputPathDirTextBox.Text));
-
-                submit.Events()
-                    .Click
-                    .Select(ea => this.ParentForm)
-                    .InvokeCommand(ViewModel, vm => vm.AddProjectCommand);
             });
         }
 
@@ -80,7 +78,23 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 
         private void cancel_Click(object sender, EventArgs e)
         {
-            this.FindForm().Close();
+            FindForm().Close();
+        }
+
+        private async void submit_Click(object sender, EventArgs e)
+        {
+            var validator = new AddProjectValidator();
+            var validationResult = validator.Validate(new AddProjectDto(ViewModel.Name, ViewModel.Path, ViewModel.OutputPath));
+
+            var validationErrors = validationResult.Errors;
+
+            if (!validationResult.IsValid)
+            {
+                MessageBox.Show(string.Join('\n', validationErrors), "Validation Errors", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            await ViewModel.AddProjectCommand.Execute();
         }
     }
 }

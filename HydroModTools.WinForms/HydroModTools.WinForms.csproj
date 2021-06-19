@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="FluentValidation" Version="10.2.3" />
     <PackageReference Include="Krypton.Components.Suite" Version="4.5.9" />
     <PackageReference Include="PostSharp.Redist" Version="6.9.5" />
     <PackageReference Include="ReactiveUI" Version="13.3.2" />
