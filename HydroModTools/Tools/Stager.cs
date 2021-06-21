@@ -63,33 +63,44 @@ namespace HydroModTools.Tools
 
         private MemoryStream PatchFile(string fileSrc, IReadOnlyCollection<GuidItemModel> guids)
         {
-
             var fileBytes = File.ReadAllBytes(fileSrc);
 
+            var patchedBytes = new byte[fileBytes.Length];
+            Buffer.BlockCopy(fileBytes, 0, patchedBytes, 0, patchedBytes.Length);
+
+            var patched = false;
             foreach (var guid in guids)
             {
                 var moddedGuidBytes = Utilities.Hex2Binary(guid.ModdedGuid.ToString("N"));
                 var originalGuidBytes = Utilities.Hex2Binary(guid.OriginalGuid.ToString("N"));
 
-                var position = Utilities.SearchBytePattern(moddedGuidBytes, fileBytes);
+                var position = Utilities.SearchBytePattern(moddedGuidBytes, patchedBytes);
 
                 if (!position.HasValue)
                 {
                     continue;
                 }
 
-                var patchedBytes = new byte[fileBytes.Length];
-                Buffer.BlockCopy(fileBytes, 0, patchedBytes, 0, position.Value);
-                Buffer.BlockCopy(originalGuidBytes, 0, patchedBytes, position.Value, 16);
-                Buffer.BlockCopy(fileBytes, position.Value + 16, patchedBytes, position.Value + 16, fileBytes.Length - (position.Value + 16));
+                var tmpPatchedBytes = new byte[patchedBytes.Length];
 
+                Buffer.BlockCopy(patchedBytes, 0, tmpPatchedBytes, 0, position.Value);
+                Buffer.BlockCopy(originalGuidBytes, 0, tmpPatchedBytes, position.Value, 16);
+                Buffer.BlockCopy(patchedBytes, position.Value + 16, tmpPatchedBytes, position.Value + 16, patchedBytes.Length - (position.Value + 16));
 
-                var ms = new MemoryStream(patchedBytes);
+                patched = true;
 
-                return ms;
+                Buffer.BlockCopy(tmpPatchedBytes, 0, patchedBytes, 0, patchedBytes.Length);
             }
 
-            return null;
+            if (!patched)
+            {
+                return null;
+            }
+
+
+            var ms = new MemoryStream(patchedBytes);
+
+            return ms;
         }
     }
 }
