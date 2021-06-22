@@ -4,7 +4,6 @@ using HydroModTools.WinForms.Validators;
 using HydroModTools.WinForms.ViewModels;
 using ReactiveUI;
 using System;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
@@ -94,7 +93,7 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                 return;
             }
 
-            await ViewModel.AddProjectCommand.Execute();
+            await ViewModel.AddProjectCommand.Execute(ParentForm);
         }
     }
 }
