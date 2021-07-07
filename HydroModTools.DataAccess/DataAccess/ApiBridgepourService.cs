@@ -9,7 +9,7 @@ namespace HydroModTools.DataAccess.Services
     public class ApiBridgepourService : ServiceBase
     {
         public ApiBridgepourService(HttpClient httpClient) :
-            base(httpClient, "https://api-temporary-1.bridgepour.repl.co/api")
+            base(httpClient, "https://api.bridgepour.com/api")
         { }
 
         public async Task<BridgepourModsResult> GetModsAsync()
