@@ -35,6 +35,9 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                     .WhenAnyValue(vm => vm.ProjectItems)
                     .Subscribe(x =>
                     {
+                        projectItemsTree.SelectedNode = null;
+                        projectItemsTree.SelectedNodes = null;
+
                         if (x == null)
                         {
                             projectItemsTree.Nodes.Clear();
@@ -143,7 +146,7 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                         deleteClick
                           .Subscribe(ea => {
                               projectItemsTree.SelectedNode = null;
-                              projectItemsTree.SelectedNode = null;
+                              projectItemsTree.SelectedNodes = null;
                           });
 
                         items.Items.Add(deleteItemStripItem);
