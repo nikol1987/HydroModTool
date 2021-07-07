@@ -68,9 +68,10 @@ namespace HydroModTools.Services
         {
             var config = await _configuration.GetConfigurationAsync();
 
-            var project = config.Projects.First(project => project.Id == projectId).ToModel();
-            var projectIdx = config.Projects.ToModel().ToList().IndexOf(project) - 1;
-            projectIdx = projectIdx <= 0 ? 0 : projectIdx;
+            var projects = config.Projects.ToModel().ToList();
+            var projectIdx = projects.FindIndex(p => p.Id == projectId);
+
+            var project = projects[projectIdx];
 
             var items = project.Items.ToList();
 
@@ -90,10 +91,9 @@ namespace HydroModTools.Services
 
             var newProject = new ProjectModel(project.Id, project.Name, project.Path, project.OutputPath, items);
 
-            var updatedProjects = config.Projects.Where(p => p.Id != projectId).ToList().ToModel().ToList();
-            updatedProjects.Insert(projectIdx, newProject); 
+            projects[projectIdx] = newProject;
 
-            var newConfig = new AppConfigModel(updatedProjects, config.DefaultProject, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
@@ -101,18 +101,18 @@ namespace HydroModTools.Services
         {
             var config = await _configuration.GetConfigurationAsync();
 
-            var project = config.Projects.First(project => project.Id == projectId).ToModel();
-            var projectIdx = config.Projects.ToModel().ToList().IndexOf(project) - 1;
-            projectIdx = projectIdx <= 0 ? 0 : projectIdx;
+            var projects = config.Projects.ToModel().ToList();
+            var projectIdx = projects.FindIndex(p => p.Id == projectId);
+
+            var project = projects[projectIdx];
 
             var items = project.Items.Where(item => !assetsId.Contains(item.Id)).ToList();
 
             var newProject = new ProjectModel(project.Id, project.Name, project.Path, project.OutputPath, items);
 
-            var updatedProjects = config.Projects.Where(p => p.Id != projectId).ToList().ToModel().ToList();
-            updatedProjects.Insert(projectIdx, newProject);
+            projects[projectIdx] = newProject;
 
-            var newConfig = new AppConfigModel(updatedProjects, config.DefaultProject, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
