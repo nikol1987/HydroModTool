@@ -48,7 +48,7 @@ namespace HydroModTools.WinForms.ApplicationTabs
         private void SetFonts()
         {
             modName.Font = new Font(Utilities.FontCollection.Families[Utilities.Fonts.Almenda.ToInt()], modName.Font.Size);
-            author.Font = new Font(Utilities.FontCollection.Families[Utilities.Fonts.Almenda.ToInt()], modName.Font.Size);
+            author.Font = new Font(Utilities.FontCollection.Families[Utilities.Fonts.Almenda.ToInt()], author.Font.Size);
         }
 
         public ModSegmentViewModel ViewModel { get; set; }
