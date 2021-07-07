@@ -40,6 +40,19 @@ namespace HydroModTools.Services
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
+        public async Task EditProject(Guid id, string name, string assetsPath, string outputPath)
+        {
+            var config = await _configuration.GetConfigurationAsync();
+
+            var projects = config.Projects.ToModel().ToList();
+            var projectIdx = projects.FindIndex(p => p.Id == id);
+
+            projects[projectIdx] = new ProjectModel(id, name, assetsPath, outputPath, projects[projectIdx].Items);
+
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
+
+            await _configuration.SaveConfigurationAsync(newConfig);
+        }
         public async Task RemoveProject(Guid projectId)
         {
             var config = await _configuration.GetConfigurationAsync();

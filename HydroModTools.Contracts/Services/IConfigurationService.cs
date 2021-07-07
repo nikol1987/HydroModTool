@@ -11,6 +11,7 @@ namespace HydroModTools.Contracts.Services
         Task Save();
 
         Task AddProject(Guid id, string name, string assetsPath, string outputPath);
+        Task EditProject(Guid id, string name, string assetsPath, string outputPath);
         Task RemoveProject(Guid projectId);
         
         Task AddAssets(Guid projectId, IReadOnlyCollection<string> fileDirs);

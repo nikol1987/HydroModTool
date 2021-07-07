@@ -47,6 +47,8 @@ namespace HydroModTools.WinForms.ViewModels
             DeleteProjectCommand = ReactiveCommand.Create<Guid>(DeleteProject);
             DeleteAssetsCommand = ReactiveCommand.Create<IList<Guid>>(DeleteAssets);
             AddAssetsCommand = ReactiveCommand.Create(AddAssets);
+            EditProjectCommand = ReactiveCommand.Create<Guid>(EditProject);
+            
         }
 
         private void SetProjects()
@@ -127,19 +129,19 @@ namespace HydroModTools.WinForms.ViewModels
                     break;
 
                 case "addProject":
-                    var selectFolderForm = new Form
+                    var addProjectForm = new Form
                     {
                         FormBorderStyle = FormBorderStyle.None
                     };
 
-                    var addProjectForm = (AddProjectView)_services.GetService(typeof(AddProjectView));
+                    var addProjectView = (AddProjectView)_services.GetService(typeof(AddProjectView));
 
-                    addProjectForm.Dock = DockStyle.Fill;
+                    addProjectView.Dock = DockStyle.Fill;
 
 
-                    selectFolderForm.Size = addProjectForm.Size;
-                    selectFolderForm.Controls.Add(addProjectForm);
-                    selectFolderForm.ShowDialog();
+                    addProjectForm.Size = addProjectView.Size;
+                    addProjectForm.Controls.Add(addProjectView);
+                    addProjectForm.ShowDialog();
                     break;
 
                 case "stageProject":
@@ -317,8 +319,6 @@ namespace HydroModTools.WinForms.ViewModels
             };
 
             timer.Start();
-
-
         }
 
         internal ReactiveCommand<IList<Guid>, Unit> DeleteAssetsCommand;
@@ -330,6 +330,43 @@ namespace HydroModTools.WinForms.ViewModels
             await _projectsService.RemoveAssets(project.Id, assetsIds.ToList());
 
             ProgressBarState = new ProgressbarStateModel(100, "Removed assets");
+
+            var timer = new System.Windows.Forms.Timer()
+            {
+                Enabled = true,
+                Interval = 500
+            };
+
+            timer.Tick += async (sender, ea) =>
+            {
+                timer.Stop();
+                var config = await _configurationService.GetAsync();
+                await ApplicationStore.RefreshStore(config);
+                ProgressBarState = new ProgressbarStateModel(0, "Ready");
+            };
+
+            timer.Start();
+        }
+
+        internal ReactiveCommand<Guid, Unit> EditProjectCommand;
+        private void EditProject(Guid projectId)
+        {
+            var project = ApplicationStore.Store.Projects.Where(p => p.Id == SelectedProject).First();
+            ProgressBarState = new ProgressbarStateModel(10, $"Editing project project {project.Name}");
+
+            var editProjectForm = new Form
+            {
+                FormBorderStyle = FormBorderStyle.None
+            };
+
+            var editProjectView = (AddProjectView)_services.GetService(typeof(AddProjectView));
+            editProjectView.SetEditMode(projectId);
+
+            editProjectView.Dock = DockStyle.Fill;
+
+            editProjectForm.Size = editProjectView.Size;
+            editProjectForm.Controls.Add(editProjectView);
+            editProjectForm.ShowDialog();
 
             var timer = new System.Windows.Forms.Timer()
             {

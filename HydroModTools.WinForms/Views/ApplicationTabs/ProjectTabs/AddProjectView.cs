@@ -13,8 +13,14 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
 {
     public partial class AddProjectView : UserControl, IViewFor<AddProjectViewModel>
     {
+        private readonly IProjectsService _projectsService;
+        private readonly IConfigurationService _configurationService;
+
         public AddProjectView(IProjectsService projectsService, IConfigurationService configurationService)
         {
+            _projectsService = projectsService;
+            _configurationService = configurationService;
+
             ViewModel = new AddProjectViewModel(projectsService, configurationService);
 
             InitializeComponent();
@@ -24,22 +30,6 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                 d(this.Bind(ViewModel, vm => vm.Name, v => v.projectNameTextBox.Text));
                 d(this.Bind(ViewModel, vm => vm.Path, v => v.cookedAssetsDirTextBox.Text));
                 d(this.Bind(ViewModel, vm => vm.OutputPath, v => v.outputPathDirTextBox.Text));
-            });
-        }
-
-        private void selectCookedDirBtn_Click(object sender, System.EventArgs e)
-        {
-            ChooseFolderHelper("Select Cooked assets folder", (path) =>
-            {
-                cookedAssetsDirTextBox.Text = path;
-            });
-        }
-
-        private void outputPathDirBtn_Click(object sender, EventArgs e)
-        {
-            ChooseFolderHelper("Select output assets folder", (path) =>
-            {
-                outputPathDirTextBox.Text = path;
             });
         }
 
@@ -71,6 +61,11 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
             action.Invoke(result.ToString()); ;
         }
 
+        public void SetEditMode(Guid projectGuid)
+        {
+            ViewModel = new AddProjectViewModel(_projectsService, _configurationService, projectGuid);
+        }
+
         public AddProjectViewModel ViewModel { get; set; }
 
         object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (AddProjectViewModel)value; }
@@ -94,6 +89,22 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
             }
 
             await ViewModel.AddProjectCommand.Execute(ParentForm);
+        }
+
+        private void selectCookedDirBtn_Click(object sender, System.EventArgs e)
+        {
+            ChooseFolderHelper("Select Cooked assets folder", (path) =>
+            {
+                cookedAssetsDirTextBox.Text = path;
+            });
+        }
+
+        private void outputPathDirBtn_Click(object sender, EventArgs e)
+        {
+            ChooseFolderHelper("Select output assets folder", (path) =>
+            {
+                outputPathDirTextBox.Text = path;
+            });
         }
     }
 }

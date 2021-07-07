@@ -111,6 +111,15 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
                   .InvokeCommand(ViewModel.DeleteProjectCommand);
 
                 items.Items.Add(deleteProjectStripItem);
+
+                var editProjectStripItem = new KryptonContextMenuItem("Edit Project");
+
+                var editClick = Observable.FromEventPattern<EventArgs>(editProjectStripItem, "Click");
+                editClick
+                  .Select(ea => (Guid)projectListBox.SelectedValue)
+                  .InvokeCommand(ViewModel.EditProjectCommand);
+
+                items.Items.Add(editProjectStripItem);
             }
             else if (sourceControl.Name == projectItemsTree.Name)
             {

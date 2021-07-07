@@ -27,6 +27,10 @@ namespace HydroModTools.Services
         {
             await _configurationService.AddProject(id, name, assetsPath, outputPath);
         }
+        public async Task EditProject(Guid id, string name, string assetsPath, string outputPath)
+        {
+            await _configurationService.EditProject(id, name, assetsPath, outputPath);
+        }
         public async Task DeleteProject(Guid projectId)
         {
             await _configurationService.RemoveProject(projectId);

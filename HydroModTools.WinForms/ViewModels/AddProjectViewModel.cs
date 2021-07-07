@@ -2,6 +2,7 @@
 using HydroModTools.WinForms.Data;
 using ReactiveUI;
 using System;
+using System.Linq;
 using System.Reactive;
 using System.Windows.Forms;
 
@@ -18,6 +19,21 @@ namespace HydroModTools.WinForms.ViewModels
             _projectService = projectService;
             _configurationService = configurationService;
         }
+
+        public AddProjectViewModel(IProjectsService projectService, IConfigurationService configurationService, Guid projectId):
+            this(projectService, configurationService)
+        {
+            var project = ApplicationStore.Store.Projects.First(p => p.Id == projectId);
+
+            Id = project.Id;
+            Name = project.Name;
+            Path = project.Path;
+            OutputPath = project.OutputPath;
+
+            editMode = true;
+        }
+
+        private bool editMode = false;
 
         private Guid _id = Guid.NewGuid();
         internal Guid Id
@@ -62,7 +78,13 @@ namespace HydroModTools.WinForms.ViewModels
         public ReactiveCommand<Form, Unit> AddProjectCommand;
         public async void AddProject(Form form)
         {
-            await _projectService.AddProject(Id, Name, Path, OutputPath);
+            if (editMode)
+            {
+                await _projectService.EditProject(Id, Name, Path, OutputPath);
+            } else
+            {
+                await _projectService.AddProject(Id, Name, Path, OutputPath);
+            }
 
             var config = await _configurationService.GetAsync();
             await ApplicationStore.RefreshStore(config);
