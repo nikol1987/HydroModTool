@@ -48,7 +48,6 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
 
                 d(ViewModel
                     .WhenAnyValue(vm => vm.LoadedMods)
-                    .Where(mf => mf.Count > 0)
                     .Subscribe(modFiles =>
                     {
                         CreateModItems(ViewModel.ModList);
