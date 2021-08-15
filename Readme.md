@@ -47,9 +47,11 @@ Thanks to [Rexxar-tc](https://github.com/rexxar-tc) where i forked this project 
 
 Thanks to [KaiHeilos](https://github.com/kaiheilos) where he shared the Asset editor tool used for packaging and unpacking game assets && get the assets GUIDs from.
 
-Thanks to [Rhino](https://github.com/RHlNO) for sharing the HydroUMH and giving massive help in the proccess
+Thanks to [Rhino](https://github.com/RHlNO) for sharing the HydroUMH and giving massive help in the proccess.
 
-The rest of all modders in the discord #hydro-modding channel, without theyr help, I would understand nothing of how the building a mod pipeline worked and being there to help.
+Thanks to F4T4L and [Gamerkuipers](https://github.com/Gamerkuipers) for testing my PR versions.
+
+The rest of all modders in the discord #hydro-modding channel, without their help, I would understand nothing of how the building a mod pipeline worked and being there to help.
 
 ## Author
 
