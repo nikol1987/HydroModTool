@@ -43,6 +43,11 @@ namespace HydroModTools.DataAccess.Services
             var uri = new Uri(url);
             var fileName = Path.GetFileName(uri.LocalPath);
 
+            if (!Directory.Exists(PaksFolder))
+            {
+                Directory.CreateDirectory(PaksFolder);
+            }
+
             using (var webClient = new WebClient())
             {
                 await webClient.DownloadFileTaskAsync(uri, Path.Combine(PaksFolder, fileName));
