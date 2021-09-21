@@ -31,8 +31,9 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.refreshMods = new System.Windows.Forms.ToolStripMenuItem();
-            this.modsContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.clearMods = new System.Windows.Forms.ToolStripMenuItem();
+            this.openModFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.modsContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,7 +42,8 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
             this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.refreshMods,
-            this.clearMods});
+            this.clearMods,
+            this.openModFolder});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.ShowItemToolTips = true;
@@ -56,6 +58,19 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
             this.refreshMods.Text = "Refresh";
             this.refreshMods.ToolTipText = "Refresh mod list";
             // 
+            // clearMods
+            // 
+            this.clearMods.Name = "clearMods";
+            this.clearMods.Size = new System.Drawing.Size(79, 20);
+            this.clearMods.Text = "Clear mods";
+            this.clearMods.ToolTipText = "Removes all mods for a clean install";
+            // 
+            // openModFolder
+            // 
+            this.openModFolder.Name = "openModFolder";
+            this.openModFolder.Size = new System.Drawing.Size(117, 20);
+            this.openModFolder.Text = "Open Mods Folder";
+            // 
             // modsContainer
             // 
             this.modsContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -66,13 +81,6 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
             this.modsContainer.Name = "modsContainer";
             this.modsContainer.Size = new System.Drawing.Size(651, 390);
             this.modsContainer.TabIndex = 1;
-            // 
-            // clearMods
-            // 
-            this.clearMods.Name = "clearMods";
-            this.clearMods.Size = new System.Drawing.Size(79, 20);
-            this.clearMods.Text = "Clear mods";
-            this.clearMods.ToolTipText = "Removes all mods for a clean install";
             // 
             // ModInstallerTabView
             // 
@@ -95,5 +103,6 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
         private System.Windows.Forms.ToolStripMenuItem refreshMods;
         private System.Windows.Forms.FlowLayoutPanel modsContainer;
         private System.Windows.Forms.ToolStripMenuItem clearMods;
+        private System.Windows.Forms.ToolStripMenuItem openModFolder;
     }
 }

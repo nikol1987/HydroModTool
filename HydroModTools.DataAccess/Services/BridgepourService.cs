@@ -3,6 +3,7 @@ using HydroModTools.DataAccess.Contracts.Services;
 using HydroModTools.DataAccess.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -81,6 +82,18 @@ namespace HydroModTools.DataAccess.Services
             });
 
             return await Task.FromResult(files.ToList());
+        }
+
+        public Task OpenModFolder()
+        {
+            if (!Directory.Exists(PaksFolder))
+            {
+                Directory.CreateDirectory(PaksFolder);
+            }
+
+            Process.Start("explorer.exe", PaksFolder);
+
+            return Task.CompletedTask;
         }
     }
 }
