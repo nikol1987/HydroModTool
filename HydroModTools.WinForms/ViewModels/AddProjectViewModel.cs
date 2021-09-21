@@ -55,6 +55,16 @@ namespace HydroModTools.WinForms.ViewModels
             }
         }
 
+        private string? _modIndex = "500";
+        internal string? ModIndex
+        {
+            get => _modIndex;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _modIndex, value);
+            }
+        }
+
         private string _path;
         internal string Path
         {
@@ -80,10 +90,10 @@ namespace HydroModTools.WinForms.ViewModels
         {
             if (editMode)
             {
-                await _projectService.EditProject(Id, Name, Path, OutputPath);
+                await _projectService.EditProject(Id, Name, short.Parse(ModIndex), Path, OutputPath);
             } else
             {
-                await _projectService.AddProject(Id, Name, Path, OutputPath);
+                await _projectService.AddProject(Id, Name, short.Parse(ModIndex), Path, OutputPath);
             }
 
             var config = await _configurationService.GetAsync();

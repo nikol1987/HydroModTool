@@ -10,12 +10,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using static HydroModTools.Common.Constants;
+
 namespace HydroModTools.DataAccess.Services
 {
     public sealed class BridgepourService : IBridgepourService
     {
-        private readonly string PaksFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Mining", "Saved", "Paks");
-
         private readonly ApiBridgepourService _apiBridgepourService;
 
         public BridgepourService(HttpClient httpClient)
@@ -43,11 +43,6 @@ namespace HydroModTools.DataAccess.Services
         {
             var uri = new Uri(url);
             var fileName = Path.GetFileName(uri.LocalPath);
-
-            if (!Directory.Exists(PaksFolder))
-            {
-                Directory.CreateDirectory(PaksFolder);
-            }
 
             using (var webClient = new WebClient())
             {
@@ -86,11 +81,6 @@ namespace HydroModTools.DataAccess.Services
 
         public Task OpenModFolder()
         {
-            if (!Directory.Exists(PaksFolder))
-            {
-                Directory.CreateDirectory(PaksFolder);
-            }
-
             Process.Start("explorer.exe", PaksFolder);
 
             return Task.CompletedTask;

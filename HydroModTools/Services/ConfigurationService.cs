@@ -29,25 +29,25 @@ namespace HydroModTools.Services
             await _configuration.SaveConfigurationAsync();
         }
 
-        public async Task AddProject(Guid id, string name, string assetsPath, string outputPath)
+        public async Task AddProject(Guid id, string name, short modIndex, string assetsPath, string outputPath)
         {
             var config = await _configuration.GetConfigurationAsync();
 
             var projects = config.Projects.ToModel().ToList();
-            projects.Add(new ProjectModel(id, name, assetsPath, outputPath));
+            projects.Add(new ProjectModel(id, name, modIndex, assetsPath, outputPath));
 
             var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
-        public async Task EditProject(Guid id, string name, string assetsPath, string outputPath)
+        public async Task EditProject(Guid id, string name, short modIndex, string assetsPath, string outputPath)
         {
             var config = await _configuration.GetConfigurationAsync();
 
             var projects = config.Projects.ToModel().ToList();
             var projectIdx = projects.FindIndex(p => p.Id == id);
 
-            projects[projectIdx] = new ProjectModel(id, name, assetsPath, outputPath, projects[projectIdx].Items);
+            projects[projectIdx] = new ProjectModel(id, name, modIndex, assetsPath, outputPath, projects[projectIdx].Items);
 
             var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
 
@@ -89,7 +89,7 @@ namespace HydroModTools.Services
                 items.Add(new ProjectItemModel(Guid.NewGuid(), Path.GetFileName(item), partialPath));
             }
 
-            var newProject = new ProjectModel(project.Id, project.Name, project.Path, project.OutputPath, items);
+            var newProject = new ProjectModel(project.Id, project.Name, project.ModIndex, project.Path, project.OutputPath, items);
 
             projects[projectIdx] = newProject;
 
@@ -108,7 +108,7 @@ namespace HydroModTools.Services
 
             var items = project.Items.Where(item => !assetsId.Contains(item.Id)).ToList();
 
-            var newProject = new ProjectModel(project.Id, project.Name, project.Path, project.OutputPath, items);
+            var newProject = new ProjectModel(project.Id, project.Name, project.ModIndex, project.Path, project.OutputPath, items);
 
             projects[projectIdx] = newProject;
 
