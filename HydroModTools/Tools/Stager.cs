@@ -1,16 +1,17 @@
-﻿using HydroModTools;
-using HydroModTools.Common.Models;
+﻿using HydroModTools.Common.Models;
 using HydroModTools.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace HydroModTools.Tools
 {
     public class Stager
     {
-        public async Task StageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project, IReadOnlyCollection<GuidItemModel> guids)
+        public Task StageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project, IReadOnlyCollection<GuidItemModel> guids)
         {
             var basePathSrc = project.Path;
             var basePathOut = Path.Combine(project.OutputPath, "Staging", project.Name, "Mining");
@@ -22,6 +23,15 @@ namespace HydroModTools.Tools
                 Directory.Delete(basePathOut, true);
             }
 
+            var missingFiles = VerifyFiles(basePathSrc, project.Items);
+
+            if (missingFiles.Count > 0)
+            {
+                MessageBox.Show($"These assets are missing: \n{string.Join("\n", missingFiles)} \n Stating aborted", "Missing Assets");
+
+                return Task.CompletedTask;
+            }
+
             var count = 0;
             foreach (var projectItem in project.Items)
             {
@@ -29,8 +39,6 @@ namespace HydroModTools.Tools
 
                 var newPath = projectItem.Path.Replace(basePathSrc, basePathOut);
                 Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath));
-
-
 
                 if (projectItem.Name.EndsWith(".uexp"))
                 {
@@ -59,6 +67,19 @@ namespace HydroModTools.Tools
 
                 count++;
             }
+
+            return Task.CompletedTask;
+        }
+
+        private IReadOnlyCollection<string> VerifyFiles(string basepath, IReadOnlyCollection<ProjectItemModel> items)
+        {
+            var itemList = new List<ProjectItemModel>(items);
+
+            return itemList.Where(item => {
+                var itemPath = basepath + item.Path;
+
+                return !File.Exists(itemPath);
+            }).Select(item => basepath + item.Path).ToList();
         }
 
         private MemoryStream PatchFile(string fileSrc, IReadOnlyCollection<GuidItemModel> guids)
