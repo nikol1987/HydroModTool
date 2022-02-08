@@ -50,7 +50,7 @@ jobs:
       run: dotnet publish -p:PublishProfile=HydroModTools/Properties/PublishProfiles/FolderProfile
 
     - name: zip published files
-      uses: papeloto/action-zip@v1
+      uses: vimtor/action-zip@v1
       with:
         files: HydroModTools\publish\
         dest: Hydroneer Modding Toolchain.zip
