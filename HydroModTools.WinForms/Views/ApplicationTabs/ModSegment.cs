@@ -12,11 +12,12 @@ namespace HydroModTools.WinForms.ApplicationTabs
 {
     public partial class ModSegmentView : UserControl, IViewFor<ModSegmentViewModel>
     {
-        public ModSegmentView(BridgepourModModel bridgepourModModel, IBridgepourService bridgepourService, bool isLoaded)
+        public ModSegmentView(BridgepourModModel bridgepourModModel, ModInstallerTabViewModel modInstallerTabViewModel, IBridgepourService bridgepourService, bool isLoaded)
         {
             InitializeComponent();
 
             ViewModel = new ModSegmentViewModel(bridgepourModModel, bridgepourService);
+            ViewModel.OnModDownload += async () => await modInstallerTabViewModel.RefreshModList(true);
             ViewModel.CanDownload = !isLoaded;
 
             SetFonts();

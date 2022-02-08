@@ -68,7 +68,7 @@ namespace HydroModTools.WinForms.Views.ApplicationTabs
             {
                 var loaded = ViewModel.LoadedMods.Any(modFile => Path.GetFileName(mod.Url) == Path.GetFileName(modFile));
 
-                modsContainer.Controls.Add(new ModSegmentView(mod, _bridgepourService, loaded));
+                modsContainer.Controls.Add(new ModSegmentView(mod, ViewModel, _bridgepourService, loaded));
             }
         }
 

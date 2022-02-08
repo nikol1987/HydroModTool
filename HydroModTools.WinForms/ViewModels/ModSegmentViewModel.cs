@@ -1,14 +1,16 @@
 ﻿using HydroModTools.DataAccess.Contracts.Models;
 using HydroModTools.DataAccess.Contracts.Services;
 using ReactiveUI;
+using System;
 using System.Reactive;
-using System.Windows.Forms;
 
 namespace HydroModTools.WinForms.ViewModels
 {
     public sealed class ModSegmentViewModel : ReactiveObject
     {
         private readonly IBridgepourService _bridgepourService;
+
+        public event Action OnModDownload;
 
         public ModSegmentViewModel(BridgepourModModel bridgepourModModel, IBridgepourService bridgepourService)
         {
@@ -62,6 +64,12 @@ namespace HydroModTools.WinForms.ViewModels
             LockedButtons = true;
 
             await _bridgepourService.DownloadMod(_bridgepourModModel.Url);
+
+            if (OnModDownload != null)
+            {
+                OnModDownload.Invoke();
+            }
+
             LockedButtons = false;
             CanDownload = false;
         }
