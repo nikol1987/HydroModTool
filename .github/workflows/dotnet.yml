@@ -5,7 +5,10 @@ on:
     tags:
       - '*'
   workflow_dispatch:
-    
+    env:
+      
+      
+
 jobs:
   build:
     environment: distEnv
@@ -14,50 +17,53 @@ jobs:
         configuration: [Release]
 
     runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-    # Install the .NET Core workload
-    - name: Install .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
+      # Install the .NET Core workload
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
 
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
+      # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.0.2
 
-    # Add Wix installer
-    - name: Choco help
-      uses: crazy-max/ghaction-chocolatey@v1
-      with:
-        args: install wixtoolset
+      # Add Wix installer
+      - name: Choco help
+        uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: install wixtoolset
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build --no-restore
+      - name: Build
+        run: dotnet build --no-restore
 
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
 
-    - name: Publish
-      run: dotnet publish -p:PublishProfile=HydroModTools/Properties/PublishProfiles/FolderProfile
+      - name: Publish
+        run: dotnet publish -p:PublishProfile=HydroModTools/Properties/PublishProfiles/FolderProfile
 
-    - name: zip published files
-      uses: papeloto/action-zip@v1
-      with:
-        files: HydroModTools\publish\
-        dest: Hydroneer Modding Toolchain.zip
+      - name: zip published files
+        uses: vimtor/action-zip@v1
+        with:
+          files: HydroModTools\publish\
+          dest: Hydroneer Modding Toolchain.zip
 
-    - name: Build msi
-      run: msbuild HydroModTools.Installer\HydroModTools.Installer.wixproj
-
+      - name: Build msi
+        run: msbuild HydroModTools.Installer\HydroModTools.Installer.wixproj
+  publish:
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
     - name: release
       uses: actions/create-release@v1
       id: create_release
