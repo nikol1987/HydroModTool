@@ -2,7 +2,6 @@
 using HydroModTools.Client.WinForms.Data;
 using HydroModTools.Common.Models;
 using HydroModTools.Contracts.Services;
-using HydroModTools.WinForms;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;

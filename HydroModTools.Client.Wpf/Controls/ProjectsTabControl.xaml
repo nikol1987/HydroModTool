@@ -33,8 +33,6 @@
             <MenuItem Grid.Column="4" x:Name="CopyModBtn" Header="Copy Mod" FontFamily="Consolas" FontSize="17" Height="42"/>
             <MenuItem Grid.Column="5" x:Name="LaunchGameBtn" Header="Launch Game" FontFamily="Consolas" FontSize="17" Height="42"/>
             <MenuItem Grid.Column="6" x:Name="DevExpressBtn" Header="Dev Express" FontFamily="Consolas" FontSize="17" Height="42"/>
-
-
             <MenuItem Grid.Column="7" HorizontalAlignment="Right" Header="Game Version" FontFamily="Consolas" FontSize="17" Height="42">
                 <hc:ComboBox x:Name="GameVersionSelectorCombo" SelectedIndex="0">
                     <ComboBoxItem Content="Hydroneer Legacy"/>
@@ -42,5 +40,20 @@
                 </hc:ComboBox>
             </MenuItem>
         </Menu>
+        <Grid  Margin="0,45,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <hc:SimplePanel Grid.Column="0">
+                <ListBox x:Name="ProjectsList" />
+            </hc:SimplePanel>
+            <hc:SimplePanel Grid.Column="1">
+
+            </hc:SimplePanel>
+        </Grid>
     </hc:SimplePanel>
 </UserControl>

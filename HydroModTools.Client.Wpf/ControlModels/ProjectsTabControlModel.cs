@@ -1,6 +1,8 @@
 ﻿using HydroModTools.Contracts.Enums;
+using HydroModTools.Contracts.Models;
 using HydroModTools.Contracts.Services;
 using ReactiveUI;
+using System.Collections.Generic;
 using System.Reactive;
 
 namespace HydroModTools.Client.Wpf.ControlModels
@@ -24,6 +26,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
                     var config = configTask.Result;
 
                     SelectedGame = config.HydroneerVersion;
+                    ProjectList = config.Projects;
                 });
         }
 
@@ -37,6 +40,16 @@ namespace HydroModTools.Client.Wpf.ControlModels
         private void StartGame()
         {
             _appService.StartGame();
+        }
+
+        private IReadOnlyCollection<ProjectModel> _projectList = new List<ProjectModel>();
+        public IReadOnlyCollection<ProjectModel> ProjectList
+        {
+            get => _projectList;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _projectList, value);
+            }
         }
 
         private HydroneerVersion _selectedVersion = HydroneerVersion.HydroneerLegacy;

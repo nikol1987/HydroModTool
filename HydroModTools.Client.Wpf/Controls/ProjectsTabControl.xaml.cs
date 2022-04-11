@@ -6,6 +6,10 @@ using ReactiveMarbles.ObservableEvents;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Disposables;
+using System;
+using HydroModTools.Client.Wpf.Structs;
+using System.Windows;
+using System.Linq;
 
 namespace HydroModTools.Client.Wpf.Controls
 {
@@ -37,6 +41,31 @@ namespace HydroModTools.Client.Wpf.Controls
                     .WhenAnyValue(vm => vm.SelectedGame)
                     .Select(gameVersion => (int)gameVersion)
                     .BindTo(this, v => v.GameVersionSelectorCombo.SelectedIndex)
+                    .DisposeWith(d);
+
+                ProjectsList
+                    .Events()
+                    .SelectionChanged
+                    .Select(e => e.Source as ListBox)
+                    .Select(listBox => listBox.SelectedItem)
+                    .Subscribe(item => {
+                        MessageBox.Show(((ListItem<Guid, string>)item).Key.ToString());
+                    })
+                    .DisposeWith(d);
+
+                ViewModel
+                    .WhenAnyValue(vm => vm.ProjectList)
+                    .Select(list => list
+                        .ToList()
+                        .Select(project => new ListItem<Guid, string>(project.Id, project.Name)))
+                    .SubscribeOn(Dispatcher)
+                    .Subscribe(items => {
+                        ProjectsList.ItemsSource = items;
+                        if (items.Count() > 0)
+                        {
+                            ProjectsList.SelectedIndex = 0;
+                        }
+                    })
                     .DisposeWith(d);
             });
         }
