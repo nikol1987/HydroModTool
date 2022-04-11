@@ -1,0 +1,17 @@
+﻿<hc:Window x:Class="HydroModTools.Client.Wpf.Views.SplashView"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        mc:Ignorable="d"
+        Title="SplashView" Height="450" Width="800" Icon="../Resources/hydroneer.ico" ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    <hc:Window.Background>
+        <ImageBrush TileMode="None" Stretch="UniformToFill" ImageSource="../Resources/SpashBG.jpg"/>
+    </hc:Window.Background>
+    <hc:SimplePanel>
+        <hc:OutlineText x:Name="AppLoadingStateLabel" HorizontalAlignment="Center" Height="118" VerticalAlignment="Top" Width="800" FontFamily="Arial Black" FontSize="100" Text="App Starting" Margin="0,332,0,0" StrokePosition="Inside" StrokeThickness="3" TextAlignment="Left" FontWeight="Bold" Stroke="White"/>
+        <Image HorizontalAlignment="Left" Height="328" VerticalAlignment="Top" Width="650" Source="../Resources/HydroneerLogo.png" Stretch="UniformToFill" Margin="0,-97,0,0"/>
+    </hc:SimplePanel>
+</hc:Window>

@@ -1,0 +1,17 @@
+﻿<hc:Window x:Class="HydroModTools.Client.Wpf.Views.ApplicationView"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HydroModTools.Client.Wpf.Controls"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        mc:Ignorable="d"
+        Title="HydroModTools" Height="720" Width="1006" Topmost="False" Icon="../Resources/hydroneer.ico" ResizeMode="NoResize" ShowMinButton="True">
+    <hc:TabControl x:Name="TabSelector" SelectedIndex="0" ShowOverflowButton="False" ShowContextMenu="False">
+        <hc:TabItem x:Name="InstallModsTab" Header="Install Mods" FontFamily="Consolas" IsSelected="True" />
+        <hc:TabItem x:Name="CreateModsTab" Header="Create Mods" FontFamily="Consolas" />
+        <hc:TabItem x:Name="AboutTab" Header="About" FontFamily="Consolas"/>
+    </hc:TabControl>
+
+</hc:Window>

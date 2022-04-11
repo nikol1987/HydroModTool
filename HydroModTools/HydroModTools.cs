@@ -5,11 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using HydroModTools.Client.Abstractions;
+using HydroModTools.Client.WinForms;
+using HydroModTools.Client.Wpf;
 using HydroModTools.Common;
 using HydroModTools.Common.Enums;
 using HydroModTools.Tools;
-using HydroModTools.WinForms;
-using HydroModTools.Wpf;
 using Microsoft.Extensions.Configuration;
 
 namespace HydroModTools
@@ -29,8 +29,7 @@ namespace HydroModTools
             if (_wfp)
             {
                 _client = new WpfClient();
-            } else
-            {
+            } else {
                 _client = new WinFormsClient();
             }
             
