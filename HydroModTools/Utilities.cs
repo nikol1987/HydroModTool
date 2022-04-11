@@ -52,7 +52,7 @@ namespace HydroModTools
 
         public static string GetOutFile(ProjectModel project)
         {
-            var fileName = $"500-{project.Name}_P.pak";
+            var fileName = $"{project.ModIndex}-{project.Name}_P.pak";
             var outPath = Path.Combine(project.OutputPath, "dist");
             var outputFile = Path.Combine(outPath, fileName);
 

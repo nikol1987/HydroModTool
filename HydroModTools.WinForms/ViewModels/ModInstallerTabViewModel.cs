@@ -62,6 +62,9 @@ namespace HydroModTools.WinForms.ViewModels
                     MessageBox.Show("Cleared mods folder", "Mods Removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     await RefreshModList(true);
                     break;
+                case "openModFolder":
+                    await _bridgepourService.OpenModFolder();
+                    break;
             }
         }
 

@@ -16,6 +16,8 @@ namespace HydroModTools.Configuration.Models
 
         public string Name { get; set; } = "";
 
+        public short ModIndex { get; set; } = 500;
+
         public string Path { get; set; } = "";
 
         public string OutputPath { get; set; } = "";

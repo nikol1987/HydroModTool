@@ -3,18 +3,20 @@ using HydroModTools.DataAccess.Contracts.Services;
 using HydroModTools.DataAccess.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using static HydroModTools.Common.Constants;
+
 namespace HydroModTools.DataAccess.Services
 {
     public sealed class BridgepourService : IBridgepourService
     {
-        private readonly string PaksFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Mining", "Saved", "Paks");
-
         private readonly ApiBridgepourService _apiBridgepourService;
 
         public BridgepourService(HttpClient httpClient)
@@ -22,20 +24,22 @@ namespace HydroModTools.DataAccess.Services
             _apiBridgepourService = new ApiBridgepourService(httpClient);
         }
 
-        public Task ClearMods()
+        public async Task ClearMods()
         {
-            Directory.Delete(PaksFolder, true);
-            Directory.CreateDirectory(PaksFolder);
-
-            return Task.CompletedTask;
+            await Task.Run(() => { 
+                Directory.Delete(PaksFolder, true);
+                Directory.CreateDirectory(PaksFolder);
+            });
         }
 
         public async Task DeleteMod(string url)
         {
-            var uri = new Uri(url);
-            var fileName = Path.GetFileName(uri.LocalPath);
+            await Task.Run(() => {
+                var uri = new Uri(url);
+                var fileName = Path.GetFileName(uri.LocalPath);
 
-            File.Delete(Path.Combine(PaksFolder, fileName));
+                File.Delete(Path.Combine(PaksFolder, fileName));
+            });
         }
 
         public async Task DownloadMod(string url)
@@ -50,7 +54,20 @@ namespace HydroModTools.DataAccess.Services
 
             using (var webClient = new WebClient())
             {
-                await webClient.DownloadFileTaskAsync(uri, Path.Combine(PaksFolder, fileName));
+                var downloadedFile = Path.Combine(PaksFolder, fileName);
+
+                await webClient.DownloadFileTaskAsync(uri, downloadedFile);
+
+                if (new List<string>{ ".ZIP", ".RAR"}.Any(ex => fileName.ToUpper().EndsWith(ex)))
+                {
+                    try
+                    {
+                        ZipFile.ExtractToDirectory(downloadedFile, PaksFolder, true);
+                        File.Delete(downloadedFile);
+                    }
+                    catch (Exception)
+                    {}
+                }
             }
         }
 
@@ -81,6 +98,13 @@ namespace HydroModTools.DataAccess.Services
             });
 
             return await Task.FromResult(files.ToList());
+        }
+
+        public Task OpenModFolder()
+        {
+            Process.Start("explorer.exe", PaksFolder);
+
+            return Task.CompletedTask;
         }
     }
 }

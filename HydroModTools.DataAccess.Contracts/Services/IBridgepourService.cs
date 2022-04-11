@@ -11,5 +11,6 @@ namespace HydroModTools.DataAccess.Contracts.Services
         Task<IReadOnlyCollection<string>> LoadedMods();
         Task DeleteMod(string url);
         Task ClearMods();
+        Task OpenModFolder();
     }
 }

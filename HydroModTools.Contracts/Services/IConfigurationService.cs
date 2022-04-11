@@ -10,8 +10,8 @@ namespace HydroModTools.Contracts.Services
         Task<AppConfigModel> GetAsync();
         Task Save();
 
-        Task AddProject(Guid id, string name, string assetsPath, string outputPath);
-        Task EditProject(Guid id, string name, string assetsPath, string outputPath);
+        Task AddProject(Guid id, string name, short modIndex, string assetsPath, string outputPath);
+        Task EditProject(Guid id, string name, short modIndex, string assetsPath, string outputPath);
         Task RemoveProject(Guid projectId);
         
         Task AddAssets(Guid projectId, IReadOnlyCollection<string> fileDirs);

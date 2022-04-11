@@ -39,6 +39,8 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
             this.outputPathDirBtn = new System.Windows.Forms.Button();
             this.submit = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
+            this.projectIndexTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -46,16 +48,16 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(38, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 15);
+            this.label1.Size = new System.Drawing.Size(79, 15);
             this.label1.TabIndex = 0;
-            this.label1.Text = "ProjectName";
+            this.label1.Text = "Project Name";
             // 
             // projectNameTextBox
             // 
             this.projectNameTextBox.Location = new System.Drawing.Point(38, 43);
             this.projectNameTextBox.Name = "projectNameTextBox";
             this.projectNameTextBox.PlaceholderText = "Project Name";
-            this.projectNameTextBox.Size = new System.Drawing.Size(431, 23);
+            this.projectNameTextBox.Size = new System.Drawing.Size(199, 23);
             this.projectNameTextBox.TabIndex = 1;
             // 
             // label2
@@ -134,10 +136,29 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
+            // projectIndexTextBox
+            // 
+            this.projectIndexTextBox.Location = new System.Drawing.Point(243, 43);
+            this.projectIndexTextBox.Name = "projectIndexTextBox";
+            this.projectIndexTextBox.PlaceholderText = "500";
+            this.projectIndexTextBox.Size = new System.Drawing.Size(196, 23);
+            this.projectIndexTextBox.TabIndex = 5;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(243, 25);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(64, 15);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "Mod Index";
+            // 
             // AddProjectView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.projectIndexTextBox);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.submit);
             this.Controls.Add(this.outputPathDirBtn);
@@ -169,5 +190,7 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
         private System.Windows.Forms.Button outputPathDirBtn;
         private System.Windows.Forms.Button submit;
         private System.Windows.Forms.Button cancel;
+        private System.Windows.Forms.TextBox projectIndexTextBox;
+        private System.Windows.Forms.Label label4;
     }
 }

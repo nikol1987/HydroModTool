@@ -1,5 +1,4 @@
-﻿using HydroModTools;
-using HydroModTools.Common.Models;
+﻿using HydroModTools.Common.Models;
 using HydroModTools.Contracts.Services;
 using HydroModTools.Tools;
 using System;
@@ -7,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using static HydroModTools.Common.Constants;
 
 namespace HydroModTools.Services
 {
@@ -23,13 +24,13 @@ namespace HydroModTools.Services
             _stager = stager;
         }
 
-        public async Task AddProject(Guid id, string name, string assetsPath, string outputPath)
+        public async Task AddProject(Guid id, string name, short modIndex, string assetsPath, string outputPath)
         {
-            await _configurationService.AddProject(id, name, assetsPath, outputPath);
+            await _configurationService.AddProject(id, name, modIndex, assetsPath, outputPath);
         }
-        public async Task EditProject(Guid id, string name, string assetsPath, string outputPath)
+        public async Task EditProject(Guid id, string name, short modIndex, string assetsPath, string outputPath)
         {
-            await _configurationService.EditProject(id, name, assetsPath, outputPath);
+            await _configurationService.EditProject(id, name, modIndex, assetsPath, outputPath);
         }
         public async Task DeleteProject(Guid projectId)
         {
@@ -59,9 +60,6 @@ namespace HydroModTools.Services
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(10, 0, 100, progressMin, progressMax)), "Checking Directory"));
 
-            var gameFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Mining", "Saved", "Paks");
-            Directory.CreateDirectory(gameFolder);
-
             var outFile = Utilities.GetOutFile(project);
 
             if (!File.Exists(outFile))
@@ -69,16 +67,35 @@ namespace HydroModTools.Services
                 return;
             }
 
-            var gamePak = Path.Combine(gameFolder, Path.GetFileName(outFile));
+            var gamePak = Path.Combine(PaksFolder, Path.GetFileName(outFile));
 
-            if (File.Exists(gamePak))
+            try
             {
-                File.Delete(gamePak);
+                if (File.Exists(gamePak))
+                {
+                    File.Delete(gamePak);
+                }
+            }
+            catch (IOException)
+            {
+
+                MessageBox.Show("Check if the game is open or try to delete manualy.", "Can't copy mod");
+
+                return;
             }
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(80, 0, 100, progressMin, progressMax)), "Copying pak"));
 
-            File.Copy(outFile, gamePak);
+            try
+            {
+                File.Copy(outFile, gamePak);
+            }
+            catch (IOException)
+            {
+                MessageBox.Show("Check if the game is open or try to delete manualy.", "Can't copy mod");
+
+                return;
+            }
         }
 
 

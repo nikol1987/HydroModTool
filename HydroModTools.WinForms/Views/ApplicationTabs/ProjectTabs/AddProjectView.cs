@@ -28,6 +28,7 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
             this.WhenActivated(d =>
             {
                 d(this.Bind(ViewModel, vm => vm.Name, v => v.projectNameTextBox.Text));
+                d(this.Bind(ViewModel, vm => vm.ModIndex, v => v.projectIndexTextBox.Text));
                 d(this.Bind(ViewModel, vm => vm.Path, v => v.cookedAssetsDirTextBox.Text));
                 d(this.Bind(ViewModel, vm => vm.OutputPath, v => v.outputPathDirTextBox.Text));
             });
@@ -78,7 +79,7 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
         private async void submit_Click(object sender, EventArgs e)
         {
             var validator = new AddProjectValidator();
-            var validationResult = validator.Validate(new AddProjectDto(ViewModel.Name, ViewModel.Path, ViewModel.OutputPath));
+            var validationResult = validator.Validate(new AddProjectDto(ViewModel.Name, ViewModel.ModIndex, ViewModel.Path, ViewModel.OutputPath));
 
             var validationErrors = validationResult.Errors;
 
@@ -91,7 +92,7 @@ namespace HydroModTools.Winforms.Views.ApplicationTabs.ProjectTabs
             await ViewModel.AddProjectCommand.Execute(ParentForm);
         }
 
-        private void selectCookedDirBtn_Click(object sender, System.EventArgs e)
+        private void selectCookedDirBtn_Click(object sender, EventArgs e)
         {
             ChooseFolderHelper("Select Cooked assets folder", (path) =>
             {

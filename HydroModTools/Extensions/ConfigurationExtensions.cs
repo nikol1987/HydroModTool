@@ -14,7 +14,7 @@ namespace HydroModTools.Extensions
 
         public static ProjectModel ToModel(this ProjectConfig project)
         {
-            return new ProjectModel(project.Id, project.Name, project.Path, project.OutputPath, project.Items.ToModel());
+            return new ProjectModel(project.Id, project.Name, project.ModIndex, project.Path, project.OutputPath, project.Items.ToModel());
         }
         public static IReadOnlyCollection<ProjectModel> ToModel(this IList<ProjectConfig> projects)
         {
@@ -91,6 +91,7 @@ namespace HydroModTools.Extensions
                 {
                     Id = project.Id,
                     Name = project.Name,
+                    ModIndex = project.ModIndex,
                     Path = project.Path,
                     OutputPath = project.OutputPath,
                     Items = project.Items.ToConfig()

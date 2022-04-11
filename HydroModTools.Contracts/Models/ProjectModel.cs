@@ -5,19 +5,21 @@ namespace HydroModTools.Contracts.Models
 {
     public sealed class ProjectModel
     {
-        public ProjectModel(Guid id, string name, string path, string outputPath)
+        public ProjectModel(Guid id, string name, short modIndex, string path, string outputPath)
         {
             Id = id;
             Name = name;
+            ModIndex = modIndex;
             Path = path;
             OutputPath = outputPath;
             Items = new List<ProjectItemModel>();
         }
 
-        public ProjectModel(Guid id, string name, string path, string outputPath, IReadOnlyCollection<ProjectItemModel> items)
+        public ProjectModel(Guid id, string name, short modIndex, string path, string outputPath, IReadOnlyCollection<ProjectItemModel> items)
         {
             Id = id;
             Name = name;
+            ModIndex = modIndex;
             Path = path;
             OutputPath = outputPath;
             Items = items;
@@ -26,6 +28,8 @@ namespace HydroModTools.Contracts.Models
         public Guid Id { get; }
 
         public string Name { get; }
+
+        public short ModIndex { get; }
 
         public string Path { get; }
 
