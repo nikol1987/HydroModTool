@@ -7,6 +7,7 @@ using System.Windows;
 using Autofac;
 using HydroModTools.Client.Abstractions;
 using HydroModTools.Wpf.DI;
+using HydroModTools.Wpf.State;
 using HydroModTools.Wpf.Views;
 
 namespace HydroModTools.Wpf
@@ -68,28 +69,39 @@ namespace HydroModTools.Wpf
             return Task.Run(clientThread.Join);
         }
 
-        public override void RegisterClientTypes(Action<IEnumerable<Type>> configure)
+        public override void RegisterClientTypes(ContainerBuilder services)
         {
-            var types = typeof(Assembly).Assembly.GetTypes()
-                .Where(t => t.Name.EndsWith("View"));
-            
-            configure.Invoke(types);
+            var types = typeof(Assembly).Assembly.GetTypes();
+
+            var selectedTypes = types
+                .Where(t => t.Name.EndsWith("View") || t.Name.EndsWith("Control") || t.Name.EndsWith("ViewModel"))
+                .ToList();
+
+            services
+                .RegisterTypes(selectedTypes.ToArray())
+                .InstancePerDependency();
+
+            services
+                .RegisterType<AppState>()
+                .SingleInstance();
         }
 
         public override void ConfigureServices(IContainer services)
         {
-            var formFactory = new DiFormFactory(services);
-            FormFactory.Use(formFactory);
+            var formFactory = new DiIWpfFactory(services);
+            WpfFactory.Use(formFactory);
 
             _appThread = new Thread(() =>
             {
-                var app = new Application();
-                app.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                var app = new HMTApp
+                {
+                    ShutdownMode = ShutdownMode.OnExplicitShutdown
+                };
 
-                _splashView = FormFactory.Create<SplashView>();
-                MainForm = FormFactory.Create<ApplicationView>();
+                _splashView = WpfFactory.CreateWindow<SplashView>();
+                MainForm = WpfFactory.CreateWindow<ApplicationView>();
 
-                app.Run();
+                app.StartApp();
             })
             {
                 IsBackground = true,
@@ -101,6 +113,32 @@ namespace HydroModTools.Wpf
             while (MainForm == null)
             {
                 Thread.Yield();
+            }
+        }
+
+        private class HMTApp : Application
+        {
+
+            private bool _contentLoaded;
+
+            public void InitializeComponent()
+            {
+                if (_contentLoaded)
+                {
+                    return;
+                }
+                _contentLoaded = true;
+
+                var resourceLocater = new Uri("/HydroModTools.Wpf;component/app.xaml", System.UriKind.Relative);
+
+                LoadComponent(this, resourceLocater);
+            }
+
+            [STAThread()]
+            public void StartApp()
+            {
+                InitializeComponent();
+                Run();
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -23,7 +22,7 @@ namespace HydroModTools.Client.Abstractions
 
         public abstract Task RunClient();
         
-        public abstract void RegisterClientTypes(Action<IEnumerable<Type>> configure);
+        public abstract void RegisterClientTypes(ContainerBuilder services);
         
         public abstract void ConfigureServices(IContainer services);
     }

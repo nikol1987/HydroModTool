@@ -1,6 +1,6 @@
-﻿using DynamicData.Binding;
-using HandyControl.Controls;
+﻿using HandyControl.Controls;
 using HydroModTools.Common.Enums;
+using HydroModTools.Wpf.DI;
 using HydroModTools.Wpf.ViewModels;
 using ReactiveUI;
 using System;
@@ -9,11 +9,11 @@ using System.Reactive.Linq;
 
 namespace HydroModTools.Wpf.Views
 {
-    public partial class SplashView : Window, IViewFor<SplashViewModel>
+    internal partial class SplashView : Window, IViewFor<SplashViewModel>
     {
         public SplashView()
         {
-            ViewModel = new SplashViewModel();
+            ViewModel = WpfFactory.CreateViewModel<SplashViewModel>();
 
             InitializeComponent();
 

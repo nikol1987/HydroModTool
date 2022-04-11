@@ -51,12 +51,12 @@ namespace HydroModTools.WinForms
             return clientTask;
         }
 
-        public override void RegisterClientTypes(Action<IEnumerable<Type>> configure)
+        public override void RegisterClientTypes(ContainerBuilder services)
         {
             var types = typeof(Assembly).Assembly.GetTypes()
                 .Where(t => t.Name.EndsWith("View"));
-            
-            configure.Invoke(types);
+
+            services.RegisterTypes(types.ToArray());
         }
 
         public override void ConfigureServices(IContainer services)

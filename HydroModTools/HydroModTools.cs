@@ -40,13 +40,10 @@ namespace HydroModTools
             };
 
             var services = new ContainerBuilder();
-            _client.RegisterClientTypes((types) =>
-            {
-                services.RegisterTypes(types.ToArray());
-            });
+            _client.RegisterClientTypes(services);
 
             services
-                .Register((ctx) => new ServiceProvider(_services))
+                .Register((ctx) => new ServiceProvider(_services!))
                 .AsImplementedInterfaces()
                 .SingleInstance();
             

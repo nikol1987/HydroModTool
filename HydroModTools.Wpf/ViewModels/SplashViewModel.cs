@@ -6,7 +6,7 @@ using System.Reactive.Linq;
 
 namespace HydroModTools.Wpf.ViewModels
 {
-    public class SplashViewModel : ReactiveObject
+    internal class SplashViewModel : ReactiveObject
     {
         public SplashViewModel()
         {

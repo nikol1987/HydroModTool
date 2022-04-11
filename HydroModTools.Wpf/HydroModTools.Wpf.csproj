@@ -9,13 +9,20 @@
 
     <ItemGroup>
       <PackageReference Include="HandyControls" Version="3.3.11" />
+      <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="ReactiveUI" Version="17.1.50" />
       <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
       <PackageReference Include="ReactiveUI.WPF" Version="17.1.50" />
+      <PackageReference Include="System.Reactive" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\HydroModTools.Client\HydroModTools.Client.csproj" />
       <ProjectReference Include="..\HydroModTools.Common\HydroModTools.Common.csproj" />
+      <ProjectReference Include="..\HydroModTools.DataAccess.Contracts\HydroModTools.DataAccess.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -46,10 +53,6 @@
       <Resource Include="Resources\SpashBG.jpg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Controls\" />
     </ItemGroup>
 
 </Project>

@@ -6,6 +6,10 @@
              xmlns:hc="https://handyorg.github.io/handycontrol">
     <Application.Resources>
         <ResourceDictionary>
+            <Style x:Key="DefaultFont" TargetType="{x:Type Control}">
+                <Setter Property="FontFamily" Value="Consolas" />
+            </Style>
+
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources RequestedTheme="Dark" AccentColor="Red"/>
                 <hc:Theme/>
