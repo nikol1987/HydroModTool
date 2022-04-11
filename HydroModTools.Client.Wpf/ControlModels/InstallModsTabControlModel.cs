@@ -1,8 +1,7 @@
-﻿using HandyControl.Controls;
-using HandyControl.Data;
-using HydroModTools.DataAccess.Contracts.Models;
+﻿using HydroModTools.DataAccess.Contracts.Models;
 using HydroModTools.DataAccess.Contracts.Services;
 using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -11,6 +10,8 @@ namespace HydroModTools.Client.Wpf.ControlModels
 {
     internal sealed class InstallModsTabControlModel : ReactiveObject
     {
+        public event Action? ModsCleared;
+
         private readonly IBridgepourService _bridgepourService;
 
         public InstallModsTabControlModel(IBridgepourService bridgepourService)
@@ -48,19 +49,24 @@ namespace HydroModTools.Client.Wpf.ControlModels
         public ReactiveCommand<Unit, Unit> OpenModsFolderCommand;
         private void OpenModsFolder()
         {
-            MessageBox.Show(new MessageBoxInfo()
-            {
-                Message = "Opening Mod Folder"
-            });
+            _bridgepourService.OpenModFolder();
         }
 
         public ReactiveCommand<Unit, Unit> ClearModsCommand;
         private void ClearMods()
         {
-            MessageBox.Show(new MessageBoxInfo()
-            {
-                Message = "Clearing mods!"
-            });
+            _bridgepourService
+                .ClearMods()
+                .ContinueWith((clearTask) => {
+                    clearTask.Wait();
+
+                    if (ModsCleared == null)
+                    {
+                        return;
+                    }
+
+                    ModsCleared.Invoke();
+                });
         }
 
         private IReadOnlyCollection<BridgepourModModel> _modList = new List<BridgepourModModel>();

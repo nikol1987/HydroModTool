@@ -23,22 +23,22 @@ namespace HydroModTools.DataAccess.Services
             _apiBridgepourService = new ApiBridgepourService(httpClient);
         }
 
-        public async Task ClearMods()
+        public Task ClearMods()
         {
-            await Task.Run(() => { 
-                Directory.Delete(PaksFolder, true);
-                Directory.CreateDirectory(PaksFolder);
-            });
+            Directory.Delete(PaksFolder, true);
+            Directory.CreateDirectory(PaksFolder);
+
+            return Task.CompletedTask;
         }
 
-        public async Task DeleteMod(string url)
+        public Task DeleteMod(string url)
         {
-            await Task.Run(() => {
-                var uri = new Uri(url);
-                var fileName = Path.GetFileName(uri.LocalPath);
+            var uri = new Uri(url);
+            var fileName = Path.GetFileName(uri.LocalPath);
 
-                File.Delete(Path.Combine(PaksFolder, fileName));
-            });
+            File.Delete(Path.Combine(PaksFolder, fileName));
+
+            return Task.CompletedTask;
         }
 
         public async Task DownloadMod(string url)

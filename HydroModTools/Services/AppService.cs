@@ -7,12 +7,19 @@ namespace HydroModTools.Services
 {
     internal sealed class AppService : IAppService
     {
-        public async Task<string> LoadAboutHtml()
+        public async Task<string> LoadAboutString()
         {
             var markdown = await File.ReadAllTextAsync("Readme.md");
 
+            return markdown;
+        }
+
+        public async Task<string> LoadAboutHtml()
+        {
+            var markdown = await LoadAboutString();
+
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-            return Markdown.ToHtml(markdown, pipeline);
+            return Markdig.Markdown.ToHtml(markdown, pipeline);
         }
     }
 }

@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <PackageReference Include="HandyControls" Version="3.3.11" />
+      <PackageReference Include="Markdown.Xaml" Version="1.0.0" />
       <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,6 +23,7 @@
     <ItemGroup>
       <ProjectReference Include="..\HydroModTools.Client\HydroModTools.Client.csproj" />
       <ProjectReference Include="..\HydroModTools.Common\HydroModTools.Common.csproj" />
+      <ProjectReference Include="..\HydroModTools.Contracts\HydroModTools.Contracts.csproj" />
       <ProjectReference Include="..\HydroModTools.DataAccess.Contracts\HydroModTools.DataAccess.Contracts.csproj" />
     </ItemGroup>
 

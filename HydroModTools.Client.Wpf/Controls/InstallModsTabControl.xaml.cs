@@ -62,6 +62,7 @@ namespace HydroModTools.Client.Wpf.Controls
                             .Select(mod => {
                                 var modSegment = WpfFactory.CreateControl<ModSegmentControl>();
                                 modSegment.SetModDetails(mod);
+                                ViewModel.ModsCleared += modSegment.UpdateState;
 
                                 return modSegment;
                             });

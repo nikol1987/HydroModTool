@@ -24,6 +24,11 @@ namespace HydroModTools.Client.Wpf.Views
             installModsTab.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             InstallModsTab.Content = installModsTab;
 
+            var aboutTab = WpfFactory.CreateControl<AboutTabControl>();
+            aboutTab.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+            aboutTab.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+            AboutTab.Content = aboutTab;
+
             this.WhenActivated((d) => {
                 TabSelector
                     .Events()

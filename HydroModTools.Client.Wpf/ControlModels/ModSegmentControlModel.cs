@@ -1,5 +1,8 @@
 ﻿using HydroModTools.DataAccess.Contracts.Services;
 using ReactiveUI;
+using System;
+using System.IO;
+using System.Linq;
 using System.Reactive;
 
 namespace HydroModTools.Client.Wpf.ControlModels
@@ -16,7 +19,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
             RemoveModCommand = ReactiveCommand.Create(RemoveMod);
         }
 
-        public string _author = string.Empty;
+        private string _author = string.Empty;
         public string Author
         {
             get => _author;
@@ -26,7 +29,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
             }
         }
 
-        public string _description = string.Empty;
+        private string _description = string.Empty;
         public string Description
         {
             get => _description;
@@ -36,7 +39,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
             }
         }
 
-        public string _name = string.Empty;
+        private string _name = string.Empty;
         public string Name
         {
             get => _name;
@@ -46,7 +49,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
             }
         }
 
-        public string _ribbonColor = string.Empty;
+        private string _ribbonColor = string.Empty;
         public string RibbonColor
         {
             get => _ribbonColor;
@@ -56,7 +59,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
             }
         }
 
-        public string _ribbonText = string.Empty;
+        private string _ribbonText = string.Empty;
         public string RibbonText
         {
             get => _ribbonText;
@@ -66,7 +69,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
             }
         }
 
-        public string _status = string.Empty;
+        private string _status = string.Empty;
         public string Status
         {
             get => _status;
@@ -76,7 +79,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
             }
         }
 
-        public string _url = string.Empty;
+        private string _url = string.Empty;
         public string Url
         {
             get => _url;
@@ -86,20 +89,20 @@ namespace HydroModTools.Client.Wpf.ControlModels
             }
         }
 
-        public bool _canDownload = false;
+        private bool _canDownload = false;
         public bool CanDownload
         {
-            get => _canDownload;
+            get => _canDownload && !LockedButtons;
             set
             {
                 this.RaiseAndSetIfChanged(ref _canDownload, value);
             }
         }
 
-        public bool _canRemove = false;
+        private bool _canRemove = false;
         public bool CanRemove
         {
-            get => _canDownload;
+            get => _canRemove && !LockedButtons;
             set
             {
                 this.RaiseAndSetIfChanged(ref _canRemove, value);
@@ -113,6 +116,8 @@ namespace HydroModTools.Client.Wpf.ControlModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _lockedButtons, value);
+                this.RaisePropertyChanged(nameof(CanDownload));
+                this.RaisePropertyChanged(nameof(CanRemove));
             }
         }
 
@@ -165,6 +170,38 @@ namespace HydroModTools.Client.Wpf.ControlModels
             RibbonText = ribbonText;
             Status = status;
             Url = url;
+
+            CheckIfExists();
+        }
+
+        public void CheckIfExists()
+        {
+            _bridgepourService
+                .LoadedMods()
+                .ContinueWith((loadedModsTask) => {
+                    var loadedMods = loadedModsTask.Result
+                    .Select(file => Path.GetFileName(new Uri(file).LocalPath));
+
+                    var uri = new Uri(Url);
+                    var fileName = Path.GetFileName(uri.LocalPath);
+
+                    if (loadedMods.Count() == 0)
+                    {
+                        CanDownload = true;
+                        CanRemove = false;
+
+                        return;
+                    }
+
+                    if (loadedMods.Contains(fileName))
+                    {
+                        CanDownload = false;
+                        CanRemove = true;
+                    } else {
+                        CanDownload = true;
+                        CanRemove = false;
+                    }
+                });
         }
     }
 }
