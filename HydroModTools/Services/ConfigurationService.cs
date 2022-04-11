@@ -1,4 +1,5 @@
-﻿using HydroModTools.Contracts.Models;
+﻿using HydroModTools.Contracts.Enums;
+using HydroModTools.Contracts.Models;
 using HydroModTools.Contracts.Services;
 using HydroModTools.Extensions;
 using System;
@@ -24,6 +25,7 @@ namespace HydroModTools.Services
 
             return config.ToModel();
         }
+
         public async Task Save()
         {
             await _configuration.SaveConfigurationAsync();
@@ -36,10 +38,11 @@ namespace HydroModTools.Services
             var projects = config.Projects.ToModel().ToList();
             projects.Add(new ProjectModel(id, name, modIndex, assetsPath, outputPath));
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
+
         public async Task EditProject(Guid id, string name, short modIndex, string assetsPath, string outputPath)
         {
             var config = await _configuration.GetConfigurationAsync();
@@ -49,17 +52,18 @@ namespace HydroModTools.Services
 
             projects[projectIdx] = new ProjectModel(id, name, modIndex, assetsPath, outputPath, projects[projectIdx].Items);
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
+
         public async Task RemoveProject(Guid projectId)
         {
             var config = await _configuration.GetConfigurationAsync();
 
             var projects = config.Projects.ToModel().Where(project => project.Id != projectId).ToList();
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
@@ -93,10 +97,11 @@ namespace HydroModTools.Services
 
             projects[projectIdx] = newProject;
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
+
         public async Task RemoveAssets(Guid projectId, IReadOnlyCollection<Guid> assetsId)
         {
             var config = await _configuration.GetConfigurationAsync();
@@ -112,7 +117,7 @@ namespace HydroModTools.Services
 
             projects[projectIdx] = newProject;
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
@@ -121,10 +126,19 @@ namespace HydroModTools.Services
         {
             var config = await _configuration.GetConfigurationAsync();
 
-            var newConfig = new AppConfigModel(config.Projects.ToModel(), config.DefaultProject, guids);
+            var newConfig = new AppConfigModel(config.Projects.ToModel(), config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, guids);
 
             await _configuration.SaveConfigurationAsync(newConfig);
 
+        }
+
+        public async Task SetGameVersion(HydroneerVersion hydroneerVersion)
+        {
+            var config = await _configuration.GetConfigurationAsync();
+
+            var newConfig = new AppConfigModel(config.Projects.ToModel(), config.DefaultProject, hydroneerVersion, config.Guids.ToModel());
+
+            await _configuration.SaveConfigurationAsync(newConfig);
         }
     }
 }

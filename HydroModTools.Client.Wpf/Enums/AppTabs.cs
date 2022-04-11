@@ -4,6 +4,8 @@
     {
         INSTALL_MODS = 0,
         CREATE_MODS,
-        ABOUT
+        ABOUT,
+        PROJECTS,
+        GUIDS
     }
 }

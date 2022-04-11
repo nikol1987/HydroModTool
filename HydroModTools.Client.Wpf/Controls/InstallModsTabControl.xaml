@@ -8,12 +8,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1005" Padding="0,0,0,5">
     <hc:SimplePanel>
-        <Menu Margin="0,0,0,0" Height="42" VerticalAlignment="Top">
+        <Menu Margin="0,0,0,0" Height="45" VerticalAlignment="Top">
             <MenuItem x:Name="RefreshBtn" Header="Refresh" FontFamily="Consolas" FontSize="24" Height="42"/>
             <MenuItem x:Name="ClearModsBtn" Header="Clear Mods" FontFamily="Consolas" FontSize="24" Height="42"/>
             <MenuItem x:Name="OpenFolderBtn" Header="Open Mods Folder" FontFamily="Consolas" FontSize="24" Height="42"/>
         </Menu>
-        <hc:ScrollViewer IsInertiaEnabled="True" Width="1005" Margin="0,42,0,0" HorizontalAlignment="Stretch" Padding="5,5,5,0">
+        <hc:ScrollViewer IsInertiaEnabled="True" Width="1005" Margin="0,45,0,0" HorizontalAlignment="Stretch" Padding="5,5,5,0">
             <hc:UniformSpacingPanel x:Name="ModListPanel"  ItemHorizontalAlignment="Left" HorizontalAlignment="Stretch" ItemVerticalAlignment="Top" Orientation="Horizontal" ChildWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Spacing="5" />
         </hc:ScrollViewer>
     </hc:SimplePanel>

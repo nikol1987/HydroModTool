@@ -68,10 +68,6 @@ namespace HydroModTools
                 .SingleInstance();
 
             _services = services.Build();
-            
-            _client.ConfigureServices(_services);
-            DataInterop.Instance.AppLoadStage = AppLoadStage.Preload;
-            _client.ToggleSplash(true);
 
             _config.SetupConfiguration();
 
@@ -79,6 +75,10 @@ namespace HydroModTools
             config.AddJsonFile($"{AppVars.ConfigPath}.json", false, true);
             config.AddJsonFile($"{AppVars.GuidsConfigPath}.json", false, true);
             _config.LoadConfigAsync(config.Build()).Wait();
+
+            _client.ConfigureServices(_services);
+            DataInterop.Instance.AppLoadStage = AppLoadStage.Preload;
+            _client.ToggleSplash(true);
         }
 
         public async Task RunApplication()

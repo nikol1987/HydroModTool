@@ -1,7 +1,9 @@
 ﻿using HydroModTools.Configuration.Models;
+using HydroModTools.Contracts.Enums;
 using HydroModTools.Contracts.Models;
 using System;
 using System.Collections.Generic;
+using HydroneerVersionConfig = HydroModTools.Configuration.Enums.HydroneerVersion;
 
 namespace HydroModTools.Extensions
 {
@@ -9,7 +11,7 @@ namespace HydroModTools.Extensions
     {
         public static AppConfigModel ToModel(this AppConfig appConfig)
         {
-            return new AppConfigModel(appConfig.Projects.ToModel(), appConfig.DefaultProject, appConfig.Guids.ToModel());
+            return new AppConfigModel(appConfig.Projects.ToModel(), appConfig.DefaultProject, (HydroneerVersion)appConfig.HydroneerVersion, appConfig.Guids.ToModel());
         }
 
         public static ProjectModel ToModel(this ProjectConfig project)
@@ -72,7 +74,8 @@ namespace HydroModTools.Extensions
             return new GeneralConfig()
             {
                 Projects = appConfig.Projects.ToConfig(),
-                DefaultProject = appConfig.DefaultProject
+                DefaultProject = appConfig.DefaultProject,
+                HydroneerVersion = (HydroneerVersionConfig)appConfig.HydroneerVersion
             };
         }
 

@@ -14,12 +14,10 @@ namespace HydroModTools.Services
     internal class ProjectService : IProjectsService
     {
         private readonly IConfigurationService _configurationService;
-        private readonly Packager _packager;
 
-        public ProjectService(IConfigurationService configurationService, Packager packager)
+        public ProjectService(IConfigurationService configurationService)
         {
             _configurationService = configurationService;
-            _packager = packager;
         }
 
         public async Task AddProject(Guid id, string name, short modIndex, string assetsPath, string outputPath)

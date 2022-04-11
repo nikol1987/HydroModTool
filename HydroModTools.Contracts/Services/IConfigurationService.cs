@@ -1,4 +1,5 @@
-﻿using HydroModTools.Contracts.Models;
+﻿using HydroModTools.Contracts.Enums;
+using HydroModTools.Contracts.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,5 +19,7 @@ namespace HydroModTools.Contracts.Services
         Task RemoveAssets(Guid projectId, IReadOnlyCollection<Guid> assetsId);
         
         Task SaveGuids(IReadOnlyCollection<GuidItemModel> guids);
+
+        Task SetGameVersion(HydroneerVersion hydroneerVersion);
     }
 }
