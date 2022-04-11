@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HydroModTools.Contracts", "
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "HydroModTools.Installer", "HydroModTools.Installer\HydroModTools.Installer.wixproj", "{06C0948F-4253-4BBD-9D39-8FA504036E27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HydroModTools.Client", "HydroModTools.Client\HydroModTools.Client.csproj", "{273B3AA6-E5D9-420C-909D-0BEBA551792F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HydroModTools.Wpf", "HydroModTools.Wpf\HydroModTools.Wpf.csproj", "{1AFD24A1-CCE1-40C7-9D34-6F9B55EADA80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -55,6 +59,14 @@ Global
 		{05C9CF22-A3CD-45DB-87AF-360041490F23}.Release|x64.Build.0 = Release|Any CPU
 		{06C0948F-4253-4BBD-9D39-8FA504036E27}.Debug|x64.ActiveCfg = Debug|x86
 		{06C0948F-4253-4BBD-9D39-8FA504036E27}.Release|x64.ActiveCfg = Release|x86
+		{273B3AA6-E5D9-420C-909D-0BEBA551792F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{273B3AA6-E5D9-420C-909D-0BEBA551792F}.Debug|x64.Build.0 = Debug|Any CPU
+		{273B3AA6-E5D9-420C-909D-0BEBA551792F}.Release|x64.ActiveCfg = Release|Any CPU
+		{273B3AA6-E5D9-420C-909D-0BEBA551792F}.Release|x64.Build.0 = Release|Any CPU
+		{1AFD24A1-CCE1-40C7-9D34-6F9B55EADA80}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1AFD24A1-CCE1-40C7-9D34-6F9B55EADA80}.Debug|x64.Build.0 = Debug|Any CPU
+		{1AFD24A1-CCE1-40C7-9D34-6F9B55EADA80}.Release|x64.ActiveCfg = Release|Any CPU
+		{1AFD24A1-CCE1-40C7-9D34-6F9B55EADA80}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

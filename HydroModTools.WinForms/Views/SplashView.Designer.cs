@@ -1,6 +1,6 @@
 ﻿namespace HydroModTools.WinForms.Views
 {
-    public partial class SpashView
+    public partial class SplashView
     {
         /// <summary>
         /// Required designer variable.
@@ -107,7 +107,7 @@
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "SpashView";
+            this.Name = "SplashView";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

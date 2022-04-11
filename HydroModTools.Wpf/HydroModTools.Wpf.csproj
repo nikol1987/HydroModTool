@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <OutputType>WinExe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="HandyControls" Version="3.3.11" />
+      <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
+      <PackageReference Include="ReactiveUI.WPF" Version="17.1.50" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HydroModTools.Client\HydroModTools.Client.csproj" />
+      <ProjectReference Include="..\HydroModTools.Common\HydroModTools.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\hydroneer.ico" />
+      <Resource Include="Resources\hydroneer.ico">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\HydroneerLogo.png" />
+      <Resource Include="Resources\HydroneerLogo.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="Resources\SpashBG.jpg" />
+      <Resource Include="Resources\SpashBG.jpg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Controls\" />
+    </ItemGroup>
+
+</Project>

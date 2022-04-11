@@ -49,40 +49,28 @@ namespace HydroModTools.WinForms.ViewModels
         internal string Name
         {
             get => _name;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _name, value);
-            }
+            set => this.RaiseAndSetIfChanged(ref _name, value);
         }
 
-        private string? _modIndex = "500";
-        internal string? ModIndex
+        private string _modIndex = "500";
+        internal string ModIndex
         {
             get => _modIndex;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _modIndex, value);
-            }
+            set => this.RaiseAndSetIfChanged(ref _modIndex, value);
         }
 
         private string _path;
         internal string Path
         {
             get => _path;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _path, value);
-            }
+            set => this.RaiseAndSetIfChanged(ref _path, value);
         }
 
         private string _outputPath;
         internal string OutputPath
         {
             get => _outputPath;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _outputPath, value);
-            }
+            set => this.RaiseAndSetIfChanged(ref _outputPath, value);
         }
 
         public ReactiveCommand<Form, Unit> AddProjectCommand;

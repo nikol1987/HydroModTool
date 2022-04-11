@@ -486,7 +486,7 @@ namespace HydroModTools.WinForms.ViewModels
                 Thread.Sleep(100);
             }
 
-            return result;
+            return await Task.FromResult(result);
         }
     }
 }

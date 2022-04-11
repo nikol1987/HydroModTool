@@ -84,7 +84,7 @@ namespace HydroModTools.Configuration
             }
         }
 
-        private async Task CreateConfigFileAsync(ConfigFile configFile, GeneralConfig generalConfig = null, GuidsConfig guidsConfig = null)
+        private static async Task CreateConfigFileAsync(ConfigFile configFile, GeneralConfig? generalConfig = null, GuidsConfig? guidsConfig = null)
         {
             var jsonOptions = new JsonSerializerOptions()
             {
@@ -119,9 +119,9 @@ namespace HydroModTools.Configuration
 
         private static class Defaults
         {
-            public static GeneralConfig DefaultGeneralConfig = new GeneralConfig();
+            public static readonly GeneralConfig DefaultGeneralConfig = new GeneralConfig();
 
-            public static GuidsConfig DefaultGuidsConfig = new GuidsConfig() {
+            public static readonly GuidsConfig DefaultGuidsConfig = new GuidsConfig() {
                 Guids = new List<GuidConfigItem>()
                 {
                     new GuidConfigItem()

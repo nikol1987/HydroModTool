@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace HydroModTools.DI
+namespace HydroModTools.WinForms.DI
 {
-    public static class FormFactory
+    internal static class FormFactory
     {
-        private static IFormFactory factory;
+        private static IFormFactory _factory;
 
         public static void Use(IFormFactory factory)
         {
-            if (FormFactory.factory != null)
+            if (FormFactory._factory != null)
             {
                 throw new InvalidOperationException(@"Form factory has been already set up.");
             }
 
-            FormFactory.factory = factory;
+            FormFactory._factory = factory;
         }
 
-        public static Form Create(Type formType)
+        private static Form Create(Type formType)
         {
-            if (factory == null)
+            if (_factory == null)
             {
                 throw new InvalidOperationException(@"Form factory has not been set up. Call the 'Use' method to inject an IFormFactory instance.");
             }
 
-            return factory.CreateForm(formType);
+            return _factory.CreateForm(formType);
         }
 
         public static T Create<T>() where T : Form

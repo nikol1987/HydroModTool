@@ -1,5 +1,4 @@
-﻿using HydroModTools;
-using HydroModTools.Common.Models;
+﻿using HydroModTools.Common.Models;
 using HydroModTools.Contracts.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ namespace HydroModTools.Tools
 {
     public class Packager
     {
-        public async Task PackageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project)
+        public static Task PackageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project)
         {
             var stagedFilesDir = Path.Combine(project.OutputPath, "Staging", project.Name, "Mining");
             var outputFile = Utilities.GetOutFile(project);
@@ -22,7 +21,7 @@ namespace HydroModTools.Tools
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(10, 0, 100, progressMin, progressMax)), "Preparing to Package"));
 
-            Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
+            Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
 
             if (File.Exists(outputFile))
             {
@@ -36,9 +35,12 @@ namespace HydroModTools.Tools
             File.WriteAllBytes(outputFile, bytes);
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(80, 0, 100, progressMin, progressMax)), "Pak created"));
+
+            return Task.CompletedTask;
         }
 
-        public class OldStuff
+        
+        private class OldStuff
         {
             private class FileList
             {
@@ -119,7 +121,7 @@ namespace HydroModTools.Tools
                 fileData.Bytes.AddRange(BitConverter.GetBytes(3));
                 fileData.Bytes.AddRange(BitConverter.GetBytes((long)count));
                 fileData.Bytes.AddRange(BitConverter.GetBytes((long)fileData.FileCheck.Count + 18L));
-                fileData.Bytes.AddRange(new SHA1CryptoServiceProvider().ComputeHash(list.ToArray()));
+                fileData.Bytes.AddRange(SHA1.Create().ComputeHash(list.ToArray()));
                 return fileData.Bytes;
             }
 
@@ -153,7 +155,7 @@ namespace HydroModTools.Tools
                 Buffer.BlockCopy(BitConverter.GetBytes(list.Count), 0, array4, 8, 4);
                 Buffer.BlockCopy(BitConverter.GetBytes(oldRange.Length), 0, array4, 16, 4);
                 Buffer.BlockCopy(BitConverter.GetBytes(1), 0, array4, 24, 4);
-                Buffer.BlockCopy(new SHA1CryptoServiceProvider().ComputeHash(list.ToArray()), 0, array4, 28, 20);
+                Buffer.BlockCopy(SHA1.Create().ComputeHash(list.ToArray()), 0, array4, 28, 20);
                 Buffer.BlockCopy(BitConverter.GetBytes(num2), 0, array4, 48, 4);
                 num += array4.Length;
                 for (int j = 0; j < num2; j++)

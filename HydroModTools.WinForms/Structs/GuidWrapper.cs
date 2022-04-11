@@ -16,7 +16,14 @@ namespace HydroModTools.WinForms.Structs
 
         public GuidWrapper(string guid)
         {
-            guidValue = new Guid(guid);
+            try
+            {
+                guidValue = new Guid(guid);
+            }
+            catch
+            {
+                guidValue = Guid.Empty;
+            }
         }
 
 

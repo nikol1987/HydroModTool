@@ -1,8 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ApplicationIcon>..\HydroModTools.WinForms\Resources\hydroneer.ico</ApplicationIcon>
@@ -11,18 +10,17 @@
     <PackageIcon>hydroneer.ico</PackageIcon>
     <RepositoryUrl>https://github.com/ResaloliPT/HydroModTool</RepositoryUrl>
     <RepositoryType>github</RepositoryType>
+    <OutputType>WinExe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.2.0" />
-    <PackageReference Include="DotNetZip" Version="1.15.0" />
-    <PackageReference Include="Markdig" Version="0.24.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-    <PackageReference Include="PostSharp.Redist" Version="6.9.5" />
-    <PackageReference Include="ReactiveUI" Version="13.3.2" />
-    <PackageReference Include="Scrutor" Version="3.3.0" />
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
+    <PackageReference Include="Markdig" Version="0.28.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Scrutor" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +29,7 @@
     <ProjectReference Include="..\HydroModTools.DataAccess.Contracts\HydroModTools.DataAccess.Contracts.csproj" />
     <ProjectReference Include="..\HydroModTools.DataAccess\HydroModTools.DataAccess.csproj" />
     <ProjectReference Include="..\HydroModTools.WinForms\HydroModTools.WinForms.csproj" />
+    <ProjectReference Include="..\HydroModTools.Wpf\HydroModTools.Wpf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +50,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Remove="publish\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,6 +58,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Remove="publish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="publish\**" />
   </ItemGroup>
 
 </Project>

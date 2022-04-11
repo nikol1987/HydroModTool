@@ -1,21 +1,28 @@
-using System;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace HydroModTools
 {
     public static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        public static void Main()
+        public static void Main(params string[] args)
         {
             var app = new HydroModTools();
             
-            app.StartApplication();
+            if (args.Contains("--wpf"))
+            {
+                app.UseWpf();
+            }
 
-            app.RunApplication();
+            app.PrepareApplication();
+
+            var appTask = app.RunApplication();
+
+            while (appTask.Status != TaskStatus.RanToCompletion)
+            {
+                Thread.Yield();
+            }
         }
     }
 }

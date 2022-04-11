@@ -52,21 +52,29 @@ namespace HydroModTools.DataAccess.Services
                 Directory.CreateDirectory(PaksFolder);
             }
 
-            using (var webClient = new WebClient())
+            using (var httpClient = new HttpClient())
             {
-                var downloadedFile = Path.Combine(PaksFolder, fileName);
-
-                await webClient.DownloadFileTaskAsync(uri, downloadedFile);
-
+                var downloadedModFinalPath = Path.Combine(PaksFolder, fileName);
+                var response = await httpClient.GetAsync(uri);
+                var fs = new FileStream(downloadedModFinalPath, FileMode.Create, FileAccess.Write);
+                await (await response.Content.ReadAsStreamAsync())
+                    .CopyToAsync(fs)
+                    .ContinueWith((task) =>
+                    {
+                      fs.Close();  
+                    });
+                
                 if (new List<string>{ ".ZIP", ".RAR"}.Any(ex => fileName.ToUpper().EndsWith(ex)))
                 {
                     try
                     {
-                        ZipFile.ExtractToDirectory(downloadedFile, PaksFolder, true);
-                        File.Delete(downloadedFile);
+                        ZipFile.ExtractToDirectory(downloadedModFinalPath, PaksFolder, true);
+                        File.Delete(downloadedModFinalPath);
                     }
                     catch (Exception)
-                    {}
+                    {
+                        // ignored
+                    }
                 }
             }
         }

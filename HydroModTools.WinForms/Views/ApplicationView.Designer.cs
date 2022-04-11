@@ -29,6 +29,8 @@ namespace HydroModTools.WinForms.Views
         /// </summary>
         private void InitializeComponent()
         {
+            this.TopMost = true;
+            
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ApplicationView));
             this.kryptonNavigator1 = new ComponentFactory.Krypton.Navigator.KryptonNavigator();
             this.kryptonPage1 = new ComponentFactory.Krypton.Navigator.KryptonPage();

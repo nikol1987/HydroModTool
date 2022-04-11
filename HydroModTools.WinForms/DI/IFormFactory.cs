@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace HydroModTools.DI
+namespace HydroModTools.WinForms.DI
 {
-    public interface IFormFactory
+    internal interface IFormFactory
     {
         Form CreateForm(Type formType);
     }

@@ -6,11 +6,12 @@ using System.Windows.Forms;
 
 namespace HydroModTools.WinForms.Views
 {
-    public partial class SpashView : Form
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public partial class SplashView : Form
     {
         public event Action TimeOutEvent; 
 
-        public SpashView(IConfigurationService configurationService)
+        public SplashView(IConfigurationService configurationService)
         {
             InitializeComponent();
 
@@ -23,22 +24,22 @@ namespace HydroModTools.WinForms.Views
             loadingLabel.Parent = this.pictureBox1;
             loadingLabel.BringToFront();
 
-            loadingWorker.DoWork += async (object sender, DoWorkEventArgs e) =>
+            loadingWorker.DoWork += (object sender, DoWorkEventArgs e) =>
             {
                 loadingWorker.ReportProgress(1, new LoadingWorkerStage("Loading Configuration"));
 
-                var config = await configurationService.GetAsync();
+                var config = configurationService.GetAsync().Result;
 
-                await ApplicationStore.RefreshStore(config);
+                ApplicationStore.RefreshStore(config).Wait();
             };
 
             loadingWorker.ProgressChanged += (sender, e) =>
             {
-                loadingLabel.Text = ((LoadingWorkerStage)e.UserState).Phase;
+                loadingLabel.Text = ((LoadingWorkerStage)e.UserState)!.Phase;
             };
             loadingWorker.RunWorkerCompleted += (sender, e) =>
             {
-                loadingLabel.Text = "Starting App";
+                loadingLabel.Text = @"Starting App";
 
                 splashTimer.Enabled = true;
                 splashTimer.Start();
@@ -49,7 +50,7 @@ namespace HydroModTools.WinForms.Views
                 splashTimer.Enabled = false;
                 splashTimer.Stop();
 
-                TimeOutEvent.Invoke();
+                TimeOutEvent?.Invoke();
                 Close();
             };
 
