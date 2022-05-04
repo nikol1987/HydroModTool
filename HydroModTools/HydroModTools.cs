@@ -9,6 +9,7 @@ using HydroModTools.Client.WinForms;
 using HydroModTools.Client.Wpf;
 using HydroModTools.Common;
 using HydroModTools.Common.Enums;
+using HydroModTools.Enums;
 using HydroModTools.Tools;
 using Microsoft.Extensions.Configuration;
 
@@ -22,17 +23,22 @@ namespace HydroModTools
         private readonly Configuration.Configuration _config = new Configuration.Configuration();
         private IContainer? _services;
 
-        private bool _wfp = false;
+        private VisualClients _selectedClient = VisualClients.Wpf;
 
         public void PrepareApplication()
         {
-            if (_wfp)
+            switch (_selectedClient)
             {
-                _client = new WpfClient();
-            } else {
-                _client = new WinFormsClient();
+                case VisualClients.WinForms:
+                    _client = new WinFormsClient();
+                    break;
+                case VisualClients.Wpf:
+                    _client = new WpfClient();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            
+
             _client.ShutdownApp += delegate
             {
                 _cancellationToken.Cancel();
@@ -108,7 +114,12 @@ namespace HydroModTools
 
         public void UseWpf()
         {
-            _wfp = true;
+            _selectedClient = VisualClients.Wpf;
+        }
+
+        public void UseWinForms()
+        {
+            _selectedClient = VisualClients.WinForms;
         }
     }
 }

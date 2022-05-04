@@ -10,7 +10,11 @@ namespace HydroModTools
         {
             var app = new HydroModTools();
             
-            if (args.Contains("--wpf"))
+            if (args.Contains("--legacy"))
+            {
+                app.UseWinForms();
+            }
+            else
             {
                 app.UseWpf();
             }

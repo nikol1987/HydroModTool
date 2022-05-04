@@ -40,6 +40,9 @@
     <Content Include="..\HydroModTools.Client.WinForms\Resources\hydroneer.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\HydroModTools-Legacy.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
