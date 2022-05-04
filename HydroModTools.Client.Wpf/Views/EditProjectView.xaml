@@ -9,10 +9,10 @@
         mc:Ignorable="d"
         Title="Edit/New Project" Height="271" Width="510" WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
     <Grid Background="#FF404040" Margin="0,0,0,0">
-        <hc:TextBox x:Name="ProjectNameTextBox" hc:InfoElement.Title="Project Name" hc:InfoElement.Placeholder="Project Name" HorizontalAlignment="Left" Margin="9,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280"/>
-        <hc:TextBox x:Name="ModIndexTextBox" hc:InfoElement.Title="Mod Index" hc:InfoElement.Placeholder="Mod Index" HorizontalAlignment="Left" Margin="302,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
-        <hc:TextBox x:Name="CookedAssetsDirTextBox" hc:InfoElement.Title="Cooked Assets" hc:InfoElement.Placeholder="Cooked Assets" HorizontalAlignment="Left" Margin="10,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="456"/>
-        <hc:TextBox x:Name="OutputDirTextBox" hc:InfoElement.Title="Output Dir" hc:InfoElement.Placeholder="Output Dir" HorizontalAlignment="Left" Margin="10,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="456"/>
+        <hc:TextBox x:Name="ProjectNameTextBox" hc:InfoElement.Title="Project Name" hc:InfoElement.Placeholder="Project Name" HorizontalAlignment="Left" Margin="9,10,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="280"/>
+        <hc:TextBox x:Name="ModIndexTextBox" hc:InfoElement.Title="Mod Index" hc:InfoElement.Placeholder="Mod Index" HorizontalAlignment="Left" Margin="302,10,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="198"/>
+        <hc:TextBox x:Name="CookedAssetsDirTextBox" hc:InfoElement.Title="Cooked Assets" hc:InfoElement.Placeholder="Cooked Assets" HorizontalAlignment="Left" Margin="10,73,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="456"/>
+        <hc:TextBox x:Name="OutputDirTextBox" hc:InfoElement.Title="Output Dir" hc:InfoElement.Placeholder="Output Dir" HorizontalAlignment="Left" Margin="10,136,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="456"/>
         <Button x:Name="SelectCookedAssetsDirBtn" Content="..." HorizontalAlignment="Left" Margin="471,100,0,0" VerticalAlignment="Top"/>
         <Button x:Name="SelectOutputDirBtn" Content="..." HorizontalAlignment="Left" Margin="471,164,0,0" VerticalAlignment="Top"/>
         <Button x:Name="SaveBtn" Content="Save" HorizontalAlignment="Left" Margin="10,199,0,0" VerticalAlignment="Top" Width="81"/>

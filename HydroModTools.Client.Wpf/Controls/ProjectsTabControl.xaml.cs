@@ -74,9 +74,8 @@ namespace HydroModTools.Client.Wpf.Controls
                 ProjectsList
                     .Events()
                     .SelectionChanged
-                    .Select(e => e.Source as ListBox)
+                    .Select(e => ((ListItem<Guid, string>?)ProjectsList.SelectedItem)?.Key)
                     .WhereNotNull()
-                    .Select(listBox => ((ListItem<Guid, string>)listBox.SelectedItem).Key)
                     .BindTo(ViewModel, vm => vm.SelectedProject)
                     .DisposeWith(d);
 
@@ -159,6 +158,10 @@ namespace HydroModTools.Client.Wpf.Controls
 
             if (files == null)
             {
+                FilesTreeView
+                    .Items
+                    .Clear();
+                
                 ProjectsList.SelectedIndex = 0;
                 return;
             }

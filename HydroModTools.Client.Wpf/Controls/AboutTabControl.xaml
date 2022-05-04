@@ -7,6 +7,6 @@
              xmlns:local="clr-namespace:HydroModTools.Client.Wpf.Controls"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Padding="5,5,5,5">
     <hc:SimplePanel x:Name="MdPanel"/>
 </UserControl>

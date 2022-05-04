@@ -52,7 +52,7 @@ namespace HydroModTools.Client.Wpf
                     {
                         var node = new FileTreeViewNode()
                         {
-                            Name = "node11" + pathPart,
+                            Name = "node11" + Guid.NewGuid().ToString("N"),
                             Header = pathPart,
                             IsExpanded = true
                         };
@@ -74,7 +74,7 @@ namespace HydroModTools.Client.Wpf
                     {
                         var node = new FileTreeViewNode()
                         {
-                            Name = "node11" + pathPart,
+                            Name = "node11" +  Guid.NewGuid().ToString("N"),
                             Header = pathPart,
                             IsExpanded = true
                         };

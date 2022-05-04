@@ -94,6 +94,11 @@ namespace HydroModTools.Client.Wpf.ControlModels
         {
             Task.Run(async () =>
             {
+                if (SelectedProject == Guid.Empty)
+                {
+                    return;
+                }
+                
                 var project = ProjectList.First(p => p.Id == SelectedProject);
 
                 var files = await ChooseFilesHelper("Select assets", project.Path);
@@ -108,6 +113,11 @@ namespace HydroModTools.Client.Wpf.ControlModels
         private void DeleteProject()
         {
             Task.Run(async () => {
+                if (SelectedProject == Guid.Empty)
+                {
+                    return;
+                }
+                
                 var project = ProjectList.First(p => p.Id == SelectedProject);
 
                 await _projectsService.DeleteProject(project.Id);
@@ -120,6 +130,11 @@ namespace HydroModTools.Client.Wpf.ControlModels
         private void EditProject()
         {
             Task.Run(() => {
+                if (SelectedProject == Guid.Empty)
+                {
+                    return;
+                }
+                
                 var project = ProjectList.First(p => p.Id == SelectedProject);
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -149,6 +164,11 @@ namespace HydroModTools.Client.Wpf.ControlModels
         private void DeleteAssets(IReadOnlyCollection<Guid> assetsIds)
         {
             Task.Run(async () => {
+                if (SelectedProject == Guid.Empty)
+                {
+                    return;
+                }
+                
                 var project = ProjectList.First(p => p.Id == SelectedProject);
 
                 await _projectsService.RemoveAssets(project.Id, assetsIds);
