@@ -17,12 +17,7 @@ namespace HydroModTools
 
             app.PrepareApplication();
 
-            var appTask = app.RunApplication();
-
-            while (appTask.Status != TaskStatus.RanToCompletion)
-            {
-                Thread.Yield();
-            }
+            app.RunApplication().Wait();
         }
     }
 }

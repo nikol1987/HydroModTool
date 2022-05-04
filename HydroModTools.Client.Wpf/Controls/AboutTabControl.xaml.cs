@@ -4,6 +4,7 @@ using ReactiveUI;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using System;
+using MdXaml;
 
 namespace HydroModTools.Client.Wpf.Controls
 {
@@ -24,7 +25,7 @@ namespace HydroModTools.Client.Wpf.Controls
                     {
                         MdPanel.Children.Clear();
 
-                        var mrkDown = new Markdown.Xaml.Markdown();
+                        /*var mrkDown = new Markdown.Xaml.Markdown();
                         var mdDocument = mrkDown.Transform(aboutMd);
 
                         var mdViewer = new FlowDocumentScrollViewer();
@@ -32,8 +33,11 @@ namespace HydroModTools.Client.Wpf.Controls
                         mdViewer.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                         mdViewer.Margin = new System.Windows.Thickness(5);
                         mdViewer.Document = mdDocument;
-                        mdViewer.Zoom = 80.0d;
-
+                        mdViewer.Zoom = 80.0d;*/
+                        
+                        var mdViewer = new MdXaml.MarkdownScrollViewer();
+                        mdViewer.Markdown = aboutMd;
+                        
                         MdPanel.Children.Add(mdViewer);
                     });
             });

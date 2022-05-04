@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:HydroModTools.Client.Wpf.Controls"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="HydroModTools" Height="720" Width="1006" Topmost="False" Icon="../Resources/hydroneer.ico" ResizeMode="NoResize" ShowMinButton="True">
+        Title="HydroModTools" Height="720" Width="1006" MinHeight="720" MinWidth="1006" Topmost="False" Icon="../Resources/hydroneer.ico" ResizeMode="NoResize" ShowMinButton="True">
     <hc:TabControl x:Name="TabSelector" SelectedIndex="0" ShowOverflowButton="False" ShowContextMenu="False">
         <hc:TabItem x:Name="InstallModsTab" Header="Install Mods" FontFamily="Consolas" IsSelected="True" />
         <hc:TabItem x:Name="CreateModsTab" Header="Create Mods" FontFamily="Consolas" />

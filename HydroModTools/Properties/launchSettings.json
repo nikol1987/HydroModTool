@@ -1,6 +1,9 @@
 {
   "profiles": {
     "HydroModTools": {
+      "commandName": "Project"
+    },
+    "HydroModTools WPF": {
       "commandName": "Project",
       "commandLineArgs": "--wpf"
     }

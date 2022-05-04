@@ -4,8 +4,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:HydroModTools.Client.Wpf.Controls"
+             xmlns:local="clr-namespace:HydroModTools.Client.Wpf.ExtendedControls"
              xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:treeView="clr-namespace:HydroModTools.Client.Wpf.ExtendedControls.TreeView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1005">
     <hc:SimplePanel>
@@ -33,12 +34,12 @@
             <MenuItem Grid.Column="4" x:Name="CopyModBtn" Header="Copy Mod" FontFamily="Consolas" FontSize="17" Height="42"/>
             <MenuItem Grid.Column="5" x:Name="LaunchGameBtn" Header="Launch Game" FontFamily="Consolas" FontSize="17" Height="42"/>
             <MenuItem Grid.Column="6" x:Name="DevExpressBtn" Header="Dev Express" FontFamily="Consolas" FontSize="17" Height="42"/>
-            <MenuItem Grid.Column="7" HorizontalAlignment="Right" Header="Game Version" FontFamily="Consolas" FontSize="17" Height="42">
+            <!--<MenuItem Grid.Column="7" HorizontalAlignment="Right" Header="Game Version" FontFamily="Consolas" FontSize="17" Height="42">
                 <hc:ComboBox x:Name="GameVersionSelectorCombo" SelectedIndex="0">
                     <ComboBoxItem Content="Hydroneer Legacy"/>
                     <ComboBoxItem Content="Hydroneer 2.0" />
                 </hc:ComboBox>
-            </MenuItem>
+            </MenuItem>-->
         </Menu>
         <Grid  Margin="0,45,0,0">
             <Grid.ColumnDefinitions>
@@ -49,10 +50,24 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <hc:SimplePanel Grid.Column="0">
-                <ListBox x:Name="ProjectsList" />
+                <ListBox x:Name="ProjectsList">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="ListBoxEditContextBtn"  Header="Edit"/>
+                            <MenuItem x:Name="ListBoxDeleteContextBtn" Header="Delete"/>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
             </hc:SimplePanel>
             <hc:SimplePanel Grid.Column="1">
-
+                <treeView:MultiSelectTreeView x:Name="FilesTreeView" Background="#FF2D2D30">
+                    <TreeView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="TreeViewAddContextBtn"  Header="Add"/>
+                            <MenuItem x:Name="TreeViewDeleteContextBtn" Header="Delete"/>
+                        </ContextMenu>
+                    </TreeView.ContextMenu>
+                </treeView:MultiSelectTreeView>
             </hc:SimplePanel>
         </Grid>
     </hc:SimplePanel>
