@@ -20,10 +20,10 @@ namespace HydroModTools.Client.Wpf.Controls
             projectsTab.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             ProjectsTab.Content = projectsTab;
 
-            /*var guidsTab = WpfFactory.CreateControl<CreateModsTabControl>();
+            var guidsTab = WpfFactory.CreateControl<GuidsTabControl>();
             guidsTab.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
             guidsTab.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
-            GUIDsTab.Content = guidsTab;*/
+            GUIDsTab.Content = guidsTab;
 
             this.WhenActivated(d => {
                 TabSelector

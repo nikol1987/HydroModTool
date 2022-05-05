@@ -41,7 +41,7 @@
                 </hc:ComboBox>
             </MenuItem>-->
         </Menu>
-        <Grid  Margin="0,45,0,0">
+        <Grid Margin="0,45,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="3*" />

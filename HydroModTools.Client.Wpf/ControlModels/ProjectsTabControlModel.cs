@@ -187,7 +187,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
                 
                 ReloadAssets();
                 
-                _notificationManager.Show(CreateNotification("Staged", $"Project '{project.Name}' staged."));
+                _notificationManager.Show(Utilities.CreateInfoNotification("Staged", $"Project '{project.Name}' staged."));
             });
         }
         
@@ -206,7 +206,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
                 
                 ReloadAssets();
                 
-                _notificationManager.Show(CreateNotification("Packaged", $"Project '{project.Name}' packaged."));
+                _notificationManager.Show(Utilities.CreateInfoNotification("Packaged", $"Project '{project.Name}' packaged."));
             });
         }
         
@@ -225,7 +225,7 @@ namespace HydroModTools.Client.Wpf.ControlModels
                 
                 ReloadAssets();
                 
-                _notificationManager.Show(CreateNotification("Copy Mod", $"Project '{project.Name}' copied."));
+                _notificationManager.Show(Utilities.CreateInfoNotification("Copy Mod", $"Project '{project.Name}' copied."));
             });
         }
         
@@ -280,16 +280,6 @@ namespace HydroModTools.Client.Wpf.ControlModels
                 });
         }
 
-        private NotificationContent CreateNotification(string title, string message)
-        {
-            return new NotificationContent()
-            {
-                Title = title,
-                Message = message,
-                Type = NotificationType.Information
-            };
-        }
-        
         private async Task<IList<string>> ChooseFilesHelper(string title, string rootPath)
         {
             var result = new List<string>();

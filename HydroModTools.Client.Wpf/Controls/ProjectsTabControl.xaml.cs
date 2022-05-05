@@ -12,9 +12,7 @@ using HydroModTools.Client.Wpf.Structs;
 using System.Windows;
 using System.Windows.Input;
 using System.Collections.Generic;
-using HydroModTools.Client.Wpf.ExtendedControls;
 using System.Windows.Media;
-using DynamicData.Kernel;
 using HydroModTools.Client.Wpf.ExtendedControls.TreeView;
 
 namespace HydroModTools.Client.Wpf.Controls

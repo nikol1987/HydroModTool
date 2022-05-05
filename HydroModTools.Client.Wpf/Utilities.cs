@@ -6,11 +6,22 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Media;
 using HydroModTools.Client.Wpf.ExtendedControls.TreeView;
+using Notifications.Wpf;
 
 namespace HydroModTools.Client.Wpf
 {
     internal static class Utilities
     {
+        public static NotificationContent CreateInfoNotification(string title, string message)
+        {
+            return new NotificationContent()
+            {
+                Title = title,
+                Message = message,
+                Type = NotificationType.Information
+            };
+        }
+        
         public static Brush GetColorFromBridgepourRibbonColor(string name)
         {
             var color = name switch
