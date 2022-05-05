@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="HydroModTools.Client.Wpf.Controls.InstallModsTabControl"
+             x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1005" Padding="0,0,0,5">
+    <hc:SimplePanel>
+        <Menu Margin="0,0,0,0" Height="45" VerticalAlignment="Top">
+            <MenuItem x:Name="RefreshBtn" Header="Refresh" FontFamily="Consolas" FontSize="24" Height="42"/>
+            <MenuItem x:Name="ClearModsBtn" Header="Clear Mods" FontFamily="Consolas" FontSize="24" Height="42"/>
+            <MenuItem x:Name="OpenFolderBtn" Header="Open Mods Folder" FontFamily="Consolas" FontSize="24" Height="42"/>
+        </Menu>
+        <hc:ScrollViewer IsInertiaEnabled="True" Width="1005" Margin="0,45,0,0" HorizontalAlignment="Stretch" Padding="5,5,5,0">
+            <hc:UniformSpacingPanel x:Name="ModListPanel"  ItemHorizontalAlignment="Left" HorizontalAlignment="Stretch" ItemVerticalAlignment="Top" Orientation="Horizontal" ChildWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Spacing="5" />
+        </hc:ScrollViewer>
+    </hc:SimplePanel>
+</UserControl>

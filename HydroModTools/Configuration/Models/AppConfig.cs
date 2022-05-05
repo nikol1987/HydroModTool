@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HydroModTools.Configuration.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace HydroModTools.Configuration.Models
@@ -8,9 +9,13 @@ namespace HydroModTools.Configuration.Models
         public AppConfig(GeneralConfig generalConfig, GuidsConfig guidsConfig)
         {
             Projects = generalConfig.Projects;
-            DefaultProject = generalConfig.DefaultProject;
             Guids = guidsConfig.Guids;
+
+            DefaultProject = generalConfig.DefaultProject;
+            HydroneerVersion = generalConfig.HydroneerVersion;
         }
+
+        public HydroneerVersion HydroneerVersion { get; }
 
         public List<ProjectConfig> Projects { get; }
 

@@ -1,147 +1,125 @@
-﻿using HydroModTools.Common;
-using HydroModTools.Contracts.Services;
-using HydroModTools.DI;
-using HydroModTools.WinForms.Views;
+﻿using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Autofac;
+using HydroModTools.Client.Abstractions;
+using HydroModTools.Client.WinForms;
+using HydroModTools.Client.Wpf;
+using HydroModTools.Common;
+using HydroModTools.Common.Enums;
+using HydroModTools.Enums;
 using HydroModTools.Tools;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Threading;
 
 namespace HydroModTools
 {
-    internal sealed class HydroModTools : ApplicationContext
+    internal sealed class HydroModTools
     {
-        private Configuration.Configuration config = new Configuration.Configuration();
+        private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
 
-        private IHost BuiltHost;
+        private IClient? _client;
+        private readonly Configuration.Configuration _config = new Configuration.Configuration();
+        private IContainer? _services;
 
-        public ApplicationView? MainForm { get; private set; }
+        private VisualClients _selectedClient = VisualClients.Wpf;
 
-        public void StartApplication()
+        public void PrepareApplication()
         {
-            config.SetupConfiguration();
-
-            BuiltHost = Host.CreateDefaultBuilder()
-                .ConfigureServices(async (context, services) => {
-                    await ConfigureServices(null, services, ConfigureServicesPhase.PreConfig);
-                })
-                .ConfigureAppConfiguration((context, builder) => {
-                    builder.AddJsonFile($"{AppVars.ConfigPath}.json", false, true);
-                    builder.AddJsonFile($"{AppVars.GuidsConfigPath}.json", false, true);
-                })
-                .ConfigureServices(async (context, services) => {
-                    await ConfigureServices(context.Configuration, services, ConfigureServicesPhase.PostConfig);
-                })
-                .Build();
-
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            var configuration = BuiltHost.Services.GetService<IConfigurationService>();
-
-            Application.ApplicationExit += async (sender, e) =>
+            switch (_selectedClient)
             {
-
-                await configuration.Save();
-            };
-
-            var spashForm = FormFactory.Create<SpashView>();
-            spashForm.TimeOutEvent += () =>
-            {
-                MainForm = FormFactory.Create<ApplicationView>();
-
-                MainForm.Disposed += (sender, ea) =>
-                {
-                    Application.Exit();
-                };
-
-                MainForm.Show();
-                spashForm.Close();
-            };
-        }
-
-        private async Task ConfigureServices(IConfiguration appConfiguration, IServiceCollection services, ConfigureServicesPhase configureServicesPhase)
-        {
-            if (configureServicesPhase == ConfigureServicesPhase.PreConfig)
-            {
-                services.AddSingleton(config);
-
-                return;
+                case VisualClients.WinForms:
+                    _client = new WinFormsClient();
+                    break;
+                case VisualClients.Wpf:
+                    _client = new WpfClient();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
-            if (configureServicesPhase == ConfigureServicesPhase.PostConfig)
+            _client.ShutdownApp += delegate
             {
-                await config.LoadConfigAsync(appConfiguration);
+                _cancellationToken.Cancel();
+            };
 
-                services
-                    .AddSingleton<Packager>()
-                    .AddSingleton<Stager>()
-                    .AddSingleton<HttpClient>((_) => {
-                        var httpClientHandler = new HttpClientHandler();
-                        httpClientHandler.AllowAutoRedirect = false;
+            var services = new ContainerBuilder();
+            _client.RegisterClientTypes(services);
 
-                        return new HttpClient(httpClientHandler);
-                    })
-                    .Scan(s => {
-                        s.FromAssemblyOf<Assembly>()
-                        .AddClasses((filter) =>
-                        {
-                            filter.Where(type => type.Name.EndsWith("Service"));
-                        })
-                        .AsImplementedInterfaces()
-                        .WithSingletonLifetime();
+            services
+                .Register((ctx) => new ServiceProvider(_services!))
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            
+            services.RegisterAssemblyTypes(typeof(Assembly).Assembly, typeof(DataAccess.Assembly).Assembly)
+                .Where(t => t.Name.EndsWith("Service"))
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
-                        s.FromAssemblyOf<DataAccess.Assembly>()
-                        .AddClasses((filter) =>
-                        {
-                            filter.Where(type => type.Name.EndsWith("Service"));
-                        })
-                        .AsImplementedInterfaces()
-                        .WithSingletonLifetime();
-
-                        s.FromAssemblyOf<WinForms.Assembly>()
-                        .AddClasses((filter) =>
-                        {
-                            filter.Where(type => type.Name.EndsWith("View"));
-                        })
-                        .AsSelf()
-                        .WithTransientLifetime();
-                    });
-
-                var formFactory = new DIFormFactory(services.BuildServiceProvider());
-
-                FormFactory.Use(formFactory);
-
-                return;
-            }
-        }
-
-        public void RunApplication() //Blocking!
-        {
-            var hostThread = new Thread(async () =>
+            services
+                .RegisterType<Packager>();
+            services
+                .RegisterType<Stager>();
+            services.Register((c) =>
             {
-                await BuiltHost.RunAsync();
+                var httpClientHandler = new HttpClientHandler();
+                httpClientHandler.AllowAutoRedirect = false;
+
+                return new HttpClient(httpClientHandler);
             });
+            
+            services
+                .Register(ctx => _config)
+                .SingleInstance();
 
-            Application.ApplicationExit += (sender, ea) =>
-            {
-                hostThread.Interrupt();
-            };
+            _services = services.Build();
 
-            Application.Run(this); // TODO: Anti-crash
+            _config.SetupConfiguration();
+
+            var config = new ConfigurationBuilder();
+            config.AddJsonFile($"{AppVars.ConfigPath}.json", false, true);
+            config.AddJsonFile($"{AppVars.GuidsConfigPath}.json", false, true);
+            _config.LoadConfigAsync(config.Build()).Wait();
+
+            _client.ConfigureServices(_services);
+            DataInterop.Instance.AppLoadStage = AppLoadStage.Preload;
+            _client.ToggleSplash(true);
         }
 
-
-        private enum ConfigureServicesPhase
+        public async Task RunApplication()
         {
-            PreConfig,
-            PostConfig
+            DataInterop.Instance.AppLoadStage = AppLoadStage.Load;
+
+            await Task.Delay(5000);
+            await _client!.ToggleSplash(false);
+            
+            await _client!.RunClient();
+        }
+        
+        private class ServiceProvider : IServiceProvider
+        {
+            private readonly IContainer _container;
+
+            public ServiceProvider(IContainer container)
+            {
+                _container = container;
+            }
+            
+            public object? GetService(Type serviceType)
+            {
+                return _container.Resolve(serviceType);
+            }
+        }
+
+        public void UseWpf()
+        {
+            _selectedClient = VisualClients.Wpf;
+        }
+
+        public void UseWinForms()
+        {
+            _selectedClient = VisualClients.WinForms;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Forms;
 using static HydroModTools.Common.Constants;
 
 namespace HydroModTools.Services
@@ -14,14 +14,10 @@ namespace HydroModTools.Services
     internal class ProjectService : IProjectsService
     {
         private readonly IConfigurationService _configurationService;
-        private readonly Packager _packager;
-        private readonly Stager _stager;
 
-        public ProjectService(IConfigurationService configurationService, Packager packager, Stager stager)
+        public ProjectService(IConfigurationService configurationService)
         {
             _configurationService = configurationService;
-            _packager = packager;
-            _stager = stager;
         }
 
         public async Task AddProject(Guid id, string name, short modIndex, string assetsPath, string outputPath)
@@ -79,7 +75,7 @@ namespace HydroModTools.Services
             catch (IOException)
             {
 
-                MessageBox.Show("Check if the game is open or try to delete manualy.", "Can't copy mod");
+                MessageBox.Show(@"Check if the game is open or try to delete manually.", @"Can't copy mod");
 
                 return;
             }
@@ -92,9 +88,7 @@ namespace HydroModTools.Services
             }
             catch (IOException)
             {
-                MessageBox.Show("Check if the game is open or try to delete manualy.", "Can't copy mod");
-
-                return;
+                MessageBox.Show(@"Check if the game is open or try to delete manually.", @"Can't copy mod");
             }
         }
 
@@ -112,10 +106,7 @@ namespace HydroModTools.Services
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(10, 0, 100, progressMin, progressMax)), "Start Packaging"));
 
-            await _packager.PackageAsync((progress) =>
-            {
-                reportProgress.Invoke(progress);
-            }, 10, 90, project);
+            await Packager.PackageAsync(reportProgress.Invoke, 10, 90, project);
         }
 
         public async Task StageProject(Guid id, int progressMin, int progressMax, Action<ProgressbarStateModel> reportProgress)
@@ -131,10 +122,7 @@ namespace HydroModTools.Services
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(10, 0, 100, progressMin, progressMax)), "Start Staging"));
 
-            await _stager.StageAsync((progress) =>
-            {
-                reportProgress.Invoke(progress);
-            }, 10, 90, project, configuration.Guids);
+            await Stager.StageAsync(reportProgress.Invoke, 10, 90, project, configuration.Guids);
         }
     }
 }

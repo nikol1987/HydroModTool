@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Forms;
 
 namespace HydroModTools.Tools
 {
     public class Stager
     {
-        public Task StageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project, IReadOnlyCollection<GuidItemModel> guids)
+        public static Task StageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project, IReadOnlyCollection<GuidItemModel> guids)
         {
             var basePathSrc = project.Path;
             var basePathOut = Path.Combine(project.OutputPath, "Staging", project.Name, "Mining");
@@ -27,7 +27,7 @@ namespace HydroModTools.Tools
 
             if (missingFiles.Count > 0)
             {
-                MessageBox.Show($"These assets are missing: \n{string.Join("\n", missingFiles)} \n Stating aborted", "Missing Assets");
+                MessageBox.Show(@$"These assets are missing: \n{string.Join("\n", missingFiles)} \n Stating aborted", @"Missing Assets");
 
                 return Task.CompletedTask;
             }
@@ -38,8 +38,9 @@ namespace HydroModTools.Tools
                 reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap((decimal)count, 0, (decimal)project.Items.Count, progressMin, progressMax)), $"Staging {count + 1}/{project.Items.Count} ({projectItem.Name})"));
 
                 var newPath = projectItem.Path.Replace(basePathSrc, basePathOut);
-                Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath));
+                Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath)!);
 
+                // ReSharper disable once StringLiteralTypo
                 if (projectItem.Name.EndsWith(".uexp"))
                 {
                     var patched = PatchFile(basePathSrc + projectItem.Path, guids);
@@ -52,13 +53,11 @@ namespace HydroModTools.Tools
                         continue;
                     }
 
-                    Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath));
+                    Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath)!);
 
-                    using (var file = File.Create(basePathOut + newPath, (int)patched.Length, FileOptions.Asynchronous | FileOptions.SequentialScan))
-                    {
-                        patched.Position = 0;
-                        patched.CopyTo(file);
-                    }
+                    using var file = File.Create(basePathOut + newPath, (int)patched.Length, FileOptions.Asynchronous | FileOptions.SequentialScan);
+                    patched.Position = 0;
+                    patched.CopyTo(file);
                 }
                 else
                 {
@@ -71,18 +70,18 @@ namespace HydroModTools.Tools
             return Task.CompletedTask;
         }
 
-        private IReadOnlyCollection<string> VerifyFiles(string basepath, IReadOnlyCollection<ProjectItemModel> items)
+        private static IReadOnlyCollection<string> VerifyFiles(string basePath, IEnumerable<ProjectItemModel> items)
         {
             var itemList = new List<ProjectItemModel>(items);
 
             return itemList.Where(item => {
-                var itemPath = basepath + item.Path;
+                var itemPath = basePath + item.Path;
 
                 return !File.Exists(itemPath);
-            }).Select(item => basepath + item.Path).ToList();
+            }).Select(item => basePath + item.Path).ToList();
         }
 
-        private MemoryStream PatchFile(string fileSrc, IReadOnlyCollection<GuidItemModel> guids)
+        private static MemoryStream? PatchFile(string fileSrc, IEnumerable<GuidItemModel> guids)
         {
             var fileBytes = File.ReadAllBytes(fileSrc);
 

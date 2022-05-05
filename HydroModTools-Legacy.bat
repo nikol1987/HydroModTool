@@ -1,0 +1,1 @@
+start HydroModTools.exe --legacy

@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <FileUpgradeFlags>40</FileUpgradeFlags>
+    <UpgradeBackupLocation>D:\Coding\C#\HydroModTool\Backup\HydroModTools.WinForms\</UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="FluentValidation" Version="10.4.0" />
+    <PackageReference Include="Krypton.Components.Suite" Version="4.5.9" />
+    <PackageReference Include="PostSharp.Redist" Version="6.10.9" />
+    <PackageReference Include="ReactiveUI" Version="17.1.50" />
+    <PackageReference Include="ReactiveUI.Events.Winforms" Version="15.1.1" />
+    <PackageReference Include="ReactiveUI.WinForms" Version="17.1.50" />
+    <PackageReference Include="Scrutor" Version="4.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HydroModTools.Client\HydroModTools.Client.csproj" />
+    <ProjectReference Include="..\HydroModTools.Common\HydroModTools.Common.csproj" />
+    <ProjectReference Include="..\HydroModTools.Contracts\HydroModTools.Contracts.csproj" />
+    <ProjectReference Include="..\HydroModTools.DataAccess.Contracts\HydroModTools.DataAccess.Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ApplicationTabs\ProjectTabs\AddProjectView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\hydroneer.ico" />
+    <Resource Include="Resources\hydroneer.ico" />
+    <None Remove="Resources\HydroneerLogo.png" />
+    <Resource Include="Resources\HydroneerLogo.png" />
+    <None Remove="Resources\SpashBG.jpg" />
+    <Resource Include="Resources\SpashBG.jpg" />
+  </ItemGroup>
+</Project>
