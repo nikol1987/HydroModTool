@@ -12,6 +12,7 @@
       <PackageReference Include="HandyControls" Version="3.3.11" />
       <PackageReference Include="Markdown.Xaml" Version="1.0.0" />
       <PackageReference Include="MdXaml" Version="1.13.0" />
+      <PackageReference Include="Notifications.Wpf" Version="0.1.1" />
       <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

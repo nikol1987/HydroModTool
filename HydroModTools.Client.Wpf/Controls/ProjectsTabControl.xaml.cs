@@ -34,8 +34,14 @@ namespace HydroModTools.Client.Wpf.Controls
             
             InitializeComponent();
 
-            this.WhenActivated(d => {
-                //Refresh
+            this.WhenActivated(d =>
+            {
+                RefreshBtn
+                    .Events()
+                    .Click
+                    .Select(e => Unit.Default)
+                    .InvokeCommand(ViewModel.RefreshCommand)
+                    .DisposeWith(d);
                 
                 AddProjectBtn
                     .Events()
@@ -44,9 +50,26 @@ namespace HydroModTools.Client.Wpf.Controls
                     .InvokeCommand(ViewModel.AddProjectCommand)
                     .DisposeWith(d);
                 
-                //Stage
-                //Package
-                //Copy
+                StageBtn
+                    .Events()
+                    .Click
+                    .Select(e => Unit.Default)
+                    .InvokeCommand(ViewModel.StageCommand)
+                    .DisposeWith(d);
+                
+                PackageBtn
+                    .Events()
+                    .Click
+                    .Select(e => Unit.Default)
+                    .InvokeCommand(ViewModel.PackageCommand)
+                    .DisposeWith(d);
+                
+                CopyModBtn
+                    .Events()
+                    .Click
+                    .Select(e => Unit.Default)
+                    .InvokeCommand(ViewModel.CopyModCommand)
+                    .DisposeWith(d);
                 
                 LaunchGameBtn
                     .Events()
@@ -55,7 +78,12 @@ namespace HydroModTools.Client.Wpf.Controls
                     .InvokeCommand(ViewModel.StartGameCommand)
                     .DisposeWith(d);
                 
-                //Express
+                DevExpressBtn
+                    .Events()
+                    .Click
+                    .Select(e => Unit.Default)
+                    .InvokeCommand(ViewModel.DevExpressCommand)
+                    .DisposeWith(d);
 
                 /*GameVersionSelectorCombo
                     .Events()

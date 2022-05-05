@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HydroModTools.Client.Wpf.DI;
 using HydroModTools.Client.Wpf.Views;
+using Notifications.Wpf;
 
 namespace HydroModTools.Client.Wpf.ControlModels
 {
@@ -22,12 +23,18 @@ namespace HydroModTools.Client.Wpf.ControlModels
         private readonly IAppService _appService;
         private readonly IConfigurationService _configurationService;
         private readonly IProjectsService _projectsService;
+        private readonly INotificationManager _notificationManager;
 
-        public ProjectsTabControlModel(IAppService appService, IConfigurationService configurationService, IProjectsService projectsService)
+        public ProjectsTabControlModel(
+            IAppService appService,
+            IConfigurationService configurationService,
+            IProjectsService projectsService,
+            INotificationManager _notificationManager)
         {
             _appService = appService;
             _configurationService = configurationService;
             _projectsService = projectsService;
+            this._notificationManager = _notificationManager;
 
             StartGameCommand = ReactiveCommand.Create(StartGame);
             SetGameVersionCommand = ReactiveCommand.Create<int>(SetGameVersion);
@@ -36,6 +43,11 @@ namespace HydroModTools.Client.Wpf.ControlModels
             EditProjectCommand = ReactiveCommand.Create(EditProject);
             DeleteProjectCommand = ReactiveCommand.Create(DeleteProject);
             AddProjectCommand = ReactiveCommand.Create(AddProject);
+            RefreshCommand = ReactiveCommand.Create(Refresh);
+            StageCommand = ReactiveCommand.Create(Stage);
+            PackageCommand = ReactiveCommand.Create(Package);
+            CopyModCommand = ReactiveCommand.Create(CopyMod);
+            DevExpressCommand = ReactiveCommand.Create(DevExpress);
 
             _configurationService
                 .GetAsync()
@@ -81,12 +93,6 @@ namespace HydroModTools.Client.Wpf.ControlModels
         private void SetGameVersion(int gameIndex)
         {
             _appService.SetGameVersion((HydroneerVersion)gameIndex);
-        }
-
-        public ReactiveCommand<Unit, Unit> StartGameCommand;
-        private void StartGame()
-        {
-            _appService.StartGame();
         }
 
         public ReactiveCommand<Unit, Unit> AddProjectFilesCommand;
@@ -148,6 +154,12 @@ namespace HydroModTools.Client.Wpf.ControlModels
             });
         }
         
+        public ReactiveCommand<Unit, Unit> RefreshCommand;
+        private void Refresh()
+        {
+            ReloadAssets();
+        }
+        
         public ReactiveCommand<Unit, Unit> AddProjectCommand;
         private void AddProject()
         {
@@ -160,6 +172,84 @@ namespace HydroModTools.Client.Wpf.ControlModels
             });
         }
         
+        public ReactiveCommand<Unit, Task> StageCommand;
+        private Task Stage()
+        {
+            return Task.Run(async () => {
+                if (SelectedProject == Guid.Empty)
+                {
+                    return;
+                }
+                
+                var project = ProjectList.First(p => p.Id == SelectedProject);
+
+                await _projectsService.StageProject(project.Id, 0, 0, model => { });
+                
+                ReloadAssets();
+                
+                _notificationManager.Show(CreateNotification("Staged", $"Project '{project.Name}' staged."));
+            });
+        }
+        
+        public ReactiveCommand<Unit, Task> PackageCommand;
+        private Task Package()
+        {
+            return Task.Run(async () => {
+                if (SelectedProject == Guid.Empty)
+                {
+                    return;
+                }
+                
+                var project = ProjectList.First(p => p.Id == SelectedProject);
+
+                await _projectsService.PackageProject(project.Id, 0, 0, model => { });
+                
+                ReloadAssets();
+                
+                _notificationManager.Show(CreateNotification("Packaged", $"Project '{project.Name}' packaged."));
+            });
+        }
+        
+        public ReactiveCommand<Unit, Task> CopyModCommand;
+        private Task CopyMod()
+        {
+            return Task.Run(async () => {
+                if (SelectedProject == Guid.Empty)
+                {
+                    return;
+                }
+                
+                var project = ProjectList.First(p => p.Id == SelectedProject);
+
+                await _projectsService.CopyProject(project.Id, 0, 0, model => { });
+                
+                ReloadAssets();
+                
+                _notificationManager.Show(CreateNotification("Copy Mod", $"Project '{project.Name}' copied."));
+            });
+        }
+        
+        public ReactiveCommand<Unit, Unit> StartGameCommand;
+        private void StartGame()
+        {
+            _appService.StartGame();
+        }
+        
+        public ReactiveCommand<Unit, Unit> DevExpressCommand;
+        private void DevExpress()
+        {
+            Task.Run(async () =>
+            {
+                await Stage();
+
+                await Package();
+
+                await CopyMod();
+
+                StartGame();
+            });
+        }
+
         public ReactiveCommand<IReadOnlyCollection<Guid>, Unit> DeleteAssetsCommand;
         private void DeleteAssets(IReadOnlyCollection<Guid> assetsIds)
         {
@@ -190,6 +280,16 @@ namespace HydroModTools.Client.Wpf.ControlModels
                 });
         }
 
+        private NotificationContent CreateNotification(string title, string message)
+        {
+            return new NotificationContent()
+            {
+                Title = title,
+                Message = message,
+                Type = NotificationType.Information
+            };
+        }
+        
         private async Task<IList<string>> ChooseFilesHelper(string title, string rootPath)
         {
             var result = new List<string>();

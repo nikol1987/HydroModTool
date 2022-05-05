@@ -2,6 +2,7 @@
 using HydroModTools.Contracts.Models;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Media;
 using HydroModTools.Client.Wpf.ExtendedControls.TreeView;
@@ -52,7 +53,7 @@ namespace HydroModTools.Client.Wpf
                     {
                         var node = new FileTreeViewNode()
                         {
-                            Name = "node11" + Guid.NewGuid().ToString("N"),
+                            Name = "node11" + Regex.Replace(pathPart, "[^A-Za-z0-9 -]", ""),
                             Header = pathPart,
                             IsExpanded = true
                         };
@@ -74,7 +75,7 @@ namespace HydroModTools.Client.Wpf
                     {
                         var node = new FileTreeViewNode()
                         {
-                            Name = "node11" +  Guid.NewGuid().ToString("N"),
+                            Name = "node11" +  Regex.Replace(pathPart, "[^A-Za-z0-9 -]", ""),
                             Header = pathPart,
                             IsExpanded = true
                         };

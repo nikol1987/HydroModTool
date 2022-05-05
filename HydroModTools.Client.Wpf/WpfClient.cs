@@ -8,6 +8,7 @@ using HydroModTools.Client.Abstractions;
 using HydroModTools.Client.Wpf.DI;
 using HydroModTools.Client.Wpf.State;
 using HydroModTools.Client.Wpf.Views;
+using Notifications.Wpf;
 
 namespace HydroModTools.Client.Wpf
 {
@@ -15,6 +16,7 @@ namespace HydroModTools.Client.Wpf
     {
         private Thread? _appThread;
         private Window? _splashView;
+        private HMTApp? _app;
 
         private bool _slashVisible = false;
         public override Task ToggleSplash(bool show)
@@ -83,6 +85,11 @@ namespace HydroModTools.Client.Wpf
             services
                 .RegisterType<AppState>()
                 .SingleInstance();
+
+            services
+                .Register(context => new NotificationManager(_app.Dispatcher))
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
 
         public override void ConfigureServices(IContainer services)
@@ -92,7 +99,7 @@ namespace HydroModTools.Client.Wpf
 
             _appThread = new Thread(() =>
             {
-                var app = new HMTApp
+                _app = new HMTApp
                 {
                     ShutdownMode = ShutdownMode.OnExplicitShutdown
                 };
@@ -100,7 +107,7 @@ namespace HydroModTools.Client.Wpf
                 _splashView = WpfFactory.CreateWindow<SplashView>();
                 MainForm = WpfFactory.CreateWindow<ApplicationView>();
 
-                app.StartApp();
+                _app.StartApp();
             })
             {
                 IsBackground = true,
