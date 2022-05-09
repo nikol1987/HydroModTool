@@ -196,7 +196,7 @@ namespace HydroModTools.Client.Wpf.Controls
                 .Items
                 .Clear();
 
-            var items = Utilities.BuildFileStruture(files);
+            var items = Utilities.BuildFileStructure(files);
 
             if (items == null)
             {

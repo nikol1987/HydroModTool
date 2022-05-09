@@ -2,6 +2,9 @@
 using HydroModTools.Contracts.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -38,7 +41,7 @@ namespace HydroModTools.Client.Wpf
             return brush!;
         }
 
-        public static FileTreeViewNode? BuildFileStruture(IReadOnlyCollection<ProjectItemModel> items)
+        public static FileTreeViewNode? BuildFileStructure(IReadOnlyCollection<ProjectItemModel> items)
         {
             var root = new FileTreeViewNode()
             {
@@ -58,13 +61,13 @@ namespace HydroModTools.Client.Wpf
                 {
                     var pathPart = pathParts[i];
 
-                    var partNode = lastTraversedNode?.Items.Find("node11" + pathPart);
+                    var partNode = lastTraversedNode?.Items.Find(GetNodeNameMd5("node11" + pathPart));
 
                     if (partNode == null && i == 0)
                     {
                         var node = new FileTreeViewNode()
                         {
-                            Name = "node11" + Regex.Replace(pathPart, "[^A-Za-z0-9 -]", ""),
+                            Name = GetNodeNameMd5("node11" + pathPart),
                             Header = pathPart,
                             IsExpanded = true
                         };
@@ -82,11 +85,11 @@ namespace HydroModTools.Client.Wpf
                             Header = pathPart
                         });
                     }
-                    else if (partNode == null && i > 0)
+                    else if (partNode == null)
                     {
                         var node = new FileTreeViewNode()
                         {
-                            Name = "node11" +  Regex.Replace(pathPart, "[^A-Za-z0-9 -]", ""),
+                            Name = GetNodeNameMd5("node11" + pathPart),
                             Header = pathPart,
                             IsExpanded = true
                         };
@@ -96,8 +99,8 @@ namespace HydroModTools.Client.Wpf
                         lastTraversedNode = node;
                         continue;
                     }
-
-                    lastTraversedNode = partNode;
+                    
+                    lastTraversedNode = partNode!;
                 }
             }
 
@@ -126,6 +129,23 @@ namespace HydroModTools.Client.Wpf
             }
 
             return newContentRoot;
+        }
+
+        private static string GetNodeNameMd5(string nodeName)
+        {
+            using MD5 hash = MD5.Create();
+            var result = string.Join
+            (
+                "",
+                from ba in hash.ComputeHash
+                (
+                    Encoding.UTF8.GetBytes(nodeName)
+                ) 
+                select ba.ToString("x2")
+            );
+            var digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+            return result.TrimStart(digits);
         }
 
         private static FileTreeViewNode? Find(this ItemCollection itemCollection, string name)
