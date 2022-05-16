@@ -126,6 +126,13 @@ namespace HydroModTools.Configuration
                 {
                     new GuidConfigItem()
                     {
+                        Id = Guid.NewGuid(),
+                        Name = "2.0 BP_ParentItem -\u003EStatic Mesh",
+                        ModdedGuid = "67eeadddd1ef1c4896df32d704eaa325",
+                        OriginalGuid = "8d738624717d4344829e0b260558cdca"
+                    },
+                    new GuidConfigItem()
+                    {
                       Id = Guid.NewGuid(),
                       Name = "2.0 BP_WorldStore -\u003EStatic Mesh",
                       ModdedGuid = "df2b4482a4e39f4d904aae745dfdefb3",
