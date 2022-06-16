@@ -268,9 +268,177 @@ namespace HydroModTools.Configuration
                     new UIDsConfigItem()
                     {
                         Id = Guid.NewGuid(),
+                        Name = "DT_Fish->Type",
+                        ModdedUID = "Type_2_4C84CF4E4AD838576148EF9583F4E553",
+                        OriginalUID = "Type_4_0BC375574CB011A04F011A80D3B0B877"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Fish->Name",
+                        ModdedUID = "Name_7_88DB23D24DF8BBB564F47FAFE89A9E3D",
+                        OriginalUID = "Name_14_A74E44DC49472A95C3508585ED17534C"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Fish->Description",
+                        ModdedUID = "Description_9_AB48C14841BC3D330B6A6BB115D41C65",
+                        OriginalUID = "Description_8_B6A3E9DD491F3B8D1CD0C28C9783C569"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Fish->Price",
+                        ModdedUID = "Price_11_7350157F41013C928069CFA5ABD0BFD2",
+                        OriginalUID = "Price_15_8AF2CC804DC195FE706F7997D3222616"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Fish->Mesh",
+                        ModdedUID = "Mesh_14_282B16EB4AE7BF6D1263DCB9836FC9E4",
+                        OriginalUID = "Mesh_18_CCCE00EF4DA316470947819EE1BEE9E7"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Functionless->Name",
+                        ModdedUID = "Name_2_4C84CF4E4AD838576148EF9583F4E553",
+                        OriginalUID = "Name_6_F7DF8D9644204240F823B7957E99127A"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Functionless->Description",
+                        ModdedUID = "Description_4_3BC821B34599A15BEED7D786B78BB034",
+                        OriginalUID = "Description_7_72D3ABB040B2D309AE8AD38B9F03198C"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Functionless->StoreSellPrice",
+                        ModdedUID = "StoreSellPrice_10_F584A93F4279DB6CDF2E84853E735714",
+                        OriginalUID = "StoreSellPrice_9_87B7F9F340952C3B014CF5888331009B"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Functionless->URL",
+                        ModdedUID = "URL_11_02CBA44E4B53F4E256B0839087028F7D",
+                        OriginalUID = "URL_12_BDEBE72747BFD50FEFDAE89565A18D38"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Functionless->PlacementType",
+                        ModdedUID = "PlacementType_13_377CA2434D2FCA64D952F19EFD0BD281",
+                        OriginalUID = "PlacementType_21_B2C702A846D4FE4D7F584D9AB4CEB3D9"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Functionless->CanRTY?",
+                        ModdedUID = "CanRTY?_15_93765AE14231B0B0D4D99C892E9FD1A8",
+                        OriginalUID = "CanRTY?_25_290FAB484E0C0DDA5BC2429A81A6197A"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Functionless->Mesh",
+                        ModdedUID = "Mesh_18_8896812D439492850AB77FAA48D7A932",
+                        OriginalUID = "Mesh_30_7E1891BD4211200E9F0BCAB8D7DD4452"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Functionless->DropSound",
+                        ModdedUID = "DropSound_21_38EF9B874019E81F578FEC975E545DAA",
+                        OriginalUID = "DropSound_15_047AD14B493506B16705209C6E5046F5"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Functionless->GridSquare",
+                        ModdedUID = "GridSquare_24_6F9FD637408F87FBB7E4D6B42E80FB45",
+                        OriginalUID = "GridSquare_31_5D24B1F0427187E5917B3694993C9A72"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_MasterworkMoulds->Name",
+                        ModdedUID = "Name_2_4C84CF4E4AD838576148EF9583F4E553",
+                        OriginalUID = "Name_19_BDAAD5534ED637B65E392B82E8844517"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_MasterworkMoulds->CraftableClass",
+                        ModdedUID = "CraftableClass_5_3568F3894D5480561AE65A86E1EBCA28",
+                        OriginalUID = "CraftableClass_5_A1018E4D4AB08DE2F4A8A0ABC2545E1F"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_MasterworkMoulds->StoreSellPrice",
+                        ModdedUID = "StoreSellPrice_8_F3B5048B4142BCF13C12209C20224F66",
+                        OriginalUID = "StoreSellPrice_22_426D9A36487FF8738860B1A7E298F99F"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_MasterworkMoulds->Mesh",
+                        ModdedUID = "Mesh_11_6479B29449C81ACB258F9F8C6E78BC12",
+                        OriginalUID = "Mesh_12_E95105BA46848F65220581B740FE2257"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_MasterworkMoulds->Requirements",
+                        ModdedUID = "Requirements_15_A353DC974C5F34A7F2C35B8B7DA0EDB4",
+                        OriginalUID = "Requirements_13_8D84B51546F36C758B7B19A998B47358"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Rod->Type",
+                        ModdedUID = "Type_8_4C84CF4E4AD838576148EF9583F4E553",
+                        OriginalUID = "Type_25_0BC375574CB011A04F011A80D3B0B877"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
                         Name = "DT_Rod->Name",
                         ModdedUID = "Name_11_358F36674E991957884324A361CDEB16",
                         OriginalUID = "Name_14_A74E44DC49472A95C3508585ED17534C"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Rod->Description",
+                        ModdedUID = "Description_13_3C1789354CE5AF9D0676DAA6D36D563B",
+                        OriginalUID = "Description_8_B6A3E9DD491F3B8D1CD0C28C9783C569"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Rod->Luck",
+                        ModdedUID = "Luck_15_3E8AD9CB4530C441EA264E9E85E72EB0",
+                        OriginalUID = "Luck_32_7BAF4BEF4D241621F91E3DA2BE535D24"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Rod->Mesh",
+                        ModdedUID = "Mesh_17_51DAD5CF472ADF2C2C3658B406420639",
+                        OriginalUID = "Mesh_18_CCCE00EF4DA316470947819EE1BEE9E7"
+                    },
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Rod->LineColor",
+                        ModdedUID = "LineColor_19_57B775F04F6853D727324BA1C7BE77EF",
+                        OriginalUID = "LineColor_29_3D848A784259CAA3A1117DA7691D4EB1"
                     }
                 }
             };
