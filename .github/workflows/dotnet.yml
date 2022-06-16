@@ -56,8 +56,8 @@ jobs:
           files: HydroModTools\publish\
           dest: Hydroneer Modding Toolchain.zip
 
-      - name: Build msi
-        run: msbuild HydroModTools.Installer\HydroModTools.Installer.wixproj
+    #  - name: Build msi
+    #    run: msbuild HydroModTools.Installer\HydroModTools.Installer.wixproj
         
       - name: Upload Zip
         uses: actions/upload-artifact@v2
@@ -65,11 +65,11 @@ jobs:
           name: app-zip
           path: Hydroneer Modding Toolchain.zip
             
-      - name: Upload MSI
-        uses: actions/upload-artifact@v2
-        with:
-          name: app-msi
-          path: HydroModTools.Installer\Installs\HydroModTools.msi
+    #  - name: Upload MSI
+    #    uses: actions/upload-artifact@v2
+    #    with:
+    #      name: app-msi
+    #      path: HydroModTools.Installer\Installs\HydroModTools.msi
         
   publish:
     needs: [build]
@@ -81,9 +81,9 @@ jobs:
     - uses: actions/download-artifact@v2
       with:
         name: app-zip
-    - uses: actions/download-artifact@v2
-      with:
-        name: app-msi
+    #- uses: actions/download-artifact@v2
+    #  with:
+    #    name: app-msi
         
     - name: release
       uses: actions/create-release@v1
@@ -106,12 +106,12 @@ jobs:
         asset_name: Hydroneer Modding Toolchain.zip
         asset_content_type: application/zip
 
-    - name: upload msi installer
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: HydroModTools.msi
-        asset_name: HydroModTools.msi
-        asset_content_type: application/x-msi
+  #  - name: upload msi installer
+  #    uses: actions/upload-release-asset@v1
+  #    env:
+  #      GITHUB_TOKEN: ${{ github.token }}
+  #    with:
+  #      upload_url: ${{ steps.create_release.outputs.upload_url }}
+  #      asset_path: HydroModTools.msi
+  #      asset_name: HydroModTools.msi
+  #      asset_content_type: application/x-msi*/
