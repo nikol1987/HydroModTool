@@ -80,6 +80,7 @@ namespace HydroModTools
             var config = new ConfigurationBuilder();
             config.AddJsonFile($"{AppVars.ConfigPath}.json", false, true);
             config.AddJsonFile($"{AppVars.GuidsConfigPath}.json", false, true);
+            config.AddJsonFile($"{AppVars.UIDsConfigPath}.json", false, true);
             _config.LoadConfigAsync(config.Build()).Wait();
 
             _client.ConfigureServices(_services);

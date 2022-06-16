@@ -1,61 +1,60 @@
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Windows.Controls;
 using HydroModTools.Client.Wpf.ControlModels;
 using HydroModTools.Client.Wpf.DI;
-using ReactiveUI;
-using System.Windows.Controls;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Reactive.Disposables;
-using System.Windows;
 using HydroModTools.Client.Wpf.Models;
+using ReactiveUI;
 
 namespace HydroModTools.Client.Wpf.Controls
 {
-    internal partial class GuidsTabControl : IViewFor<GuidsTabControlModel>
+    internal partial class UIDsTabControl : IViewFor<UIDsTabControlModel>
     {
-        public GuidsTabControl()
+        public UIDsTabControl()
         {
-            ViewModel = WpfFactory.CreateViewModel<GuidsTabControlModel>();
+            ViewModel = WpfFactory.CreateViewModel<UIDsTabControlModel>();
             
             InitializeComponent();
 
             this.WhenActivated(d =>
             {
-                SaveGuidsBtn
+                SaveUIDsBtn
                     .Events()
                     .Click
                     .Select(_ => Unit.Default)
-                    .InvokeCommand(ViewModel.SaveGuidsCommand)
+                    .InvokeCommand(ViewModel.SaveUIDsCommand)
                     .DisposeWith(d);
                 
-                AddGuidBtn
+                AddUIDBtn
                     .Events()
                     .Click
                     .Select(_ => Unit.Default)
-                    .InvokeCommand(ViewModel.AddGuidCommand)
+                    .InvokeCommand(ViewModel.AddUIDCommand)
                     .DisposeWith(d);
                 
-                RemoveGuidBtn
+                RemoveUIDBtn
                     .Events()
                     .Click
                     .Select(_ => Unit.Default)
-                    .InvokeCommand(ViewModel.RemoveGuidCommand)
+                    .InvokeCommand(ViewModel.RemoveUIDCommand)
                     .DisposeWith(d);
                     
             });
 
-            GuidDataGrid.ItemsSource = ViewModel.GuidList;
+            GuidDataGrid.ItemsSource = ViewModel.UIDList;
             GuidDataGrid.SelectionChanged += (_, _) =>
             {
-                ViewModel.SelectedItem = GuidDataGrid.SelectedItem as GuidTableRowItem;
+                ViewModel.SelectedItem = GuidDataGrid.SelectedItem as UIDTableRowItem;
             };
         }
 
         object? IViewFor.ViewModel
         {
             get => ViewModel;
-            set => ViewModel = (GuidsTabControlModel)value!;
+            set => ViewModel = (UIDsTabControlModel)value!;
         }
 
-        public GuidsTabControlModel? ViewModel { get; set; }
+        public UIDsTabControlModel? ViewModel { get; set; }
     }
 }

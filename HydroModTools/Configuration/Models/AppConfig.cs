@@ -1,16 +1,18 @@
 ﻿using HydroModTools.Configuration.Enums;
 using System;
 using System.Collections.Generic;
+using HydroModTools.Contracts.Models;
 
 namespace HydroModTools.Configuration.Models
 {
     internal sealed class AppConfig
     {
-        public AppConfig(GeneralConfig generalConfig, GuidsConfig guidsConfig)
+        public AppConfig(GeneralConfig generalConfig, GuidsConfig guidsConfig, UIDsConfig uidsConfig)
         {
             Projects = generalConfig.Projects;
             Guids = guidsConfig.Guids;
-
+            UIDs = uidsConfig.UIDs;
+            
             DefaultProject = generalConfig.DefaultProject;
             HydroneerVersion = generalConfig.HydroneerVersion;
         }
@@ -22,5 +24,7 @@ namespace HydroModTools.Configuration.Models
         public Guid? DefaultProject { get; }
 
         public List<GuidConfigItem> Guids { get; }
+        
+        public List<UIDsConfigItem> UIDs { get; }
     }
 }

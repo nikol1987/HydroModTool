@@ -23,10 +23,14 @@ namespace HydroModTools.Configuration
                 CreateConfigFileAsync(ConfigFile.General).Wait();
             }
 
-
             if (!File.Exists($"{AppVars.GuidsConfigPath}.json"))
             {
                 CreateConfigFileAsync(ConfigFile.Guids).Wait();
+            }
+            
+            if (!File.Exists($"{AppVars.UIDsConfigPath}.json"))
+            {
+                CreateConfigFileAsync(ConfigFile.UIDs).Wait();
             }
         }
 
@@ -49,13 +53,20 @@ namespace HydroModTools.Configuration
 
             if (appConfigModel == null)
             {
-                await CreateConfigFileAsync(ConfigFile.Both, _appConfiguration.ToModel().ToGeneralConfig(), _appConfiguration.ToModel().ToGuidsConfig());
+                await CreateConfigFileAsync(
+                    ConfigFile.All,
+                    _appConfiguration.ToModel().ToGeneralConfig(),
+                    _appConfiguration.ToModel().ToGuidsConfig(),
+                    _appConfiguration.ToModel().ToUIDsConfig());
 
                 return;
             }
 
-            await CreateConfigFileAsync(ConfigFile.Both, appConfigModel.ToGeneralConfig(), appConfigModel.ToGuidsConfig());
-
+            await CreateConfigFileAsync(
+                ConfigFile.All,
+                appConfigModel.ToGeneralConfig(),
+                appConfigModel.ToGuidsConfig(),
+                appConfigModel.ToUIDsConfig());
 
             ((IConfigurationRoot)_configuration).Reload();
 
@@ -73,18 +84,21 @@ namespace HydroModTools.Configuration
 
                 var guidConfiguration = new GuidsConfig();
                 configuration.GetSection("GuidConfiguration").Bind(guidConfiguration);
+                
+                var uidConfiguration = new UIDsConfig();
+                configuration.GetSection("UIDConfiguration").Bind(uidConfiguration);
 
-                _appConfiguration = new AppConfig(generalConfig, guidConfiguration);
+                _appConfiguration = new AppConfig(generalConfig, guidConfiguration, uidConfiguration);
             }
             catch (Exception)
             {
-                await CreateConfigFileAsync(ConfigFile.Both);
+                await CreateConfigFileAsync(ConfigFile.All);
 
                 await LoadConfigAsync(configuration);
             }
         }
 
-        private static async Task CreateConfigFileAsync(ConfigFile configFile, GeneralConfig? generalConfig = null, GuidsConfig? guidsConfig = null)
+        private static async Task CreateConfigFileAsync(ConfigFile configFile, GeneralConfig? generalConfig = null, GuidsConfig? guidsConfig = null, UIDsConfig? uiDsConfig = null)
         {
             var jsonOptions = new JsonSerializerOptions()
             {
@@ -93,27 +107,56 @@ namespace HydroModTools.Configuration
 
             var configTasks = new List<Task>();
 
-            if ((configFile == ConfigFile.General || configFile == ConfigFile.Both) && File.Exists($"{AppVars.ConfigPath}.json"))
+            if ((configFile == ConfigFile.General || configFile == ConfigFile.All) && File.Exists($"{AppVars.ConfigPath}.json"))
             {
                 if (generalConfig == null)
                 {
                     File.Move($"{AppVars.ConfigPath}.json", AppVars.ConfigPath + "-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".json");
                 }
+                
+                string generalJson = JsonSerializer.Serialize(new { AppConfiguration = generalConfig == null ? Defaults.DefaultGeneralConfig : generalConfig }, jsonOptions);
+                configTasks.Add(File.WriteAllTextAsync($"{AppVars.ConfigPath}.json", generalJson));
+            } else if (configFile == ConfigFile.General || configFile == ConfigFile.All)
+            {
+                string generalJson = JsonSerializer.Serialize(new { AppConfiguration = generalConfig == null ? Defaults.DefaultGeneralConfig : generalConfig }, jsonOptions);
+                configTasks.Add(File.WriteAllTextAsync($"{AppVars.ConfigPath}.json", generalJson));
             }
-            string generalJson = JsonSerializer.Serialize(new { AppConfiguration = generalConfig == null ? Defaults.DefaultGeneralConfig : generalConfig }, jsonOptions);
-            configTasks.Add(File.WriteAllTextAsync($"{AppVars.ConfigPath}.json", generalJson));
 
-            if ((configFile == ConfigFile.Guids || configFile == ConfigFile.Both) && File.Exists($"{AppVars.GuidsConfigPath}.json"))
+            if ((configFile == ConfigFile.Guids || configFile == ConfigFile.All) && File.Exists($"{AppVars.GuidsConfigPath}.json"))
             {
                 if (guidsConfig == null)
                 {
                     File.Move($"{AppVars.GuidsConfigPath}.json", AppVars.GuidsConfigPath + "-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".json");
                 }
+                
+                string guidJson = JsonSerializer.Serialize(new { GuidConfiguration = guidsConfig == null ? Defaults.DefaultGuidsConfig : guidsConfig }, jsonOptions);
+                configTasks.Add(File.WriteAllTextAsync($"{AppVars.GuidsConfigPath}.json", guidJson));
+            } else if (configFile == ConfigFile.Guids || configFile == ConfigFile.All)
+            {
+                string guidJson = JsonSerializer.Serialize(new { GuidConfiguration = guidsConfig == null ? Defaults.DefaultGuidsConfig : guidsConfig }, jsonOptions);
+                configTasks.Add(File.WriteAllTextAsync($"{AppVars.GuidsConfigPath}.json", guidJson));
             }
 
-            string guidJson = JsonSerializer.Serialize(new { GuidConfiguration = guidsConfig == null ? Defaults.DefaultGuidsConfig : guidsConfig }, jsonOptions);
-            configTasks.Add(File.WriteAllTextAsync($"{AppVars.GuidsConfigPath}.json", guidJson));
+            if ((configFile == ConfigFile.UIDs || configFile == ConfigFile.All) && File.Exists($"{AppVars.UIDsConfigPath}.json"))
+            {
+                if (uiDsConfig == null)
+                {
+                    File.Move($"{AppVars.UIDsConfigPath}.json", AppVars.UIDsConfigPath + "-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".json");
+                }
+                
+                string uidJson = JsonSerializer.Serialize(new { UIDConfiguration = uiDsConfig == null ? Defaults.DefaultUIDsConfig : uiDsConfig }, jsonOptions);
+                configTasks.Add(File.WriteAllTextAsync($"{AppVars.UIDsConfigPath}.json", uidJson));
+            } else if (configFile == ConfigFile.UIDs || configFile == ConfigFile.All)
+            {
+                string uidJson = JsonSerializer.Serialize(new { UIDConfiguration = uiDsConfig == null ? Defaults.DefaultUIDsConfig : uiDsConfig }, jsonOptions);
+                configTasks.Add(File.WriteAllTextAsync($"{AppVars.UIDsConfigPath}.json", uidJson));
+            }
 
+            if (configTasks.Count == 0)
+            {
+                return;
+            }
+            
             await Task.WhenAll(configTasks);
         }
 
@@ -214,6 +257,20 @@ namespace HydroModTools.Configuration
                       Name = "2.0 BP_ParentBuild -\u003E GridGuide",
                       ModdedGuid = "f1abe920283e3d4cbc764873444224e4",
                       OriginalGuid = "f9d436063e13ba4c85f0adb14d9505ce"
+                    }
+                }
+            };
+
+            public static readonly UIDsConfig DefaultUIDsConfig = new UIDsConfig()
+            {
+                UIDs = new List<UIDsConfigItem>()
+                {
+                    new UIDsConfigItem()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "DT_Rod->Name",
+                        ModdedUID = "Name_11_358F36674E991957884324A361CDEB16",
+                        OriginalUID = "Name_14_A74E44DC49472A95C3508585ED17534C"
                     }
                 }
             };

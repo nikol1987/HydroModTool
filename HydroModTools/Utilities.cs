@@ -59,7 +59,7 @@ namespace HydroModTools
             return outputFile;
         }
 
-        public static int? SearchBytePattern(byte[] pattern, byte[] bytes)
+        public static IReadOnlyCollection<int> SearchBytePattern(byte[] pattern, byte[] bytes)
         {
             List<int> positions = new List<int>();
             int patternLength = pattern.Length;
@@ -81,10 +81,10 @@ namespace HydroModTools
 
             if (positions.Count == 0)
             {
-                return null;
+                return Array.Empty<int>();
             }
 
-            return positions.First();
+            return positions;
         }
 
         public static byte[] Hex2Binary(string hex)
@@ -97,6 +97,11 @@ namespace HydroModTools
                 bytes.Add(byte.Parse(chunk, NumberStyles.AllowHexSpecifier));
             }
             return bytes.ToArray();
+        }
+        
+        public static byte[] String2Binary(string str)
+        {
+            return Encoding.UTF8.GetBytes(str);
         }
     }
 }

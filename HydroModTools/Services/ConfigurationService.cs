@@ -38,7 +38,7 @@ namespace HydroModTools.Services
             var projects = config.Projects.ToModel().ToList();
             projects.Add(new ProjectModel(id, name, modIndex, assetsPath, outputPath));
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel(), config.UIDs.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
@@ -52,7 +52,7 @@ namespace HydroModTools.Services
 
             projects[projectIdx] = new ProjectModel(id, name, modIndex, assetsPath, outputPath, projects[projectIdx].Items);
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel(), config.UIDs.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
@@ -63,7 +63,7 @@ namespace HydroModTools.Services
 
             var projects = config.Projects.ToModel().Where(project => project.Id != projectId).ToList();
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel(), config.UIDs.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
@@ -97,7 +97,7 @@ namespace HydroModTools.Services
 
             projects[projectIdx] = newProject;
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel(), config.UIDs.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
@@ -117,7 +117,7 @@ namespace HydroModTools.Services
 
             projects[projectIdx] = newProject;
 
-            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(projects, config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel(), config.UIDs.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }
@@ -126,17 +126,25 @@ namespace HydroModTools.Services
         {
             var config = await _configuration.GetConfigurationAsync();
 
-            var newConfig = new AppConfigModel(config.Projects.ToModel(), config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, guids);
+            var newConfig = new AppConfigModel(config.Projects.ToModel(), config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, guids, config.UIDs.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
+        }
+        
+        public async Task SaveUIDs(IReadOnlyCollection<UIDItemModel> uids)
+        {
+            var config = await _configuration.GetConfigurationAsync();
 
+            var newConfig = new AppConfigModel(config.Projects.ToModel(), config.DefaultProject, (HydroneerVersion)config.HydroneerVersion, config.Guids.ToModel(), uids);
+
+            await _configuration.SaveConfigurationAsync(newConfig);
         }
 
         public async Task SetGameVersion(HydroneerVersion hydroneerVersion)
         {
             var config = await _configuration.GetConfigurationAsync();
 
-            var newConfig = new AppConfigModel(config.Projects.ToModel(), config.DefaultProject, hydroneerVersion, config.Guids.ToModel());
+            var newConfig = new AppConfigModel(config.Projects.ToModel(), config.DefaultProject, hydroneerVersion, config.Guids.ToModel(), config.UIDs.ToModel());
 
             await _configuration.SaveConfigurationAsync(newConfig);
         }

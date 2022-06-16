@@ -11,14 +11,19 @@ namespace HydroModTools.Extensions
     {
         public static AppConfigModel ToModel(this AppConfig appConfig)
         {
-            return new AppConfigModel(appConfig.Projects.ToModel(), appConfig.DefaultProject, (HydroneerVersion)appConfig.HydroneerVersion, appConfig.Guids.ToModel());
+            return new AppConfigModel(
+                appConfig.Projects.ToModel(),
+                appConfig.DefaultProject,
+                (HydroneerVersion)appConfig.HydroneerVersion,
+                appConfig.Guids.ToModel(),
+                appConfig.UIDs.ToModel());
         }
 
         public static ProjectModel ToModel(this ProjectConfig project)
         {
             return new ProjectModel(project.Id, project.Name, project.ModIndex, project.Path, project.OutputPath, project.Items.ToModel());
         }
-        public static IReadOnlyCollection<ProjectModel> ToModel(this IList<ProjectConfig> projects)
+        public static IReadOnlyCollection<ProjectModel> ToModel(this IList<ProjectConfig>? projects)
         {
             var result = new List<ProjectModel>();
 
@@ -35,7 +40,7 @@ namespace HydroModTools.Extensions
             return result;
         }
 
-        public static IReadOnlyCollection<ProjectItemModel> ToModel(this IList<ProjectItemConfig> projectItems)
+        public static IReadOnlyCollection<ProjectItemModel> ToModel(this IList<ProjectItemConfig>? projectItems)
         {
             var result = new List<ProjectItemModel>();
 
@@ -52,7 +57,7 @@ namespace HydroModTools.Extensions
             return result;
         }
 
-        public static IReadOnlyCollection<GuidItemModel> ToModel(this IReadOnlyCollection<GuidConfigItem> guids)
+        public static IReadOnlyCollection<GuidItemModel> ToModel(this IReadOnlyCollection<GuidConfigItem>? guids)
         {
             var result = new List<GuidItemModel>();
 
@@ -68,6 +73,23 @@ namespace HydroModTools.Extensions
 
             return result;
         }
+        
+        public static IReadOnlyCollection<UIDItemModel> ToModel(this IReadOnlyCollection<UIDsConfigItem>? uids)
+        {
+            var result = new List<UIDItemModel>();
+
+            if (uids == null)
+            {
+                return result;
+            }
+
+            foreach (var uid in uids)
+            {
+                result.Add(new UIDItemModel(uid.Id, uid.Name, uid.ModdedUID, uid.OriginalUID));
+            }
+
+            return result;
+        }
 
         public static GeneralConfig ToGeneralConfig(this AppConfigModel appConfig)
         {
@@ -79,7 +101,7 @@ namespace HydroModTools.Extensions
             };
         }
 
-        public static List<ProjectConfig> ToConfig(this IReadOnlyCollection<ProjectModel> projects)
+        public static List<ProjectConfig> ToConfig(this IReadOnlyCollection<ProjectModel>? projects)
         {
             var result = new List<ProjectConfig>();
 
@@ -104,7 +126,7 @@ namespace HydroModTools.Extensions
             return result;
         }
 
-        public static List<ProjectItemConfig> ToConfig(this IReadOnlyCollection<ProjectItemModel> projectItems)
+        public static List<ProjectItemConfig> ToConfig(this IReadOnlyCollection<ProjectItemModel>? projectItems)
         {
             var result = new List<ProjectItemConfig>();
 
@@ -133,17 +155,25 @@ namespace HydroModTools.Extensions
                 Guids = appConfig.Guids.ToConfig()
             };
         }
+        
+        public static UIDsConfig ToUIDsConfig(this AppConfigModel appConfig)
+        {
+            return new UIDsConfig()
+            {
+                UIDs = appConfig.UIDs.ToConfig()
+            };
+        }
 
-        public static List<GuidConfigItem> ToConfig(this IReadOnlyCollection<GuidItemModel> projectItems)
+        public static List<GuidConfigItem> ToConfig(this IReadOnlyCollection<GuidItemModel>? guids)
         {
             var result = new List<GuidConfigItem>();
 
-            if (projectItems == null)
+            if (guids == null)
             {
                 return result;
             }
 
-            foreach (var item in projectItems)
+            foreach (var item in guids)
             {
                 result.Add(new GuidConfigItem()
                 {
@@ -156,6 +186,28 @@ namespace HydroModTools.Extensions
 
             return result;
         }
+        
+        public static List<UIDsConfigItem> ToConfig(this IReadOnlyCollection<UIDItemModel>? uids)
+        {
+            var result = new List<UIDsConfigItem>();
 
+            if (uids == null)
+            {
+                return result;
+            }
+
+            foreach (var item in uids)
+            {
+                result.Add(new UIDsConfigItem()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    ModdedUID = item.ModdedUID,
+                    OriginalUID = item.OriginalUID
+                });
+            }
+
+            return result;
+        }
     }
 }

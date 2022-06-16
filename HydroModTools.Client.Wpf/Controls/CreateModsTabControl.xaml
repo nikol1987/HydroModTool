@@ -11,5 +11,6 @@
     <hc:TabControl x:Name="TabSelector" SelectedIndex="0" ShowOverflowButton="False" ShowContextMenu="False">
         <hc:TabItem x:Name="ProjectsTab" Header="Projects" FontFamily="Consolas" IsSelected="True" />
         <hc:TabItem x:Name="GUIDsTab" Header="GUIDs" FontFamily="Consolas" />
+        <hc:TabItem x:Name="UIDsTab" Header="UIDs" FontFamily="Consolas" />
     </hc:TabControl>
 </UserControl>

@@ -11,7 +11,7 @@ namespace HydroModTools.Tools
 {
     public class Stager
     {
-        public static Task StageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project, IReadOnlyCollection<GuidItemModel> guids)
+        public static Task StageAsync(Action<ProgressbarStateModel> reportProgress, int progressMin, int progressMax, ProjectModel project, IReadOnlyCollection<GuidItemModel> guids, IReadOnlyCollection<UIDItemModel> dtUIDs)
         {
             var basePathSrc = project.Path;
             var basePathOut = Path.Combine(project.OutputPath, "Staging", project.Name, "Mining");
@@ -43,7 +43,25 @@ namespace HydroModTools.Tools
                 // ReSharper disable once StringLiteralTypo
                 if (projectItem.Name.EndsWith(".uexp"))
                 {
-                    var patched = PatchFile(basePathSrc + projectItem.Path, guids);
+                    var patched = PatchFile(basePathSrc + projectItem.Path, guids, Array.Empty<UIDItemModel>());
+
+                    if (patched == null)
+                    {
+                        File.Copy(basePathSrc + projectItem.Path, basePathOut + newPath, true);
+                        count++;
+
+                        continue;
+                    }
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(basePathOut + newPath)!);
+
+                    using var file = File.Create(basePathOut + newPath, (int)patched.Length, FileOptions.Asynchronous | FileOptions.SequentialScan);
+                    patched.Position = 0;
+                    patched.CopyTo(file);
+                }
+                else if (projectItem.Name.EndsWith(".uasset"))
+                {
+                    var patched = PatchFile(basePathSrc + projectItem.Path, Array.Empty<GuidItemModel>(), dtUIDs);
 
                     if (patched == null)
                     {
@@ -81,42 +99,67 @@ namespace HydroModTools.Tools
             }).Select(item => basePath + item.Path).ToList();
         }
 
-        private static MemoryStream? PatchFile(string fileSrc, IEnumerable<GuidItemModel> guids)
+        private static MemoryStream? PatchFile(string fileSrc, IEnumerable<GuidItemModel> guids, IEnumerable<UIDItemModel> dtUIDs)
         {
             var fileBytes = File.ReadAllBytes(fileSrc);
 
             var patchedBytes = new byte[fileBytes.Length];
             Buffer.BlockCopy(fileBytes, 0, patchedBytes, 0, patchedBytes.Length);
 
-            var patched = false;
+            var wasPatched = false;
             foreach (var guid in guids)
             {
                 var moddedGuidBytes = Utilities.Hex2Binary(guid.ModdedGuid.ToString("N"));
                 var originalGuidBytes = Utilities.Hex2Binary(guid.OriginalGuid.ToString("N"));
 
-                var position = Utilities.SearchBytePattern(moddedGuidBytes, patchedBytes);
+                var positions = Utilities.SearchBytePattern(moddedGuidBytes, patchedBytes);
 
-                if (!position.HasValue)
+                if (positions.Count == 0)
                 {
-                    continue;
+                    continue; 
                 }
+
+                var position = positions.First();
 
                 var tmpPatchedBytes = new byte[patchedBytes.Length];
 
-                Buffer.BlockCopy(patchedBytes, 0, tmpPatchedBytes, 0, position.Value);
-                Buffer.BlockCopy(originalGuidBytes, 0, tmpPatchedBytes, position.Value, 16);
-                Buffer.BlockCopy(patchedBytes, position.Value + 16, tmpPatchedBytes, position.Value + 16, patchedBytes.Length - (position.Value + 16));
-
-                patched = true;
-
+                Buffer.BlockCopy(patchedBytes, 0, tmpPatchedBytes, 0, position);
+                Buffer.BlockCopy(originalGuidBytes, 0, tmpPatchedBytes, position, originalGuidBytes.Length);
+                Buffer.BlockCopy(patchedBytes, position + originalGuidBytes.Length, tmpPatchedBytes, position + originalGuidBytes.Length, patchedBytes.Length - (position + originalGuidBytes.Length));
+                
                 Buffer.BlockCopy(tmpPatchedBytes, 0, patchedBytes, 0, patchedBytes.Length);
+                
+                wasPatched = true;
             }
 
-            if (!patched)
+            foreach (var dtUID in dtUIDs)
+            {
+                var moddedUID = Utilities.String2Binary(dtUID.ModdedUID);
+                var retailUID = Utilities.String2Binary(dtUID.OriginalUID);
+
+                var namePositions = Utilities.SearchBytePattern(moddedUID, patchedBytes);
+
+                if (namePositions.Count > 0)
+                {
+                    foreach (var namePosition in namePositions)
+                    {
+                        var tmpPatchedBytes = new byte[patchedBytes.Length];
+
+                        Buffer.BlockCopy(patchedBytes, 0, tmpPatchedBytes, 0, namePosition);
+                        Buffer.BlockCopy(retailUID, 0, tmpPatchedBytes, namePosition, retailUID.Length);
+                        Buffer.BlockCopy(patchedBytes, namePosition + retailUID.Length, tmpPatchedBytes, namePosition + retailUID.Length, patchedBytes.Length - (namePosition + retailUID.Length));
+
+                        Buffer.BlockCopy(tmpPatchedBytes, 0, patchedBytes, 0, patchedBytes.Length);
+                        
+                        wasPatched = true;
+                    }
+                }
+            }
+
+            if (!wasPatched)
             {
                 return null;
             }
-
 
             var ms = new MemoryStream(patchedBytes);
 

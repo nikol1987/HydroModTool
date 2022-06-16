@@ -122,7 +122,7 @@ namespace HydroModTools.Services
 
             reportProgress.Invoke(new ProgressbarStateModel((int)Math.Floor(Utilities.Remap(10, 0, 100, progressMin, progressMax)), "Start Staging"));
 
-            await Stager.StageAsync(reportProgress.Invoke, 10, 90, project, configuration.Guids);
+            await Stager.StageAsync(reportProgress.Invoke, 10, 90, project, configuration.Guids, configuration.UIDs);
         }
     }
 }

@@ -4,6 +4,7 @@
     {
         General,
         Guids,
-        Both
+        UIDs,
+        All
     }
 }

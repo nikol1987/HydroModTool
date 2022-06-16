@@ -19,6 +19,8 @@ namespace HydroModTools.Contracts.Services
         Task RemoveAssets(Guid projectId, IReadOnlyCollection<Guid> assetsId);
         
         Task SaveGuids(IReadOnlyCollection<GuidItemModel> guids);
+        
+        Task SaveUIDs(IReadOnlyCollection<UIDItemModel> uids);
 
         Task SetGameVersion(HydroneerVersion hydroneerVersion);
     }
