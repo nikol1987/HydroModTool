@@ -1,0 +1,53 @@
+﻿@using HydroToolChain.Client.Business.Abstracts
+@using HydroToolChain.Client.Models
+@using HydroToolChain.App.Configuration.Data
+@using HydroToolChain.App.Configuration
+
+@implements IDisposable;
+
+@inject IAppFacade Facade;
+@inject IWritableOptions<AppData> AppDataOptions;
+
+
+<div class="guid-tab flex column">
+    <div class="guid-tab__header flex row">
+        <button class="btn btn--secondary" @onclick="@Facade.AddGuid">Add Guid</button>
+        <button class="btn btn--secondary" @onclick="@Facade.RemoveGuid">Remove Guid</button>
+    </div>
+    <div class="guid-tab__content flex column grow">
+        <div class="guid-tab__content__table flex column">
+            <div class="guid-tab__content__table-header flex grow">
+                <div class="guid-tab__content__table-header-name flex">Name</div>
+                <div class="guid-tab__content__table-header-retail-uid flex">Retail GUID</div>
+                <div class="guid-tab__content__table-header-modded-uid flex">Modded GUID</div>
+            </div>
+            <div class="guid-tab__content__table-body flex column">
+            @foreach (var item in Items)
+            {
+                <GuidItem Item="@item"></GuidItem>
+            }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<GuidData> Items { get; set; } = new();
+    
+    protected override void OnInitialized()
+    {
+        Facade.OnAppStateChanged += OnStateUpdated;
+        Items = AppDataOptions.Value.Guids;
+    }
+
+    private void OnStateUpdated()
+    {
+        Items = AppDataOptions.Value.Guids;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Facade.OnAppStateChanged -= OnStateUpdated;
+    }
+}

@@ -1,0 +1,84 @@
+﻿@import "../Shared/Colors";
+
+.uid-item {
+  margin-bottom: 5px;
+  background-color: $primary-color;
+  border: 1px solid $primary-color;
+  box-sizing: border-box;
+  border-radius: 5px;
+  min-height: 50px;
+  width: 100%;
+
+  padding: 5px;
+
+  &:hover {
+    border: 1px solid red;
+  }
+  
+  &.selected {
+    border: 1px solid red;
+  }
+
+  &-name {
+    flex-basis: 26%;
+    >button {
+      text-align: left;
+      width: 100%;
+      height: 100%;
+
+      background-color: transparent;
+      border: 0;
+      color: white;
+    }
+    >input[type="text"] {
+      display: flex;
+      width: 100%;
+
+      background-color: $secondary-color;
+      border: 0;
+      color: white;
+    }
+  }
+
+  &-retail-uid {
+    flex-basis: 37%;
+    >button {
+      text-align: left;
+      width: 100%;
+      height: 100%;
+
+      background-color: transparent;
+      border: 0;
+      color: white;
+    }
+    >input[type="text"] {
+      display: flex;
+      width: 100%;
+      
+      background-color: $secondary-color;
+      border: 0;
+      color: white;
+    }
+  }
+
+  &-modded-uid {
+    flex-basis: 37%;
+    >button {
+      text-align: left;
+      width: 100%;
+      height: 100%;
+
+      background-color: transparent;
+      border: 0;
+      color: white;
+    }
+    >input[type="text"] {
+      display: flex;
+      width: 100%;
+
+      background-color: $secondary-color;
+      border: 0;
+      color: white;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+﻿.flex {
+  display: flex;
+
+  &.space-between {
+    align-content: space-between;
+  }
+  
+  &.row {
+    flex-direction: row;
+  }
+
+  &.column {
+    flex-direction: column;
+  }
+  
+  &.grow {
+    flex-grow: 1;
+  }
+  
+  &.right {
+    align-content: flex-end;
+  }
+}
+

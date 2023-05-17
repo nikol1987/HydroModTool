@@ -1,0 +1,88 @@
+﻿@using HydroToolChain.Client.Models
+@using HydroToolChain.Client.Business.Abstracts
+
+@implements IDisposable 
+
+@inject IAppFacade AppFacade
+
+<MatPortalHost></MatPortalHost>
+<MatToastContainer></MatToastContainer>
+<ContextMenus></ContextMenus>
+
+@if (AppLoaded == false)
+{
+<div class="app flex column">
+        <div class="app__spinner"><div></div><div></div><div></div><div></div></div>
+</div>
+}
+else
+{
+<div class="app flex column">
+    <div class="app-header flex row">
+        <div class="app-header__navigation">
+            <button class="btn rounded" @onclick="() => OnMenuItemClick(AppPages.CreateMods)">Create Mods</button>
+            <button class="btn rounded" @onclick="() => OnMenuItemClick(AppPages.About)">About</button>
+        </div>
+        <div class="app-header__settings">
+            <button class="btn rounded" @onclick="() => AppFacade.LoadSettings()">Load</button>
+            <button class="btn rounded" @onclick="() => AppFacade.SaveSettings()">Save</button>
+        </div>
+        <div class="app-header__title">
+            <span>Hydroneer Modding Toolchain</span>
+        </div>
+    </div>
+
+    <div class="app-content flex column @(AppLoaded ? "" : "hidden") @GetClass()">
+        @if (_currentPage == AppPages.CreateMods)
+        {
+            <CreateModsPage></CreateModsPage>
+        }
+
+        @if (_currentPage == AppPages.About)
+        {
+            <AboutPage></AboutPage>
+        }
+    </div>
+</div>
+}
+
+@code {
+    public bool AppLoaded;
+
+    private AppPages _currentPage = AppPages.CreateMods;
+
+    private string GetClass()
+    {
+        return _currentPage == AppPages.About ? "about-page" : "";
+    }
+
+    private void OnMenuItemClick(AppPages newPage)
+    {
+        AppFacade.SaveSettings(true);
+        _currentPage = newPage;
+    }
+    
+    protected override void OnInitialized()
+    {
+        AppFacade.OnAppLoaded += AppFacadeOnOnAppLoaded;
+
+        Task.Delay(5000).ContinueWith(task =>
+        {
+            InvokeAsync(() =>
+            {
+                AppFacade.LoadSettings(true);
+            });
+        });
+    }
+
+    private void AppFacadeOnOnAppLoaded(bool loaded)
+    {
+        AppLoaded = loaded;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        AppFacade.OnAppLoaded -= AppFacadeOnOnAppLoaded;
+    }
+}

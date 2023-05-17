@@ -1,0 +1,21 @@
+﻿@using HydroToolChain.Client.Business.Abstracts
+@using HydroToolChain.Client.Helpers
+@using HydroToolChain.Client.Models.Data
+
+@inject IAppFacade Facade;
+
+<ContextMenu Id="@ContextMenusIds.AssetsContextMenu" CssClass="project-asset-node__menu">
+    <Item OnClick="@(() => Facade.AddAssets())">Add Assets</Item>
+    <Item OnClick="@(() => OnRemoveAssets(context.Data))">Remove</Item>
+</ContextMenu>
+
+@code {
+    private void OnRemoveAssets(object data)
+    {
+        var assetItem = data as ProjectAssetItem;
+
+        var assetsToDelete = TreeHelpers.GetAllChildAssetIds(assetItem!);
+
+        Facade.RemoveAssets(assetsToDelete);
+    }
+}

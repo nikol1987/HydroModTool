@@ -1,0 +1,61 @@
+﻿@using HydroToolChain.App.Configuration.Data
+
+<MatDialogTitle Class="add-project-dialog__title">New Project</MatDialogTitle>
+<MatDialogContent>
+    <EditForm Model="_newProject" OnSubmit="OnSubmit">
+        <DataAnnotationsValidator/>
+        <div class="add-project-dialog__form flex column">
+            <div class="flex row">
+                <div class="flex column">
+                    <MatTextField Label="Name" @bind-Value="_newProject.Name" HelperText="Ex: HMLoader"></MatTextField>
+                    <ValidationMessage class="validator" For="@(() => _newProject.Name)"/>
+                </div>
+
+                <MatTooltip Tooltip="Used for ordering when using legacy loading, leave 500 if mod is in steam workshop" Context="ctx">
+                    <div class="flex column">
+                        <MatTextField TValue="int" RefBack="@ctx" Icon="info" Label="Index" @bind-Value="_newProject.ModIndex" ValidationDisabled="true"></MatTextField>
+                    </div>
+                </MatTooltip>
+            </div>
+            
+            <div class="flex column">
+                <MatTextField Label="Assets Path" @bind-Value="_newProject.CookedAssetsPath" HelperText="Ex: C:\contoso\Mining\Saved\Cooked\WindowsNoEditor\Mining"></MatTextField>
+                <ValidationMessage class="validator" For="@(() => _newProject.CookedAssetsPath)"/>
+            </div>
+            <div class="flex column">
+                <MatTextField Label="Dist Path" @bind-Value="_newProject.OutputPath" HelperText="Ex: C:\contoso\ModDist"></MatTextField>
+                <ValidationMessage class="validator" For="@(() => _newProject.OutputPath)"/>
+            </div>
+        </div>
+
+        <MatDialogActions Class="add-project-dialog__actions">
+            <MatButton Class="add-project-dialog__actions__button" Type="submit">Save</MatButton>
+            <MatButton Class="add-project-dialog__actions__button" OnClick="() => CloseDialog()">Cancel</MatButton>
+        </MatDialogActions>
+    </EditForm>
+</MatDialogContent>
+
+@code {
+    [CascadingParameter]
+    public MatDialogReference DialogReference { get; set; }  = null!;
+    
+    private readonly ProjectData _newProject = new();
+
+    private void CloseDialog(bool sendResult = false)
+    {
+
+        var result = sendResult ? _newProject : null;
+        
+        DialogReference.Close(result);
+    }
+
+    private void OnSubmit(EditContext ctx )
+    {
+        if (!ctx.Validate())
+        {
+            return;
+        }
+        
+        CloseDialog(true);
+    }
+}

@@ -1,0 +1,55 @@
+﻿@using HydroToolChain.Client.Business.Abstracts
+@using HydroToolChain.App.Configuration
+@using HydroToolChain.App.Configuration.Data
+
+@implements IDisposable;
+@inject IAppFacade Facade;
+
+<ContextMenuTrigger CssClass="@ItemClass" MenuId="@ContextMenusIds.ProjectItemContextMenu" @onclick="@SetCurrentProject" Data="@Project">
+    <span class="project-item__name">@Project!.Name</span>
+</ContextMenuTrigger>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public ProjectData? Project { get; set; }
+    
+    private string ItemClass = "project-item";
+
+    protected override void OnParametersSet()
+    {
+        OnProjectChange(Facade.GetCurrentProject()?.Id ?? Guid.Empty);
+    }
+
+    protected override void OnInitialized()
+    {
+        Facade.OnProjectChanged += OnProjectChange;
+    }
+
+    private void SetCurrentProject()
+    {
+        if (Facade.GetCurrentProject()?.Id == Project!.Id)
+        {
+            return;
+        }
+        
+        
+        Facade.SetCurrentProject(Project!.Id);
+    }
+
+    private void OnProjectChange(Guid newProject)
+    {
+        ItemClass = newProject == Project!.Id ? "project-item selected" : "project-item";
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Facade.OnProjectChanged -= OnProjectChange;
+    }
+
+    private void OnOpenDistFolder()
+    {
+        Facade.OpenDistFolder(Project!.Id);
+    }
+}

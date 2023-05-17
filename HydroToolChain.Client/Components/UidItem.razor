@@ -1,0 +1,145 @@
+﻿@using HydroToolChain.Client.Business.Abstracts
+@using HydroToolChain.App.Configuration.Data
+
+@implements IDisposable;
+@inject IAppFacade Facade;
+
+<div class="uid-item flex grow @_selectedClass" @onclick="@SelectUid">
+    <div class="uid-item-name">
+        <Button @ondblclick="@OnNameDblClick" class="@(_isNameDisabled ? "" : "hidden")">@Item.Name</Button>
+        <input @ref="_nameElement" class="@(_isNameDisabled ? "hidden" : "")" type="text" @onchange="@(e => OnValueChange(e, ValueChanged.Name))" Value="@Item.RetailUid" onblur="@OnNameBlur">
+    </div>
+    <div class="uid-item-retail-uid">
+        <Button @ondblclick="@OnRetailUidDblClick" class="@(_isRetailUidDisabled ? "" : "hidden")">@Item.RetailUid</Button>
+        <input @ref="_retailUidElement" class="@(_isRetailUidDisabled ? "hidden" : "")" type="text" @onchange="@(e => OnValueChange(e, ValueChanged.RetailUid))" Value="@Item.RetailUid" onblur="@OnRetailUidBlur">
+    </div>
+    <div class="uid-item-modded-uid">
+        <Button @ondblclick="@OnModdedUidDblClick" class="@(_isModdedUidDisabled ? "" : "hidden")">@Item.ModdedUid</Button>
+        <input @ref="_moddedUidElement" class="@(_isModdedUidDisabled ? "hidden" : "")" type="text" @onchange="@(e => OnValueChange(e, ValueChanged.ModdedUid))" Value="@Item.ModdedUid" onblur="@OnModdedUidBlur">
+    </div>
+</div>
+ 
+@code {
+    [Parameter]
+    public UidData Item { get; set; }  = null!;
+
+    ElementReference _nameElement;
+    private bool _isNameDisabled = true;
+    private bool _isNameDisabledRender;
+    
+    ElementReference _retailUidElement;
+    private bool _isRetailUidDisabled = true;
+    private bool _isRetailUidDisabledRender;
+    
+    ElementReference _moddedUidElement;
+    private bool _isModdedUidDisabled = true;
+    private bool _isModdedUidDisabledRender;
+
+    private string _selectedClass = "";
+    
+    protected override void OnParametersSet()
+    {
+        OnUidChange(Facade.GetCurrentUid()?.Id ?? Guid.Empty);
+    }
+
+    protected override void OnInitialized()
+    {
+        Facade.OnUidChanged += OnUidChange;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!_isNameDisabled && _isNameDisabledRender)
+        {
+            _nameElement.FocusAsync();
+            _isNameDisabledRender = false;
+        }
+        if (!_isRetailUidDisabled && _isRetailUidDisabledRender)
+        {
+            _retailUidElement.FocusAsync();
+            _isRetailUidDisabledRender = false;
+        }
+        
+        if (!_isModdedUidDisabled && _isModdedUidDisabledRender)
+        {
+            _moddedUidElement.FocusAsync();
+            _isModdedUidDisabledRender = false;
+        }
+    }
+
+    private void OnNameDblClick()
+    {
+        _isNameDisabled = false;
+        _isNameDisabledRender = true;
+    }
+
+    private void OnRetailUidDblClick()
+    {
+        _isRetailUidDisabled = false;
+        _isRetailUidDisabledRender = true;
+    }
+
+    private void OnModdedUidDblClick()
+    {
+        _isModdedUidDisabled = false;
+        _isModdedUidDisabledRender = true;
+    }
+
+    private void OnNameBlur()
+    {
+        _isNameDisabled = true;
+    }
+
+    private void OnRetailUidBlur()
+    {
+        _isRetailUidDisabled = true;
+    }
+
+    private void OnModdedUidBlur()
+    {
+        _isModdedUidDisabled = true;
+    }
+
+    private void SelectUid()
+    {
+        Facade.SetCurrentUid(Item.Id);
+    }
+
+    public void Dispose()
+    {
+        Facade.OnUidChanged -= OnUidChange;
+    }
+
+    private void OnUidChange(Guid newUid)
+    {
+        _selectedClass = newUid == Item.Id ? "selected" : "";
+        InvokeAsync(StateHasChanged);
+    }
+    
+    private void OnValueChange(ChangeEventArgs e, ValueChanged changed)
+    {
+        switch (changed)
+        {
+            case ValueChanged.Name:
+                Item.Name = (string)e.Value!;
+                break;
+            case ValueChanged.RetailUid:
+                Item.RetailUid = (string)e.Value!;
+                break;
+            case ValueChanged.ModdedUid:
+                Item.RetailUid = (string)e.Value!;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(changed), changed, null);
+        }
+
+        Facade.UpdateItem(Item);
+    }
+
+    enum ValueChanged
+    {
+        Name,
+        RetailUid,
+        ModdedUid
+    }
+}
