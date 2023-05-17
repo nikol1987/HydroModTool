@@ -1,0 +1,107 @@
+﻿@using HydroToolChain.Client.Business.Abstracts
+@using HydroToolChain.App.Configuration.Data
+@using HydroToolChain.App.Configuration
+@using HydroToolChain.Client.Helpers
+@using HydroToolChain.Client.Models.Data
+@using ProjectAssetNode = HydroToolChain.Client.Components.ProjectAssetNode
+
+@implements IDisposable;
+
+@inject IAppFacade Facade;
+@inject IWritableOptions<AppData> AppDataOptions;
+
+<div class="projects-tab flex column">
+    <div class="projects-tab__header flex row space-between">
+        <div class="flex row">
+            <button class="btn btn--secondary" @onclick="@Facade.AddProject">Add Project</button>
+            <button class="btn btn--secondary" @onclick="@Facade.Stage">Stage</button>
+            <button class="btn btn--secondary" @onclick="@Facade.Package">Package</button>
+            <button class="btn btn--secondary" @onclick="@Facade.Copy">Copy Mod</button>
+            <button class="btn btn--secondary" @onclick="@Facade.LaunchGame">Launch Game</button>
+            <button class="btn btn--secondary" @onclick="@Facade.DevExpress">Dev Express</button>
+        </div>
+        <div class="flex row grow">
+            @if (_hasProjectSelected)
+            {
+                <button class="btn btn--secondary center" @onclick="@(() => Facade.AddAssets())">Add Assets</button>
+            }
+        </div>
+        <div class="flex row">
+            <button class="btn btn--secondary" @onclick="@Facade.ClearLegacyMods">Clear Legacy Mods</button>
+            <button class="btn btn--secondary" @onclick="@Facade.OpenModsFolder">Mods Folder</button>
+        </div>
+    </div>
+    <div class="projects-tab__content flex row">
+        <div class="projects-tab__content__project-list flex column">
+            @foreach (var project in _projects)
+            {
+                <ProjectItem Project="project"></ProjectItem>
+            }
+        </div>
+        <div class="projects-tab__content__asset-list-container flex column grow">
+            <div class="projects-tab__content__asset-list">
+                <MudTreeView Items="TreeItems">
+                    <ItemTemplate>
+                        <MudTreeViewItem @bind-Expanded="@context.IsExpanded" Items="@context.TreeItems">
+                            <Content>
+                                <MudTreeViewItemToggleButton @bind-Expanded="@context.IsExpanded" Visible="@context.HasChild"></MudTreeViewItemToggleButton>
+                                <ProjectAssetNode Item="@context"></ProjectAssetNode>
+                            </Content>
+                        </MudTreeViewItem>
+                    </ItemTemplate>
+                </MudTreeView>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    
+    private IEnumerable<ProjectData> _projects = new ProjectData[]{};
+
+    private HashSet<ProjectAssetItem> TreeItems { get; set; } = new();
+
+    private bool _hasProjectSelected { get; set; } = false;
+    
+    protected override void OnInitialized()
+    {
+        var currentProjectId = Facade.GetCurrentProject()?.Id ?? Guid.Empty;
+        OnProjectChange(currentProjectId);
+        
+        _projects = AppDataOptions.Value.Projects;
+
+        Facade.OnAppStateChanged += OnAppStateChanged;
+        Facade.OnProjectChanged += OnProjectChange;
+    }
+
+    private void OnProjectChange(Guid projectId)
+    {
+        _hasProjectSelected = projectId != Guid.Empty;
+
+        if (projectId == Guid.Empty)
+        {
+            InvokeAsync(StateHasChanged);
+            return;
+        }
+        
+        var project = Facade.GetProjectById(projectId);
+        
+        TreeItems = TreeHelpers.GetTreeNodesFromProject(project);
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnAppStateChanged()
+    {
+        _projects = AppDataOptions.Value.Projects;
+        
+        var currentProjectId = Facade.GetCurrentProject()?.Id ?? Guid.Empty;
+        OnProjectChange(currentProjectId);
+        
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Facade.OnAppStateChanged -= OnAppStateChanged;
+    }
+}

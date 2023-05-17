@@ -1,0 +1,27 @@
+﻿@import "../Shared/Colors";
+
+.create-mods {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  
+  &-header {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: row;
+    background-color: $primary-color;
+
+    >.btn {
+      min-width: 15%;
+
+      margin-left: 5px;
+    }
+  }
+  
+  &-content {
+    display: flex;
+    flex: 1 0 auto;
+  }
+  
+  
+}

@@ -48,12 +48,12 @@ jobs:
         run: dotnet test --no-build --verbosity normal
 
       - name: Publish
-        run: dotnet publish -p:PublishProfile=HydroModTools/Properties/PublishProfiles/FolderProfile
+        run: dotnet publish -p:PublishProfile=HydroToolChain.Client/Properties/PublishProfiles/FolderProfile
 
       - name: zip published files
         uses: vimtor/action-zip@v1
         with:
-          files: HydroModTools\publish\
+          files: HydroToolChain.Client\publish\
           dest: Hydroneer Modding Toolchain.zip
 
     #  - name: Build msi

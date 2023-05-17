@@ -1,0 +1,43 @@
+﻿@using HydroToolChain.Client.Models
+@using HydroToolChain.Client.Business.Abstracts
+
+@inject IAppFacade AppFacade
+
+<div class="create-mods">
+    <div class="create-mods-header">
+        <button class="btn @IsSelectedClass(CreateModsTabs.Projects)" @onclick="@(() => OnMenuItemClick(CreateModsTabs.Projects))">Projects</button>
+        <button class="btn @IsSelectedClass(CreateModsTabs.Guids)" @onclick="@(() => OnMenuItemClick(CreateModsTabs.Guids))">GUIDs</button>
+        <button class="btn @IsSelectedClass(CreateModsTabs.Uids)" @onclick="@(() => OnMenuItemClick(CreateModsTabs.Uids))">UIDs</button>
+    </div>
+    <div class="create-mods-content">
+        @if (_currentTab == CreateModsTabs.Projects)
+        {
+            <ProjectsTab></ProjectsTab>
+        }
+        
+        @if (_currentTab == CreateModsTabs.Guids)
+        {
+            <GuidsTab></GuidsTab>
+        }
+        
+        @if (_currentTab == CreateModsTabs.Uids)
+        {
+            <UidsTab></UidsTab>
+        }
+    </div>
+</div>
+
+@code {
+    private CreateModsTabs _currentTab = CreateModsTabs.Projects;
+
+    private void OnMenuItemClick(CreateModsTabs newTab)
+    {
+        AppFacade.SaveSettings(true);
+        _currentTab = newTab;
+    }
+
+    private string IsSelectedClass(CreateModsTabs tab)
+    {
+        return _currentTab == tab ? "selected" : "";
+    }
+}
