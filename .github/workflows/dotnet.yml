@@ -53,7 +53,7 @@ jobs:
       - name: zip published files
         uses: vimtor/action-zip@v1
         with:
-          files: HydroModTools\publish\
+          files: HydroToolChain.Client\publish\
           dest: Hydroneer Modding Toolchain.zip
 
     #  - name: Build msi
