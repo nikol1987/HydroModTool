@@ -4,7 +4,7 @@ using HydroToolChain.App.Configuration.Data;
 
 namespace HydroToolChain.App;
 
-internal class Utilities
+internal static class Utilities
 {
     public static decimal Remap(decimal value, decimal from1, decimal to1, decimal from2, decimal to2)
     {

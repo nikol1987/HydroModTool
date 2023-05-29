@@ -1,4 +1,5 @@
 ﻿using HydroToolChain.App.Configuration.Data;
+using HydroToolChain.App.Models;
 using Microsoft.Extensions.Options;
 
 namespace HydroToolChain.App.Tools;

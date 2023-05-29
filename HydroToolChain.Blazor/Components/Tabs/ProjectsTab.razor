@@ -1,0 +1,101 @@
+﻿@inject IAppFacade Facade;
+
+<MudToolBar>
+    <MudButton Variant="Variant.Filled" OnClick="@Facade.AddProject">Add Project</MudButton>
+    <MudSpacer/>
+    <MudButtonGroup Variant="Variant.Filled">
+        <MudButton OnClick="@Facade.Stage">Stage</MudButton>
+        <MudButton OnClick="@Facade.Package">Package</MudButton>
+        <MudButton OnClick="@Facade.Copy">Copy</MudButton>
+        <MudButton OnClick="@Facade.LaunchGame">Launch Game</MudButton>
+        <MudTooltip Text="Do all steps in one click">
+            <MudButton OnClick="@Facade.DevExpress">Dev Express</MudButton>
+        </MudTooltip>
+    </MudButtonGroup>
+    <MudSpacer/>
+    <MudButtonGroup Variant="Variant.Filled">
+        <MudButton OnClick="@Facade.ClearLegacyMods">Clear Legacy Mods</MudButton>
+        <MudButton OnClick="@Facade.OpenModsFolder" >Mods Folder</MudButton>
+    </MudButtonGroup>
+</MudToolBar>
+<MudGrid Spacing="0" Justify="Justify.FlexStart">
+    <MudItem sm="3" Style="border-right: 1px solid var(--mud-palette-dark)">
+        <MudList @bind-SelectedValue="_selectedItem" Clickable>
+            @foreach(var project in _projects)
+            {
+                <MudListItem Expanded Value="project.Id" OnClick="() => OnProjectChange(project.Id)">
+                    <ContextMenuTrigger MenuId="@ContextMenusIds.ProjectItemContextMenu" Data="@project">
+                        <MudText Typo="Typo.h5" Style="overflow-wrap: anywhere">@project.Name</MudText>
+                    </ContextMenuTrigger>
+                </MudListItem>
+            }
+        </MudList>
+    </MudItem>
+    <MudItem sm="9">
+        <MudTreeView T="ProjectAssetItem" Items="_assetItems" Hover Height="calc(100vh - 168.5px)">
+            <ItemTemplate Context="item">
+                <MudTreeViewItem Items="@item.TreeItems" @bind-Expanded="@item.IsExpanded">
+                    <Content>
+                        <MudTreeViewItemToggleButton @bind-Expanded="@item.IsExpanded" Visible="@item.HasChild" />
+                        <ContextMenuTrigger MenuId="@ContextMenusIds.AssetsContextMenu" Data="@item">
+                            <span>@item.DisplayName</span>
+                        </ContextMenuTrigger>
+                    </Content>
+                </MudTreeViewItem>
+            </ItemTemplate>
+        </MudTreeView>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    private IReadOnlyCollection<ProjectData> _projects = new List<ProjectData>(0);
+    
+    private HashSet<ProjectAssetItem> _assetItems = new(0);
+    
+    private object _selectedItem = new {};
+    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Facade.OnAppStateChanged += OnAppStateChanged;
+
+        _projects = Facade.GetProjects();
+
+        var currentProject = Facade.GetCurrentProject();
+
+        if (currentProject != null)
+        {
+            _assetItems = TreeHelpers.GetTreeNodesFromProject(currentProject);
+            _selectedItem = currentProject.Id;
+        }
+    }
+
+    private void OnAppStateChanged()
+    {
+        var project = Facade.GetCurrentProject();
+
+        if (project != null)
+        {
+            _assetItems = TreeHelpers.GetTreeNodesFromProject(project);
+            _selectedItem = project.Id;
+            InvokeAsync(StateHasChanged);
+            
+            return;
+        }
+
+        _assetItems = new HashSet<ProjectAssetItem>(0);
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnProjectChange(object value)
+    {
+        if (value is not Guid projectId)
+        {
+            return;
+        }
+        
+        Facade.SetCurrentProject(projectId);
+    }
+}

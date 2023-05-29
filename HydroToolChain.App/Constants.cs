@@ -1,6 +1,6 @@
 ﻿namespace HydroToolChain.App;
 
-public class Constants
+public static class Constants
 {
     private static string _paksFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Mining", "Saved", "Paks");
     public static string PaksFolder {

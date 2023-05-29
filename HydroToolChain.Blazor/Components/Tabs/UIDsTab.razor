@@ -1,0 +1,111 @@
+﻿@using Microsoft.Extensions.Options
+
+@implements IDisposable;
+
+@inject IAppFacade Facade;
+
+<MudTable Class="uids-table" Items="@_items" @bind-SelectedItem="@_selectedItem"
+          EditTrigger="TableEditTrigger.EditButton" RowClassFunc="@CalculateRowClass"
+          Height="calc(100vh - 168.5px)"
+          RowEditPreview="OnBeforeEdit"
+          RowEditCancel="OnEditCancel"
+          FixedHeader Virtualize Dense Hover CanCancelEdit SelectOnRowClick>
+    <ToolBarContent>
+        <MudButtonGroup Variant="Variant.Filled">
+            <MudButton OnClick="Facade.AddUid">Add Uid</MudButton>
+            <MudButton OnClick="@OnRemoveUidClick">Remove Uid</MudButton>
+        </MudButtonGroup>
+        <MudSpacer />
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 30%;"/>
+        <col style="width: 35%;"/>
+        <col style="width: 35%;"/>
+        <col style="width: 8px;"/>
+    </ColGroup>
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Retail UID</MudTh>
+        <MudTh>Mod UID</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">
+            <MudText Style="overflow-wrap: anywhere">@context!.Name</MudText>
+        </MudTd>
+        <MudTd DataLabel="Retail UID">
+            <MudText Style="overflow-wrap: anywhere">@context!.RetailUid</MudText>
+        </MudTd>
+        <MudTd DataLabel="Mod UID">
+            <MudText Style="overflow-wrap: anywhere">@context!.ModdedUid</MudText>
+        </MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">
+            <MudTextField @bind-Value="@context!.Name" Required>@context.Name</MudTextField>
+        </MudTd>
+        <MudTd DataLabel="Retail UID">
+            <MudTextField @bind-Value="@context!.RetailUid" Required>@context.RetailUid</MudTextField>
+        </MudTd>
+        <MudTd DataLabel="Mod UID">
+            <MudTextField @bind-Value="@context!.ModdedUid" Required>@context.ModdedUid</MudTextField>
+        </MudTd>
+    </RowEditingTemplate>
+</MudTable>
+
+@code
+{
+    private IReadOnlyCollection<UidData> _items = new List<UidData>(0);
+
+    private UidData? _selectedItem;
+
+    private UidData? _tempItem;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Facade.OnAppStateChanged += UpdateItems;
+        
+        UpdateItems();
+    }
+
+    private void UpdateItems()
+    {
+        _items = Facade.GetUids();
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Facade.OnAppStateChanged -= UpdateItems;
+    }
+
+    private string CalculateRowClass(UidData? currentRow, int rowNumber)
+    {
+        return _selectedItem != null && _selectedItem.Id == currentRow?.Id ? "selected" : string.Empty;
+    }
+
+    private void OnRemoveUidClick()
+    {
+        Facade.RemoveUid(_selectedItem?.Id);
+    }
+
+    private void OnBeforeEdit(object item)
+    {
+        _tempItem = item as UidData;
+    }
+
+    private void OnEditCancel(object item)
+    {
+        var uidData = item as UidData;
+
+        if (_tempItem == null)
+        {
+            throw new ArgumentException("No Backup item");
+        }
+        
+        uidData!.Name = _tempItem!.Name;
+        uidData.RetailUid = _tempItem!.RetailUid;
+        uidData.ModdedUid = _tempItem!.ModdedUid;
+    }
+}

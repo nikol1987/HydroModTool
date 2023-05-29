@@ -1,0 +1,67 @@
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">New Project: @_newProject.Name</MudText>
+    </TitleContent>
+    <DialogContent>
+        <EditForm EditContext="@EditContext">
+            <DataAnnotationsValidator/>
+            <div>
+                <div>
+                    <div>
+                        <MudTextField Variant="Variant.Outlined" T="string" Label="Name" @bind-Value="_newProject.Name" HelperText="Ex: HMLoader" For="@(() => _newProject.Name)"></MudTextField>
+                    </div>
+
+                    <MudTooltip Tooltip="Used for ordering when using legacy loading, leave 500 if mod is in steam workshop" Context="ctx">
+                        <div>
+                            <MudTextField Variant="Variant.Outlined" T="int" TValue="int" Icon="info" Label="Index" @bind-Value="_newProject.ModIndex" ValidationDisabled="true"></MudTextField>
+                        </div>
+                    </MudTooltip>
+                </div>
+
+                <div>
+                    <MudTextField Variant="Variant.Outlined" T="string" Label="Assets Path" @bind-Value="_newProject.CookedAssetsPath" HelperText="Ex: C:\contoso\Mining\Saved\Cooked\WindowsNoEditor\Mining" For="@(() => _newProject.CookedAssetsPath)"></MudTextField>
+                </div>
+                <div>
+                    <MudTextField Variant="Variant.Outlined" T="string" Label="Dist Path" @bind-Value="_newProject.OutputPath" HelperText="Ex: C:\contoso\ModDist"  For="@(() => _newProject.OutputPath)"></MudTextField>
+                </div>
+            </div>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@OnSubmit" >Save</MudButton>
+        <MudButton OnClick="@(() => CloseDialog())">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    public MudDialogInstance DialogReference { get; set; }  = null!;
+
+    private EditContext EditContext { get; set; }  = null!;
+
+    private readonly ProjectData _newProject = new();
+    
+    protected override void OnInitialized()
+    {
+        EditContext = new EditContext(_newProject);
+        
+        base.OnInitialized();
+    }
+
+    private void CloseDialog(bool sendResult = false)
+    {
+        var result = sendResult ? _newProject : null;
+        
+        DialogReference.Close(result);
+    }
+
+    private void OnSubmit()
+    {
+        if (!EditContext.Validate())
+        {
+            return;
+        }
+        
+        CloseDialog(true);
+    }
+}

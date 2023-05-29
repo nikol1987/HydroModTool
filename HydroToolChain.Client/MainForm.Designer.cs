@@ -49,10 +49,9 @@ partial class MainForm
             this.ClientSize = new System.Drawing.Size(1078, 595);
             this.Controls.Add(this.blazorWebView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1140, 770);
             this.MinimumSize = new System.Drawing.Size(915, 650);
             this.Name = "MainForm";
-            this.Text = "Hydro Modding Toolchain";
+            this.Text = "Hydroneer Modding Toolchain";
             this.TopMost = false;
             this.ResumeLayout(false);
 

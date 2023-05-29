@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
             .Build();
         
         services.AddScoped<IConfiguration>(_ => configuration);
-        services.Configure<AppData>(configuration);
+        services.Configure<T>(configuration);
         
         services.AddTransient<IWritableOptions<T>>(provider =>  
         {  

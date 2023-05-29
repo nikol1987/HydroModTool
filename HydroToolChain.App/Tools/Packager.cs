@@ -28,9 +28,9 @@ public class Packager
         });
     }
     
-    private class OldStuff
+    private sealed class OldStuff
     {
-        private class FileList
+        private sealed class FileList
         {
             public List<byte> Bytes { get; } = new();
 

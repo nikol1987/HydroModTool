@@ -1,0 +1,27 @@
+﻿@inject IAppFacade Facade;
+
+<ContextMenu CssClass="context-menu" Id="@ContextMenusIds.AssetsContextMenu">
+    <Item OnClick="@OnAddAssets">
+        Add Assets
+    </Item>
+    <Item OnClick="@(() => OnRemoveAssets(context.Data))">
+        Remove
+    </Item>
+</ContextMenu>
+
+@code {
+    private void OnRemoveAssets(object data)
+    {
+        var assetItem = data as ProjectAssetItem;
+
+        var assetsToDelete = TreeHelpers.GetAllChildAssetIds(assetItem!);
+
+        Facade.RemoveAssets(assetsToDelete);
+    }
+
+    private void OnAddAssets()
+    {
+        Facade.AddAssets();
+    }
+
+}

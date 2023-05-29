@@ -36,7 +36,7 @@ internal class WritableOptions<T> : IWritableOptions<T> where T : class, new()
         try
         {
             var jObject = JsonConvert.DeserializeObject<T>(await File.ReadAllTextAsync(fileInfo.FullName));
-        
+
 
             if (jObject != null)
             {
@@ -44,7 +44,9 @@ internal class WritableOptions<T> : IWritableOptions<T> where T : class, new()
             }
         }
         catch (FileNotFoundException)
-        {}
+        {
+            // Ignored
+        }
 
         applyChanges(sectionObject);
 

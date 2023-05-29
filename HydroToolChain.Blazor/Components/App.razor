@@ -1,0 +1,54 @@
+﻿@implements IDisposable 
+
+@inject IAppFacade AppFacade
+
+<MudThemeProvider IsDarkMode="true"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<ContextMenus></ContextMenus>
+
+@if (_appLoaded == false)
+{
+    <Loader />
+}
+else
+{
+<div class="app" style="display: flex; flex-direction: column">
+    <AppHeader OnSelectedPage="OnPageSelected" />
+    <AppContent SelectedPage="_selectedPage" />
+</div>
+}
+
+@code
+{
+    private AppPages _selectedPage = AppPages.CreateMods;
+
+    private bool _appLoaded;
+
+    protected override void OnInitialized()
+    {
+        AppFacade.OnAppLoaded += AppFacadeOnOnAppLoaded;
+
+        Task.Delay(500).ContinueWith(_ =>
+        {
+            AppFacade.LoadSettings(true);
+        });
+    }
+
+    private void AppFacadeOnOnAppLoaded(bool loaded)
+    {
+        _appLoaded = loaded;
+        InvokeAsync(StateHasChanged);
+    }
+    
+    private void OnPageSelected(AppPages page)
+    {
+        _selectedPage = page;
+    }
+    
+    public void Dispose()
+    {
+        AppFacade.OnAppLoaded -= AppFacadeOnOnAppLoaded;
+    }
+}

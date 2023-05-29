@@ -8,10 +8,5 @@ public class AppData
 
     public List<GuidData> Guids { get; set; } = new();
     
-    public Guid CurrentGuid { get; set; } = Guid.Empty;
-    
     public List<UidData> Uids { get; set; } = new();
-    
-    public Guid CurrentUid { get; set; } = Guid.Empty;
-
 }

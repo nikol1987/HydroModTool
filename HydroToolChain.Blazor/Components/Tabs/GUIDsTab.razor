@@ -1,0 +1,106 @@
+﻿@using Microsoft.Extensions.Options
+
+@implements IDisposable;
+
+@inject IAppFacade Facade;
+
+<MudTable Class="guids-table" Items="@_items" @bind-SelectedItem="@_selectedItem"
+          EditTrigger="TableEditTrigger.EditButton" RowClassFunc="@CalculateRowClass"
+          Height="calc(100vh - 168.5px)"
+          RowEditPreview="OnBeforeEdit"
+          RowEditCancel="OnEditCancel"
+          FixedHeader Virtualize Dense Hover CanCancelEdit SelectOnRowClick>
+    <ToolBarContent>
+        <MudButtonGroup Variant="Variant.Filled">
+            <MudButton OnClick="Facade.AddGuid">Add Guid</MudButton>
+            <MudButton OnClick="@OnRemoveGuidClick">Remove Guid</MudButton>
+        </MudButtonGroup>
+        <MudSpacer />
+    </ToolBarContent>
+    <ColGroup>
+        <col style="width: 40%;"/>
+        <col style="width: 30%;"/>
+        <col style="width: 30%;"/>
+        <col style="width: 8px;"/>
+    </ColGroup>
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Retail GUID</MudTh>
+        <MudTh>Mod GUID</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">
+            <MudText Style="overflow-wrap: anywhere">@context!.Name</MudText>
+        </MudTd>
+        <MudTd DataLabel="Retail GUID">
+            <MudText Style="overflow-wrap: anywhere">@context!.RetailGuid.ToString("N")</MudText>
+        </MudTd>
+        <MudTd DataLabel="Mod GUID">
+            <MudText Style="overflow-wrap: anywhere">@context!.ModdedGuid.ToString("N")</MudText>
+        </MudTd>
+    </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Name">
+            <MudTextField @bind-Value="@context!.Name" Required>@context.Name</MudTextField>
+        </MudTd>
+        <MudTd DataLabel="Retail GUID">
+            <MudTextField T="Guid" @bind-Value="@context!.RetailGuid" Required>@context.RetailGuid.ToString("N")</MudTextField>
+        </MudTd>
+        <MudTd DataLabel="Mod GUID">
+            <MudTextField T="Guid" @bind-Value="@context!.ModdedGuid" Required>@context.ModdedGuid.ToString("N")</MudTextField>
+        </MudTd>
+    </RowEditingTemplate>
+</MudTable>
+
+@code
+{
+    private IReadOnlyCollection<GuidData> _items = new List<GuidData>(0);
+
+    private GuidData? _selectedItem;
+
+    private GuidData? _tempItem;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Facade.OnAppStateChanged += UpdateItems;
+        
+        UpdateItems();
+    }
+
+    private void UpdateItems()
+    {
+        _items = Facade.GetGuids();
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Facade.OnAppStateChanged -= UpdateItems;
+    }
+
+    private string CalculateRowClass(GuidData? currentRow, int rowNumber)
+    {
+        return _selectedItem != null && _selectedItem.Id == currentRow?.Id ? "selected" : string.Empty;
+    }
+
+    private void OnRemoveGuidClick()
+    {
+        Facade.RemoveGuid(_selectedItem?.Id);
+    }
+
+    private void OnBeforeEdit(object item)
+    {
+        _tempItem = item as GuidData;
+    }
+
+    private void OnEditCancel(object item)
+    {
+        var guidData = item as GuidData;
+
+        guidData!.Name = _tempItem!.Name;
+        guidData!.RetailGuid = _tempItem!.RetailGuid;
+        guidData!.ModdedGuid = _tempItem!.ModdedGuid;
+    }
+}
