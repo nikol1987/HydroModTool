@@ -1,5 +1,4 @@
-﻿using HydroToolChain.App.Configuration.Data;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -9,7 +8,7 @@ public static class ServiceCollectionExtensions
 {
     public static void ConfigureWritable<T>(  
         this IServiceCollection services,
-        string file = "appsettings.json") where T : class, new()  
+        string file = "appSettings.json") where T : class, new()  
     {
         var configuration = new ConfigurationBuilder()
             .AddJsonFile(file, true)
@@ -17,11 +16,11 @@ public static class ServiceCollectionExtensions
         
         services.AddScoped<IConfiguration>(_ => configuration);
         services.Configure<T>(configuration);
-        
         services.AddTransient<IWritableOptions<T>>(provider =>  
         {  
             var options = provider.GetRequiredService<IOptionsMonitor<T>>();  
             return new WritableOptions<T>(options, configuration, file);  
         });
+        services.AddTransient<IAppConfiguration, AppConfiguration>();
     }
 }

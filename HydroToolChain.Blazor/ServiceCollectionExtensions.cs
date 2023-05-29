@@ -1,4 +1,5 @@
-﻿using HydroToolChain.App.Models;
+﻿using HydroToolChain.App.Configuration.Models;
+using HydroToolChain.App.Models;
 using HydroToolChain.App.Tools;
 using HydroToolChain.App.WindowsHelpers;
 using HydroToolChain.Blazor.Business;
@@ -59,6 +60,10 @@ public static class ServiceCollectionExtensions
     public sealed class BlazorServiceOptions
     {
         public Func<string, string, Task<IReadOnlyCollection<string>>> FilesHelper { get; set; } =
-            (s, s1) => Task.FromResult<IReadOnlyCollection<string>>(Array.Empty<string>());
+            (_, _) => Task.FromResult<IReadOnlyCollection<string>>(Array.Empty<string>());
+
+        public Func<Task<string?>> ConfigImporterHelper { get; set; } = () => Task.FromResult<string?>(null);
+        
+        public Func<ConfigPartials?, string, Task<bool?>> ConfigExportHelper { get; set; } = (_, _) => Task.FromResult<bool?>(null);
     }   
 }

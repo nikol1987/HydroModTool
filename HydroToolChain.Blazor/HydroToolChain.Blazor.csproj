@@ -20,9 +20,7 @@
 
     <ItemGroup>
       <Folder Include="Components\ContextMenus\" />
-      <Folder Include="Components\Dialogs\" />
       <Folder Include="Components\Pages\" />
-      <Folder Include="Models\" />
     </ItemGroup>
 
     <ItemGroup>

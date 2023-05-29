@@ -2,10 +2,14 @@
 
 public class ProjectItemData
 {
-    public ProjectItemData()
+    internal ProjectItemData(Guid id)
     {
-        Id = Guid.NewGuid();
+        Id = id;
     }
+    
+    public ProjectItemData()
+        : this(Guid.NewGuid())
+    {}
     
     public Guid Id { get; set; }
     

@@ -46,10 +46,10 @@ partial class MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1078, 595);
+            this.ClientSize = new System.Drawing.Size(1078, 650);
             this.Controls.Add(this.blazorWebView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(915, 650);
+            this.MinimumSize = new System.Drawing.Size(1060, 650);
             this.Name = "MainForm";
             this.Text = "Hydroneer Modding Toolchain";
             this.TopMost = false;

@@ -6,6 +6,7 @@ using HydroToolChain.App.Tools;
 using HydroToolChain.App.WindowsHelpers;
 using HydroToolChain.Blazor.Business.Abstracts;
 using HydroToolChain.Blazor.Components.Dialogs;
+using HydroToolChain.Blazor.Models;
 using Microsoft.Extensions.Options;
 using MudBlazor;
 using MudBlazor.Extensions;
@@ -19,6 +20,7 @@ internal sealed class AppFacade : IAppFacade
     private readonly ISnackbar _snackbar;
     private readonly IToolsService _toolsService;
     private readonly IWindowsHelpers _windowsHelpers;
+    private readonly IAppConfiguration _appConfiguration;
     private readonly IOptions<ServiceCollectionExtensions.BlazorServiceOptions> _blazorOptions;
 
     private readonly AppContext _context;
@@ -29,6 +31,7 @@ internal sealed class AppFacade : IAppFacade
         ISnackbar snackbar,
         IToolsService toolsService,
         IWindowsHelpers windowsHelpers,
+        IAppConfiguration appConfiguration,
         IOptions<ServiceCollectionExtensions.BlazorServiceOptions> blazorOptions,
         AppContext context)
     {
@@ -37,6 +40,7 @@ internal sealed class AppFacade : IAppFacade
         _snackbar = snackbar;
         _toolsService = toolsService;
         _windowsHelpers = windowsHelpers;
+        _appConfiguration = appConfiguration;
         _blazorOptions = blazorOptions;
         _context = context;
         
@@ -47,6 +51,9 @@ internal sealed class AppFacade : IAppFacade
             if (!options.Projects.Exists(p => p.Id == existingCurrentProject))
                 options.CurrentProject = options.Projects
                     .FirstOrDefault()?.Id ?? Guid.Empty;
+            
+            
+            _context.SetLoaded(true);
         });
 
     }
@@ -63,24 +70,37 @@ internal sealed class AppFacade : IAppFacade
         remove => _context.OnAppLoaded -= value;
     }
 
-    public void LoadSettings(bool silent = false)
+    public async Task LoadSettings()
     {
-        _context.SetLoaded(true);
-        //TODO: Implement loading of partial configs
+        var selectedFilePath =  await _blazorOptions.Value.ConfigImporterHelper();
 
-        if (!silent)
+        if (selectedFilePath == null)
         {
-            ShowToast("NOT IMPLEMENTED YET", MessageType.Warning);
+            return;
         }
+
+        if (await _appConfiguration.TryImport(selectedFilePath))
+        {
+            _context.StateChanged();
+            
+            ShowToast("Config imported", MessageType.Info);
+            return;
+        }
+
+        ShowToast("Failed to import config", MessageType.Warning);
     }
 
-    public void SaveSettings(bool silent = false)
+    public async Task SaveSettings()
     {
-        //TODO: Implement saving full/partial configs
+        var saveResult = await SaveSettingsInner();
 
-        if (!silent)
+        if (saveResult.HasValue && saveResult.Value)
         {
-            ShowToast("NOT IMPLEMENTED YET", MessageType.Warning);
+            ShowToast("Config exported", MessageType.Info);
+        }
+        else if (saveResult.HasValue && saveResult.Value == false)
+        {
+            ShowToast("Failed to export config", MessageType.Warning);
         }
     }
 
@@ -447,16 +467,39 @@ internal sealed class AppFacade : IAppFacade
         return _appDataOptions.Value.Guids;
     }
 
-    public void UpdateUid(UidData item)
+    public void UpdateGuid(GuidData? guidData)
     {
+        if (guidData == null)
+        {
+            return;
+        }
+        
         _appDataOptions.Update(options =>
         {
-            var guid = options.Uids
-                .First(g => g.Id == item.Id);
+            var guid = options.Guids
+                .First(g => g.Id == guidData.Id);
 
-            guid.Name = item.Name;
-            guid.RetailUid = item.RetailUid;
-            guid.ModdedUid = item.ModdedUid;
+            guid.Name = guidData.Name;
+            guid.RetailGuid = guidData.RetailGuid;
+            guid.ModdedGuid = guidData.ModdedGuid;
+        });
+    }
+
+    public void UpdateUid(UidData? uidData)
+    {
+        if (uidData == null)
+        {
+            return;
+        }
+        
+        _appDataOptions.Update(options =>
+        {
+            var uid = options.Uids
+                .First(g => g.Id == uidData.Id);
+
+            uid.Name = uidData.Name;
+            uid.RetailUid = uidData.RetailUid;
+            uid.ModdedUid = uidData.ModdedUid;
         });
     }
 
@@ -484,5 +527,31 @@ internal sealed class AppFacade : IAppFacade
     private void OnAppStateUpdated()
     {
         _context.StateChanged();
+    }
+    
+    private async Task<bool?> SaveSettingsInner()
+    {
+        var result = (await (await _dialogService.ShowAsync<SaveConfigDialog>()!).Result)!.Data.As<SaveConfigResult?>();
+
+        if (result == null)
+        {
+            return false;
+        }
+
+        if (result.Save == false)
+        {
+            return null;
+        }
+
+        var contents = await _appConfiguration.ExportConfig(result.PartialType);
+
+        if (contents == null)
+        {
+            return false;
+        }
+
+        var exporterHelperResult = await _blazorOptions.Value.ConfigExportHelper(result.PartialType, contents);
+
+        return exporterHelperResult;
     }
 }

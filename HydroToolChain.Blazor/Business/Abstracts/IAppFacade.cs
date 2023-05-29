@@ -9,8 +9,8 @@ public interface IAppFacade
 
     #region AppActions
 
-    void LoadSettings(bool silent = false);
-    void SaveSettings(bool silent = false);
+    Task LoadSettings();
+    Task SaveSettings();
     
     #endregion
     
@@ -63,6 +63,8 @@ public interface IAppFacade
     
     IReadOnlyCollection<UidData> GetUids();
     
+    void UpdateUid(UidData? uidData);
+
     #endregion
 
     #region GUIDs Actions
@@ -71,6 +73,8 @@ public interface IAppFacade
     void RemoveGuid(Guid? guidId);
     
     IReadOnlyCollection<GuidData> GetGuids();
+    
+    void UpdateGuid(GuidData? guidData);
 
     #endregion
 }

@@ -9,6 +9,7 @@
           Height="calc(100vh - 168.5px)"
           RowEditPreview="OnBeforeEdit"
           RowEditCancel="OnEditCancel"
+          RowEditCommit="OnEditCommit"
           FixedHeader Virtualize Dense Hover CanCancelEdit SelectOnRowClick>
     <ToolBarContent>
         <MudButtonGroup Variant="Variant.Filled">
@@ -102,5 +103,12 @@
         guidData!.Name = _tempItem!.Name;
         guidData!.RetailGuid = _tempItem!.RetailGuid;
         guidData!.ModdedGuid = _tempItem!.ModdedGuid;
+    }
+
+    private void OnEditCommit(object item)
+    {
+        var guidData = item as GuidData;
+
+        Facade.UpdateGuid(guidData);
     }
 }

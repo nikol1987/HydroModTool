@@ -10,7 +10,7 @@
     <MudItem sm="2">
         <MudButtonGroup Variant="Variant.Filled">
             <MudTooltip Text="Import backup files or configs from old app">
-                <MudButton OnClick="@(() => Facade.LoadSettings())" >Load</MudButton>
+                <MudButton OnClick="@Facade.LoadSettings" >Load</MudButton>
             </MudTooltip>
             
             <MudTooltip Text="Create backups or partial files to share">

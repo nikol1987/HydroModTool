@@ -4,11 +4,15 @@ namespace HydroToolChain.App.Configuration.Data;
 
 public class ProjectData
 {
-    public ProjectData()
+    internal ProjectData(Guid id)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         Items = new List<ProjectItemData>();
     }
+    
+    public ProjectData()
+        : this(Guid.NewGuid())
+    {}
     
     public Guid Id { get; set; } 
     

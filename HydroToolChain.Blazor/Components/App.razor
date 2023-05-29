@@ -29,11 +29,6 @@ else
     protected override void OnInitialized()
     {
         AppFacade.OnAppLoaded += AppFacadeOnOnAppLoaded;
-
-        Task.Delay(500).ContinueWith(_ =>
-        {
-            AppFacade.LoadSettings(true);
-        });
     }
 
     private void AppFacadeOnOnAppLoaded(bool loaded)

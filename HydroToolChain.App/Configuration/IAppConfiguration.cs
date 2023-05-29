@@ -4,7 +4,7 @@ namespace HydroToolChain.App.Configuration;
 
 public interface IAppConfiguration
 {
-    public void ExportConfig(ConfigPartials partial);
+    public Task<string?> ExportConfig(ConfigPartials? partial);
 
-    public bool TryImport(string filePath);
+    public Task<bool> TryImport(string filePath);
 }

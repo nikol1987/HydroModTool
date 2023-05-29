@@ -2,10 +2,14 @@
 
 public class GuidData
 {
-    public GuidData()
+    internal GuidData(Guid id)
     {
-        Id = Guid.NewGuid();
+        Id = id;
     }
+    
+    public GuidData()
+        : this(Guid.NewGuid())
+    {}
     
     public Guid Id { get; set; }
 
